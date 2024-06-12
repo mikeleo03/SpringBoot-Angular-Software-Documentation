@@ -1,28 +1,38 @@
 import java.util.*;
 
 public class Task4 {
-    public static void main(String args[]) {
- 
-        // Create an array list and the elements, same as the task
-        List<Integer> listOfNumber = new ArrayList<>(Arrays.asList(1, 2, 3, -6, 5, 0));
- 
-        // Try to do iterate with 2 for loop to count based on the index
-        for (int i = 0; i < listOfNumber.size() - 1; i++) {
-            // Store the initial value
-            Integer total = listOfNumber.get(i);
+    /**
+     * Finds all subarrays in the list that sum to zero.
+     * 
+     * @param list The list of integers.
+     * @return A list of lists, where each inner list contains two integers representing the start and end indices of a zero-sum subarray.
+     */
+    private static List<List<Integer>> findZeroSumSubarrays(List<Integer> list) {
+        List<List<Integer>> result = new ArrayList<>();
+        
+        // Iterate through the list
+        for (int i = 0; i < list.size(); i++) {
+            int sum = 0;
+            // Sum up subarray elements from index `i` to `j`
+            for (int j = i; j < list.size(); j++) {
+                sum += list.get(j);
 
-            // Iterate for the rest, try to sum up
-            for (int j = i + 1; j < listOfNumber.size() - 1; j++) {
-                total += listOfNumber.get(j);
-
-                // Check if it is equal to 0
-                if (total == 0) {
-                    List<Integer> index = new ArrayList<>();
-                    index.add(i);
-                    index.add(j);
-                    System.out.println(index);
+                // If the sum is zero, store the start and end indices
+                if (sum == 0) {
+                    result.add(Arrays.asList(i, j));
                 }
             }
         }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        // Create an array list with the elements
+        List<Integer> listOfNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, -6, 5, 0));
+
+        // Find and print the indices of subarrays that sum to zero
+        List<List<Integer>> zeroSumSubarrays = findZeroSumSubarrays(listOfNumbers);
+        zeroSumSubarrays.forEach(System.out::println);
     }
 }

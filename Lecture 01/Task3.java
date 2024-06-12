@@ -1,41 +1,61 @@
 import java.util.*;
 
 public class Task3 {
-    public static void main(String args[]) {
- 
-        // Create an array list and the elements, same as the task
-        List<Integer> listOfNumber = new ArrayList<>(Arrays.asList(1, 4, 3, -6, 5, 4));
- 
-        // Set the initial value to get the max
-        Integer max = listOfNumber.get(0);
+    /**
+     * Finds the second largest element in the list and returns the indices of its occurrences.
+     * 
+     * @param list The list of integers.
+     * @return A list of indices where the second largest element occurs.
+     */
+    private static List<Integer> getSecondLargestElementIndices(List<Integer> list) {
+        Integer max = findMax(list);
+        List<Integer> listWithoutMax = new ArrayList<>(list);
+        listWithoutMax.removeAll(Collections.singleton(max));
+        Integer secondMax = findMax(listWithoutMax);
+        return findIndices(list, secondMax);
+    }
 
-        // Iterate to the array list get the first biggest element
-        for (int i = 0; i < listOfNumber.size() - 1; i++) {
-            if (listOfNumber.get(i) > max) {
-                max = listOfNumber.get(i);
+    /**
+     * Finds the maximum element in the list.
+     * 
+     * @param list The list of integers.
+     * @return The maximum integer in the list.
+     */
+    private static Integer findMax(List<Integer> list) {
+        Integer max = list.get(0);
+        for (Integer num : list) {
+            if (num > max) {
+                max = num;
             }
         }
+        return max;
+    }
 
-        // Exclude the biggest element from the array list
-        listOfNumber.remove(listOfNumber.indexOf(max));
-
-        // Reiterate to the array list and get the biggest element
-        Integer max2 = listOfNumber.get(0);
-        for (int i = 0; i < listOfNumber.size() - 1; i++) {
-            if (listOfNumber.get(i) > max2) {
-                max2 = listOfNumber.get(i);
+    /**
+     * Finds all indices of the given element in the list.
+     * 
+     * @param list The list of integers.
+     * @param value The value to find in the list.
+     * @return A list of indices where the value occurs.
+     */
+    private static List<Integer> findIndices(List<Integer> list, Integer value) {
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(value)) {
+                indices.add(i);
             }
         }
+        return indices;
+    }
 
-        // Get the index, store to the array
-        List<Integer> index = new ArrayList<>();
-        for (int i = 0; i < listOfNumber.size(); i++) {
-            if (listOfNumber.get(i).equals(max2)) {
-                index.add(i);
-            }
-        }
+    public static void main(String[] args) {
+        // Create an array list with the elements
+        List<Integer> listOfNumbers = new ArrayList<>(Arrays.asList(1, 4, 3, -6, 5, 4));
 
-        // Print the array
-        System.out.println(index);
+        // Get the indices of the second largest element
+        List<Integer> indices = getSecondLargestElementIndices(listOfNumbers);
+
+        // Print the indices
+        System.out.println(indices);
     }
 }
