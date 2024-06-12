@@ -9,19 +9,24 @@ public class Task4 {
      */
     private static List<List<Integer>> findZeroSumSubarrays(List<Integer> list) {
         List<List<Integer>> result = new ArrayList<>();
+        Map<Integer, Integer> prefixSumMap = new HashMap<>();
         
-        // Iterate through the list
+        // Initialize to handle subarrays starting from index 0
+        prefixSumMap.put(0, -1);
+        
+        int cumulativeSum = 0;
+        
         for (int i = 0; i < list.size(); i++) {
-            int sum = 0;
-            // Sum up subarray elements from index `i` to `j`
-            for (int j = i; j < list.size(); j++) {
-                sum += list.get(j);
-
-                // If the sum is zero, store the start and end indices
-                if (sum == 0) {
-                    result.add(Arrays.asList(i, j));
-                }
+            cumulativeSum += list.get(i);
+            
+            // If cumulativeSum is already in the map,
+            // it means we've found a subarray that sums to zero
+            if (prefixSumMap.containsKey(cumulativeSum)) {
+                result.add(Arrays.asList(prefixSumMap.get(cumulativeSum) + 1, i));
             }
+            
+            // Update the map with the current cumulative sum and index
+            prefixSumMap.put(cumulativeSum, i);
         }
 
         return result;
