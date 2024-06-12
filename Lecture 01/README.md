@@ -14,17 +14,17 @@ float b = 1.0f;     // b stores the actual value 1.0
 
 When a primitive is passed to a function, the function receives a copy of the value. Any changes made to this value inside the function do not affect the original value.
 
-Given example below.
+Given an example below.
 ```java
 public class PrimitiveExample {
+    static void modifyPrimitive(int x) {
+        x = 20; // This change affects only the local copy, not the original `num`.
+    }
+
     public static void main(String[] args) {
         int num = 10;
         modifyPrimitive(num);
         System.out.println("After modifyPrimitive: " + num); // Output: 10
-    }
-
-    static void modifyPrimitive(int x) {
-        x = 20; // This change affects only the local copy, not the original `num`.
     }
 }
 ```
@@ -37,6 +37,7 @@ Reference types are used to store the references or memory addresses which point
 Example
 
 **a. Classes**
+
 User-defined classes are reference types. We can use `new` keyword to instantiate an instance of a class. What actually done is, it creates an object in memory, and a reference to that object is stored in a variable.
 
 ```java
@@ -44,6 +45,7 @@ Person person = new Person();       // obj is a reference to an instance of Pers
 ```
 
 **b. Arrays**
+
 Arrays in Java are reference types, which can hold references to other objects or arrays.
 
 ```java
@@ -54,27 +56,27 @@ And any other examples like Strings and Interfaces.
 
 When an object is passed to a function, the function receives a copy of the reference to the object. Changes made to the object via this reference affect the original object.
 
-Given example below.
+Given an example below.
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReferenceExample {
+    static void modifyReference(List<Integer> list) {
+        list.add(4); // This change affects the original list.
+    }
+
     public static void main(String[] args) {
         List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3));
         modifyReference(numbers);
         System.out.println("After modifyReference: " + numbers); // Output: [1, 2, 3, 4]
-    }
-
-    static void modifyReference(List<Integer> list) {
-        list.add(4); // This change affects the original list.
     }
 }
 ```
 
 The `numbers` variable holds a reference to an `ArrayList` object. When `modifyReference` is called, a copy of the reference is passed. Changes to the object via this reference (e.g., adding an element) affect the original `ArrayList` object.
 
-Key Points
+Here are some remarkable key points of them.
 | Value Types | Reference Types |
 | ---------- | -------- |
 | The actual value is copied. | The reference to the object is copied. |
