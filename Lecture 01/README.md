@@ -1,8 +1,8 @@
-# Lecture 01 - Java Core
+# 👨🏻‍🏫 Lecture 01 - Java Core
 > This repository is created as a part of assignment for Lecture 01 - Java Core
 
-## Task 01 - Value Types and Reference Types
-### Value Types
+## 📝 Task 01 - Value Types and Reference Types
+### 🔢 Value Types
 In Java, all the primitive data types (int, float, double, char) are value types. Value types store the actual data value directly in the variable, and they are passed by value.
 When using a primitive data type, we are working with the actual value, not a reference to an object in memory.
 
@@ -31,7 +31,7 @@ public class PrimitiveExample {
 
 The `num` variable holds a primitive value `10`. When `modifyPrimitive` is called, a copy of `num` is passed. Changing `x` inside `modifyPrimitive` does not affect the original `num`.
 
-### Reference Types
+### 👉 Reference Types
 Reference types are used to store the references or memory addresses which pointing to the actual data or objects. These types are typically used for complex data structures and objects that can be of varying sizes.
 
 Example
@@ -84,7 +84,7 @@ Here are some remarkable key points of them.
 
 <br>
 
-## Task 02 - How OOP Principles perform in Java
+## 🚩 Task 02 - How OOP Principles perform in Java
 ### Abstraction
 Abstraction involves hiding the complex implementation details of a system and exposing only the necessary and relevant parts. It helps in reducing programming complexity and effort. For instance, when you use a List in Java, you don't need to know the internal workings of how the list is managed; you only use the methods provided to interact with the list.
 > In java concepts, we could use abstract class and interfaces.
