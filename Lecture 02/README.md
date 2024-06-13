@@ -79,6 +79,7 @@ public class Main {
 ```
 
 And the output will be something like this.
+
 ![Screenshot](img/Task5.png)
 
 Here is the detail on what it actually does.
@@ -110,7 +111,8 @@ public class Singleton {
 ```
 
 The `SingletonHelper` class is not loaded until the `getInstance()` method is called, providing lazy initialization. This approach does not require synchronization and ensures that the instance is created only when it's needed.
-<br>
+
+<br></br>
 
 ## 🔍 Task 06 - Passing Reference Types
 Given on the slide, we have 2 different ways of passing reference types. Here is the modification in order to make it more readable.
@@ -179,6 +181,7 @@ public class Main2 {
 
 ### 📊 Diagrammatic Explanation
 Here is visualization on what is actually happening in Stack and Heap memory space.
+
 ![Main1](img/Main1.png)
 Summary for Main1:
 - `modifyObject` changes the contents of the object that both `obj` and `x` point to.
@@ -193,7 +196,8 @@ Summary for Main2:
 ### ✏️ Conclusion
 1. In class `Main1`, the `modifyObject` method directly modifies the object in the heap through the reference, affecting the original object. In this case, `modifyObject` modifies the same object that `obj` references because `x` points to the same heap location.
 2. In class `Main2`, the `changeReference` method only reassigns the local reference within the method to a new object, leaving the original object untouched. In other word, `changeReference` reassigns `x` to a new object in the heap, so changes to `x` do not affect the original `obj`.
-<br>
+
+<br></br>
 
 ## 💡 Task 07 - Employee Management System
 The project goal is to create employee management system on command-line based.
