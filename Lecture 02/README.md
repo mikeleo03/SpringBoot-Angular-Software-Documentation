@@ -193,3 +193,38 @@ Summary for Main2:
 ### ✏️ Conclusion
 1. In class `Main1`, the `modifyObject` method directly modifies the object in the heap through the reference, affecting the original object. In this case, `modifyObject` modifies the same object that `obj` references because `x` points to the same heap location.
 2. In class `Main2`, the `changeReference` method only reassigns the local reference within the method to a new object, leaving the original object untouched. In other word, `changeReference` reassigns `x` to a new object in the heap, so changes to `x` do not affect the original `obj`.
+<br>
+
+## 💡 Task 07 - Employee Management System
+The project goal is to create employee management system on command-line based.
+
+### 🌳 Project Structure
+```bash
+task7
+├── data/
+│   └── employees.csv
+├── src/main/java/
+│   ├── Main.java
+│   ├── app/
+│   │   └── AppManager.java
+│   ├── model/
+│   │   └── Employee.java
+│   └── utils/
+│       ├── DateUtils.java
+│       └── FileUtils.java
+└── pom.xml
+```
+
+### ⚙️ How to run the program
+1. Go to the `task7` directory by using this command
+    ```bash
+    $ cd task7
+    ```
+2. Make sure you have maven installed on your computer, use `mvn -v` to check the version, and then run this command
+    ```bash
+    $ mvn clean install
+    ```
+3. Finally, run the jar using this command
+    ```bash
+    $ java -jar target/employee_management-jar-with-dependencies.jar
+    ```
