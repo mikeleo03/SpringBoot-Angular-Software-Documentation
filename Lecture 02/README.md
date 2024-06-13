@@ -111,3 +111,85 @@ public class Singleton {
 
 The `SingletonHelper` class is not loaded until the `getInstance()` method is called, providing lazy initialization. This approach does not require synchronization and ensures that the instance is created only when it's needed.
 <br>
+
+## 🔍 Task 06 - Passing Reference Types
+Given on the slide, we have 2 different ways of passing reference types. Here is the modification in order to make it more readable.
+
+```java
+class MyClass {
+    int value;
+    String name;    // Add new string field
+}
+
+public class Main1 {
+    // modifyObject method, Modify the object that the reference points to
+    public static void modifyObject(MyClass x) {
+        x.value = 10;
+        x.name = "Modified Name";
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.value = 5;
+        obj.name = "Original Name";
+
+        // Applying modifyObject method
+        modifyObject(obj);
+        System.out.println("obj.value after modifyObject: " + obj.value);
+        // Output : obj.value after modifyObject: 10
+        System.out.println("obj.name after modifyObject: " + obj.name);
+        // Output : obj.name after modifyObject: Modified Name
+    }
+}
+
+public class Main2 {
+    // changeReference method, Cannot change the reference itself to point to a different object
+    public static void changeReference(MyClass x) {
+        x = new MyClass();  // This change the local reference, not the original reference
+        x.value = 10;
+        x.name = "Modified Name";
+    }
+
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.value = 5;
+        obj.name = "Original Name";
+
+        // Applying changeReference method
+        changeReference(obj);
+        System.out.println("obj.value after changeReference: " + obj.value);
+        // Output : obj.value after changeReference: 5
+        System.out.println("obj.name after changeReference: " + obj.name);
+        // Output : obj.name after changeReference: Original Name
+    }
+}
+```
+
+### ❓ What is actually happening?
+1. **`modifyObject(MyClass x)` in class `Main1`**
+    1. **Reference Passing**
+    The reference `x` points to the same `MyClass` object in the heap as the `obj` reference in `main`. Modifying `x.value` or `x.name` changes the actual object in the heap.
+    2. **Heap Update**
+    Changes made to `x` are reflected in `obj` because both `x` and `obj` point to the same heap object.
+2. **`changeReference(MyClass x)` in class `Main2`**
+    1. **Reference Passing**
+    Value `x` starts by pointing to the same object as `obj`. However, `x = new MyClass();` reassigns `x` to a new object in the heap. This new reference is local to the method and doesn't affect `obj`.
+    2. **Local Update**
+    Changes made to the new `x` do not affect the original `obj` reference, which still points to the initial object.
+
+### 📊 Diagrammatic Explanation
+Here is visualization on what is actually happening in Stack and Heap memory space.
+![Main1](img/Main1.png)
+Summary for Main1:
+- `modifyObject` changes the contents of the object that both `obj` and `x` point to.
+- `obj.value` becomes 10 and `obj.name` becomes "Modified Name".
+
+![Main2](img/Main2.png)
+Summary for Main2:
+- `changeReference` only changes the local reference `x` within the method.
+- The original object `obj` remains unaffected.
+- `obj.value` remains 5 and `obj.name` remains "Original Name".
+
+### ✏️ Conclusion
+1. In class `Main1`, the `modifyObject` method directly modifies the object in the heap through the reference, affecting the original object. In this case, `modifyObject` modifies the same object that `obj` references because `x` points to the same heap location.
+2. In class `Main2`, the `changeReference` method only reassigns the local reference within the method to a new object, leaving the original object untouched. In other word, `changeReference` reassigns `x` to a new object in the heap, so changes to `x` do not affect the original `obj`.
