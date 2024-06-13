@@ -80,7 +80,7 @@ public class AppManager {
         System.out.println("      | |___| | | | | | |_) | ||  __/\\__ \\  __/ |  \\__ \\  __/");
         System.out.println("      |_____|_| |_| |_| .__/ \\__\\___||___/\\___|_|  |___/\\___|");
         System.out.println("                  |_|                                     " + ANSI_RESET);
-        System.out.println(ANSI_BOLD + ANSI_PURPLE + "       Welcome to the Employee Management System\n" + ANSI_RESET);
+        System.out.println(ANSI_BOLD + ANSI_PURPLE + "             Welcome to the Employee Management System\n" + ANSI_RESET);
     }
 
     private void showMenu() {

@@ -232,3 +232,7 @@ task7
     ```bash
     $ java -jar target/employee_management-jar-with-dependencies.jar
     ```
+
+If all the instruction is well executed, the main-view will be something like this.
+
+![Screenshot](img/Task7.png)
