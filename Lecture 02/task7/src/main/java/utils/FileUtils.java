@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class FileUtils {
      * @return A list of {@link Employee} objects read from the CSV file.
      * @throws IOException If an error occurs while reading the file.
      */
-    public static List<Employee> readEmployeesFromCSVManual(String filePath) {
+    public static List<Employee> readEmployeesFromCSVManual(String filePath) throws IOException {
         List<Employee> employees = new ArrayList<>();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(filePath))) {
             String line;
@@ -32,10 +33,11 @@ public class FileUtils {
                 Employee employee = Employee.fromCSV(attributes);
                 employees.add(employee);
             }
-            System.out.println("Data imported successfully.");
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("Error reading employee (Manual), File not found!");
         } catch (IOException e) {
-            System.out.println("Error reading employee (Manual) " + e);
-        }
+            throw new IOException("Error reading employee (Manual) " + e);
+        } 
         return employees;
     }
 
@@ -47,7 +49,7 @@ public class FileUtils {
      * @throws IOException If an error occurs while reading the file.
      * @throws CsvValidationException If the CSV file contains invalid data.
      */
-    public static List<Employee> readEmployeesFromCSVOpenCSV(String filePath) {
+    public static List<Employee> readEmployeesFromCSVOpenCSV(String filePath) throws FileNotFoundException {
         List<Employee> employees = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             String[] line;
@@ -56,7 +58,8 @@ public class FileUtils {
                 Employee employee = Employee.fromCSV(line);
                 employees.add(employee);
             }
-            System.out.println("Data imported successfully.");
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("Error reading employee (Manual), File not found!");
         } catch (IOException | CsvValidationException e) {
             System.out.println("Error reading employee (OpenCSV)" + e);
         }
@@ -70,15 +73,14 @@ public class FileUtils {
      * @param filePath The path to the CSV file where the data will be exported.
      * @throws IOException If an error occurs while writing to the file.
      */
-    public static void writeEmployeesToCSV(List<Employee> employees, String filePath) {
+    public static void writeEmployeesToCSV(List<Employee> employees, String filePath) throws FileNotFoundException {
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.append("ID,Name,DateOfBirth,Address,Department\n");
             for (Employee employee : employees) {
                 writer.append(employee.toCSV()).append("\n");
             }
-            System.out.println("Filtered data exported successfully.");
         } catch (IOException e) {
-            System.out.println("Error writing employee" + e);
+            throw new FileNotFoundException("Error writing employee" + e);
         }
     }
 }
