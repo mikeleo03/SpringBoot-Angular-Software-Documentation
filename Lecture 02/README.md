@@ -219,6 +219,11 @@ task7
 └── pom.xml
 ```
 
+### 🧩 Class Diagram
+Here is the class diagram of the program
+
+![ClassDiagram](img/ClassDiagram.png)
+
 ### ⚙️ How to run the program
 1. Go to the `task7` directory by using this command
     ```bash
