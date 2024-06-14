@@ -1,7 +1,10 @@
 package app;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -73,16 +76,27 @@ public class AppManager {
         }
     }
 
+    /**
+     * Prints the header of the application.
+     *
+     * This method prints the welcome message and the logo of the application.
+     */
     private void printHeader() {
         System.out.println(ANSI_CYAN + "       _____                 _                               ");
         System.out.println("      | ____|_ __ ___  _ __ | |_ ___  ___  ___ _ __ ___  ___ ");
         System.out.println("      |  _| | '_ ` _ \\| '_ \\| __/ _ \\/ __|/ _ \\ '__/ __|/ _ \\");
         System.out.println("      | |___| | | | | | |_) | ||  __/\\__ \\  __/ |  \\__ \\  __/");
         System.out.println("      |_____|_| |_| |_| .__/ \\__\\___||___/\\___|_|  |___/\\___|");
-        System.out.println("                  |_|                                     " + ANSI_RESET);
+        System.out.println("                      |_|                                     " + ANSI_RESET);
         System.out.println(ANSI_BOLD + ANSI_PURPLE + "             Welcome to the Employee Management System\n" + ANSI_RESET);
     }
 
+    /**
+     * Displays the main menu of the application.
+     *
+     * This method prints the welcome message and the logo of the application,
+     * followed by the main menu options.
+     */
     private void showMenu() {
         System.out.println("====================================================================");
         System.out.println(ANSI_GREEN + "Menu:");
@@ -94,6 +108,15 @@ public class AppManager {
         System.out.print("Choose an option: " + ANSI_RESET);
     }
 
+    /**
+     * Imports data from a CSV file.
+     *
+     * @param useOpenCSV  A boolean value indicating whether to use the OpenCSV library for reading the CSV file.
+     * @param filePath  The path to the CSV file containing the employee data.
+     *
+     * @throws FileNotFoundException  If the specified file does not exist.
+     * @throws IOException  If an error occurs while reading the file.
+     */
     private void importData() {
         System.out.println(ANSI_BLUE + "Select CSV reading method:");
         System.out.println("1 - Manual");
@@ -114,15 +137,28 @@ public class AppManager {
             useOpenCSV = false;
         }
 
-        System.out.print(ANSI_BLUE + "Enter the file path: " + ANSI_RESET);
-        String filePath = scanner.nextLine();
-        if (useOpenCSV) {
-            employees = FileUtils.readEmployeesFromCSVOpenCSV(filePath);
-        } else {
-            employees = FileUtils.readEmployeesFromCSVManual(filePath);
+        try {
+            System.out.println(ANSI_BLUE + "Enter the file path: " + ANSI_RESET);
+            String filePath = scanner.nextLine();
+            if (useOpenCSV) {
+                employees = FileUtils.readEmployeesFromCSVOpenCSV(filePath);
+            } else {
+                employees = FileUtils.readEmployeesFromCSVManual(filePath);
+            }
+            System.out.println(ANSI_GREEN + "Data imported successfully, here is all the imported data from CSV file." + ANSI_RESET);
+            printEmployees(employees);
+        } catch (FileNotFoundException e) {
+            System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+        } catch (IOException e) {
+            System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
         }
     }
 
+    /**
+     * Adds a new employee to the list of employees.
+     *
+     * @throws DateTimeParseException if the date of birth is not in the format dd/MM/yyyy.
+     */
     private void addEmployee() {
         try {
             System.out.print(ANSI_BLUE + "Enter ID: " + ANSI_RESET);
@@ -165,12 +201,18 @@ public class AppManager {
         }
     }    
 
+    /**
+     * Filter employees based on name, ID, DoB, department, stc
+     *
+     * @return A list of {@link Employee} objects as result of filter.
+     */
     private List<Employee> filterEmployees() {
         System.out.println(ANSI_BLUE + "Filter by:");
         System.out.println("1 - Name");
         System.out.println("2 - ID");
         System.out.println("3 - Date of Birth (year)");
         System.out.println("4 - Department");
+        System.out.println("5 - Show all employees");
         System.out.print("Choose an option: " + ANSI_RESET);
         try {
             int choice = Integer.parseInt(scanner.nextLine().trim());
@@ -205,6 +247,7 @@ public class AppManager {
                             .filter(e -> e.getDepartment().equalsIgnoreCase(department))
                             .collect(Collectors.toList());
                 }
+                case 5 -> filtered = new ArrayList<>(employees);
                 default -> System.out.println(ANSI_RED + "Invalid choice. Returning to menu." + ANSI_RESET);
             }
 
@@ -215,20 +258,83 @@ public class AppManager {
         }
     }
 
-    private void printFilteredEmployees() {
-        List<Employee> listOfEmployee = filterEmployees();
-        System.out.println(ANSI_CYAN + "\nShowing " + listOfEmployee.size() + " employee(s) data..." + ANSI_RESET);
+    /**
+     * Prints the list of employees in a formatted table.
+     *
+     * @param listOfEmployee The list of employees to be printed.
+     */
+    private void printEmployees(List<Employee> listOfEmployee) {
+        // Determine the maximum length of each column
+        int maxIdLength = "ID".length();
+        int maxNameLength = "Name".length();
+        int maxDobLength = "Date of Birth".length();
+        int maxAddressLength = "Address".length();
+        int maxDepartmentLength = "Department".length();
+
         for (Employee e : listOfEmployee) {
-            System.out.println(ANSI_YELLOW + e.toCSV() + ANSI_RESET);
+            maxIdLength = Math.max(maxIdLength, e.getId().length());
+            maxNameLength = Math.max(maxNameLength, e.getName().length());
+            maxDobLength = Math.max(maxDobLength, DateUtils.formatDate(e.getDateOfBirth()).length());
+            maxAddressLength = Math.max(maxAddressLength, e.getAddress().length());
+            maxDepartmentLength = Math.max(maxDepartmentLength, e.getDepartment().length());
         }
+
+        // Format strings for table rows
+        String format = String.format("%%-%ds | %%-%ds | %%-%ds | %%-%ds | %%-%ds",
+                maxIdLength, maxNameLength, maxDobLength, maxAddressLength, maxDepartmentLength);
+
+        // Print table header
+        String header = String.format(format, "ID", "Name", "Date of Birth", "Address", "Department");
+        String separator = new String(new char[header.length()]).replace("\0", "-");
+        System.out.println(ANSI_CYAN + "\n" + separator);
+        System.out.println(header);
+        System.out.println(separator + ANSI_RESET);
+
+        // Print table rows
+        listOfEmployee.stream()
+                .sorted(Comparator.comparing(Employee::getDateOfBirth)) // Sort by Date of Birth
+                .forEach(e -> {
+                    String row = String.format(format,
+                            e.getId(),
+                            e.getName(),
+                            DateUtils.formatDate(e.getDateOfBirth()),
+                            e.getAddress(),
+                            e.getDepartment());
+                    System.out.println(ANSI_YELLOW + row + ANSI_RESET);
+                });
+
+        System.out.println(ANSI_CYAN + separator + ANSI_RESET);
     }
 
+    /**
+     * Print the filtered employees
+     */
+    private void printFilteredEmployees() {
+        List<Employee> listOfEmployee = filterEmployees();
+
+        if (listOfEmployee.isEmpty()) {
+            System.out.println(ANSI_CYAN + "\nNo employees found." + ANSI_RESET);
+            return;
+        }
+
+        printEmployees(listOfEmployee);
+    }
+
+    /**
+     * Export the filtered list of employees and then export to CSV.
+     */
     private void exportFilteredEmployees() {
         List<Employee> listOfEmployee = filterEmployees().stream()
                 .sorted((e1, e2) -> e1.getDateOfBirth().compareTo(e2.getDateOfBirth()))
                 .collect(Collectors.toList());
-        System.out.print(ANSI_BLUE + "Enter the file path to save: " + ANSI_RESET);
-        String filePath = scanner.nextLine();
-        FileUtils.writeEmployeesToCSV(listOfEmployee, filePath);
+
+        try {
+            System.out.print(ANSI_BLUE + "Enter the file path to save: " + ANSI_RESET);
+            String filePath = scanner.nextLine();
+            FileUtils.writeEmployeesToCSV(listOfEmployee, filePath);
+            System.out.println(ANSI_GREEN + "Filtered data exported successfully." + ANSI_RESET);
+        } catch (IOException e) {
+            System.out.println(ANSI_RED + e.getMessage() + ANSI_RESET);
+        }
     }
 }
