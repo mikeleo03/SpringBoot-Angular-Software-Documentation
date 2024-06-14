@@ -212,7 +212,7 @@ public class AppManager {
         System.out.println("2 - ID");
         System.out.println("3 - Date of Birth (year)");
         System.out.println("4 - Department");
-        System.out.println("5 - Show all employees");
+        System.out.println("5 - All employees");
         System.out.print("Choose an option: " + ANSI_RESET);
         try {
             int choice = Integer.parseInt(scanner.nextLine().trim());
@@ -286,7 +286,8 @@ public class AppManager {
         // Print table header
         String header = String.format(format, "ID", "Name", "Date of Birth", "Address", "Department");
         String separator = new String(new char[header.length()]).replace("\0", "-");
-        System.out.println(ANSI_CYAN + "\n" + separator);
+        System.out.println(ANSI_BOLD + "\nShowing " + listOfEmployee.size() + " employee(s) data..." + ANSI_RESET);
+        System.out.println(ANSI_CYAN + separator);
         System.out.println(header);
         System.out.println(separator + ANSI_RESET);
 
