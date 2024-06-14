@@ -229,13 +229,15 @@ Here is the class diagram of the program
     ```bash
     $ cd task7
     ```
-2. Make sure you have maven installed on your computer, use `mvn -v` to check the version, and then run this command
+2. Make sure you have maven installed on your computer, use `mvn -v` to check the version.
+3. If you are using windows, you can run the program by using this command.
     ```bash
-    $ mvn clean install
+    $ ./run.bat
     ```
-3. Finally, run the jar using this command
+    And if you are using Linux, you can run the program by using this command.
     ```bash
-    $ java -jar target/employee_management-jar-with-dependencies.jar
+    $ chmod +x run.sh
+    $ ./run.sh
     ```
 
 If all the instruction is well executed, the main-view will be something like this.
