@@ -189,20 +189,24 @@ interface MyFunctionalInterface {
 ### ✍ Task 4 - Implement `SavingAccount` and `CurrentAccount`
 Here i implement class `SavingAccount` and `CurrentAccount`, both implementing the `Account` interface. Each account type has its unique behaviors, and they log messages with their `accountId`.
 1. **[Account Interface](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%202/Account.java)**
-Defines the contract for both account types, including deposit, withdraw, and log methods.
+
+    Defines the contract for both account types, including deposit, withdraw, and log methods.
     - Defines methods that any account must implement.
     - Includes a default `log` method that adds `accountId` to log messages
     - `isValidAccountId` shows how static methods can be included in interfaces to validate account ID is formatted perfectly.
 2. **[SavingAccount](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%202/SavingAccount.java)**
-Represents a savings account with methods for deposit, withdrawal, and logging.
+    
+    Represents a savings account with methods for deposit, withdrawal, and logging.
     - Implements `Account` methods.
     - Uses `accountId` for identification in logs.
 3. **[CurrentAccount](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%202/CurrentAccount.java)**
-Represents a current account with overdraft capabilities.
+    
+    Represents a current account with overdraft capabilities.
     - Adds an overdraft limit feature.
     - Implements `Account` methods with `accountId` for logging.
 3. **[Main Class](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%202/Task4.java)**
-Demonstrates different account types with different `accountId`s.
+    
+    Demonstrates different account types with different `accountId`s.
     - Demonstrates the behavior of different accounts (`SavingAccount` and `CurrentAccount`) with unique `accountIds`.
     - Logs transactions with `accountId`.
     - Shows how the default log method and static method from `Account` are used to validate ID.
