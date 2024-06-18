@@ -78,10 +78,10 @@ public class MultipleResourcesExample {
 `throw` and `throws` are both related to exception handling in Java, but they serve different purposes.
 
 ##### **`throw`**
-**Purpose**: Used to explicitly throw an exception from a method or block of code.
-**Types of Exceptions**: Can be used to throw both checked and unchecked exceptions.
-**Syntax**: `throw new ExceptionType("Error Message");`
-**Location**: Can be used inside any method or block of code to indicate that something has gone wrong.
+- **Purpose**: Used to explicitly throw an exception from a method or block of code.
+- **Types of Exceptions**: Can be used to throw both checked and unchecked exceptions.
+- **Syntax**: `throw new ExceptionType("Error Message");`
+- **Location**: Can be used inside any method or block of code to indicate that something has gone wrong.
 
 #### The example of `throw`
 ```java
@@ -108,10 +108,10 @@ Here is the explanation on what actually done.
 - The `main` method catches this exception and prints the error message.
 
 ##### **`throws`**
-**Purpose**: Used in a method signature to declare that the method might throw one or more exceptions.
-**Types of Exceptions**: Typically used to declare checked exceptions that a method might throw.
-**Syntax**: `void methodName() throws ExceptionType1, ExceptionType2 { ... }`
-**Location**: Appears in the method declaration and indicates that the caller of the method must handle or propagate these exceptions.
+- **Purpose**: Used in a method signature to declare that the method might throw one or more exceptions.
+- **Types of Exceptions**: Typically used to declare checked exceptions that a method might throw.
+- **Syntax**: `void methodName() throws ExceptionType1, ExceptionType2 { ... }`
+- **Location**: Appears in the method declaration and indicates that the caller of the method must handle or propagate these exceptions.
 
 #### The example of `throws`
 ```java

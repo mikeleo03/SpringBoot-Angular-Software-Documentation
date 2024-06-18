@@ -136,9 +136,11 @@ And the output of the program shows like this.
 Let’s walk through the entire process of sorting an array of random integers using multi-threading with the merge sort algorithm in Java. This involves generating the array, sorting it with multiple threads, and understanding how the merge sort algorithm is adapted to a multi-threaded environment.
 
 1. **Generate a Random Array**
-The first step is to create an array of 20 random integers. We use Java's Random class to generate these numbers.
+    
+    The first step is to create an array of 20 random integers. We use Java's Random class to generate these numbers.
 2. **Implement the Merge Sort Algorithm with Multi-threading**
-Merge sort is a divide-and-conquer algorithm. It divides the array into smaller subarrays, sorts them, and then merges them back together. For multi-threaded sorting, we use Java’s Fork/Join framework to handle sorting in parallel.
+    
+    Merge sort is a divide-and-conquer algorithm. It divides the array into smaller subarrays, sorts them, and then merges them back together. For multi-threaded sorting, we use Java’s Fork/Join framework to handle sorting in parallel.
     - **Inheritance**: Extends `RecursiveAction`, a part of the Fork/Join framework, for parallel execution.
     - **Constructor**: Initializes the task with the array and the range to sort.
     - **`compute()`**: Implements the recursive divide-and-conquer logic. If the subarray is small, it sorts it directly using `Arrays.sort()`. Otherwise, it splits the array further and sorts the halves in parallel.
