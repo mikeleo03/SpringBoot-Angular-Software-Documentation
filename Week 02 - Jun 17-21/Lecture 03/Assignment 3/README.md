@@ -11,7 +11,7 @@
 2. **Implementing `AutoCloseable`**
     Any resource used in `try-with-resources` must implement the `AutoCloseable` interface, which provides a `close()` method.
 3. **Multiple Resources**
-    You can declare multiple resources in a single `try` statement, separated by semicolons.
+    We can declare multiple resources in a single `try` statement, separated by semicolons.
 
 Here is the basic syntax.
 ```java
@@ -153,7 +153,7 @@ Here are the differences of them
 
 #### 🤔 Use Cases
 **`throw`**
-- When you need to explicitly throw an exception based on certain conditions in your code.
+- When we need to explicitly throw an exception based on certain conditions in your code.
 - Example: Validating user input and throwing an exception if the input is invalid.
 
 **`throws`**

@@ -107,7 +107,7 @@ Based on the definition and characteristics, hera are the differences between ab
 | Usage | Used for classes with shared code	| Used to define a contract for unrelated classes |
 | Access Modifiers | Methods can have any access modifier | Methods are public by default (abstract methods) |
 | Constructor | Can have constructors	| Cannot have constructors |
-| When to Use | When you have a base class with common code to share | When you want to define a contract for various classes to implement |
+| When to Use | When we have a base class with common code to share | When we want to define a contract for various classes to implement |
 
 #### Examples
 **Abstract Class**
