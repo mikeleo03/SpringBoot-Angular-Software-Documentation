@@ -129,6 +129,7 @@ Here i implement class `BankAccount` and `BankAccountDemo`.
 And the output of the program shows like this.
 
 ![Screenshot](img/Task2.png)
+
 <br>
 
 ### 🔢 Task 3 - Sorts an Array of Integers Using Multiple Threads
@@ -146,6 +147,7 @@ Merge sort is a divide-and-conquer algorithm. It divides the array into smaller 
 Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%204/MultiThreadedSort.java), and the output of the program shows like this.
 
 ![Screenshot](img/Task3.png)
+
 <br>
 
 ### 📌 Task 4 - Notable Aspects When Using Multiple Threads

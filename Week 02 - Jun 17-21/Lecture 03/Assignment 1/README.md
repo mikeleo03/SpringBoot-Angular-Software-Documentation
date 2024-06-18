@@ -64,6 +64,7 @@ public class Task2 {
 and here's the result
 
 ![Screenshot](img/Task2.png)
+
 <br>
 
 ### 🙋🏻‍♂️ Task 3 - `Student` Class

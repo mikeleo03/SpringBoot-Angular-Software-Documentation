@@ -176,6 +176,7 @@ Here is the output if `test1.txt` exist
 The content also copied to `test2.txt`, and here is the output if the `test1`.txt` is not exist.
 
 ![Screenshot](img/Lab1.2.png)
+
 <br>
 
 ### 📝 Lab 2 - Array Menu with Exception Handling
@@ -188,19 +189,25 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21//Le
 
 Here is the output of all input possibilities
 1. Normal input
-![Screenshot](img/Lab2.1.png)
+
+    ![Screenshot](img/Lab2.1.png)
 
 2. Negative number
-![Screenshot](img/Lab2.2.png)
+
+    ![Screenshot](img/Lab2.2.png)
 
 3. Bigger than 4
-![Screenshot](img/Lab2.3.png)
+
+    ![Screenshot](img/Lab2.3.png)
 
 4. Input none
-![Screenshot](img/Lab2.4.png)
+    
+    ![Screenshot](img/Lab2.4.png)
 
 5. Input string instead of integer
-![Screenshot](img/Lab2.5.png)
+    
+    ![Screenshot](img/Lab2.5.png)
+
 <br>
 
 ### 📝 Lab 3 - Method to Check for Vowels with Custom Exception
