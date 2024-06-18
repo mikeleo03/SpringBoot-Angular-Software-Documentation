@@ -111,7 +111,7 @@ We need to create a bank account system where multiple threads can deposit and w
 - **Synchronization**: We need to ensure that access to the shared resource (the account balance) is controlled to avoid race conditions.
 - **Thread Safety**: Ensuring the integrity of the account balance when multiple threads perform deposits and withdrawals.
 
-### ✍ Implementation Steps
+#### ✍ Implementation Steps
 Here i implement class `BankAccount` and `BankAccountDemo`.
 1. **[BankAccount Class](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%204/BankAccount.java)**
 
