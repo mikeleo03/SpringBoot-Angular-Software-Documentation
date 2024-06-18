@@ -42,8 +42,8 @@ public class Lab1 {
     }
     
     public static void main(String[] args) {
-        String sourceFile = "test1.txt";
-        String destinationFile = "test2.txt";
+        String sourceFile = "data/test1.txt";
+        String destinationFile = "data/test2.txt";
 
         // Try to read from the source file and write to the destination file
         try {

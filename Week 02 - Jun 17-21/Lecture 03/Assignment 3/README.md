@@ -167,7 +167,7 @@ Here are the differences of them
 2. Write an application that reads the file and prints its content to the console.
 3. Write the content to another file `test2.txt.`
 
-Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21//Lecture%2003/Assignment%203//Lab1.java) with this [test1.txt](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%203/test1.txt).
+Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21//Lecture%2003/Assignment%203//Lab1.java) with this [test1.txt](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%203/data/test1.txt).
 
 Here is the output if `test1.txt` exist
 

@@ -8,8 +8,8 @@ import java.util.Set;
 
 public class RemoveDuplicates {
     public static void main(String[] args) {
-        String inputFileName = "input.csv";
-        String outputFileName = "output.csv";
+        String inputFileName = "data/input.csv";
+        String outputFileName = "data/output.csv";
         String delimiter = ","; // Parse CSV format
         
         // Set to store unique keys (employeeID in this case)

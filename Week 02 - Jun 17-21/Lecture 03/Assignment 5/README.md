@@ -80,7 +80,7 @@ To remove duplicate lines from a file:
 4. **Writing Unique Lines**: Write only those lines to a new file that haven't been seen before (not in the `HashSet`).
 
 #### 📋 Case CSV Content
-In this program, i use CSV file [`input.csv`](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/input.csv) with content like this.
+In this program, i use CSV file [`input.csv`](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/data/input.csv) with content like this.
 ```csv
 employeeID,name,department
 1,Alice,HR
