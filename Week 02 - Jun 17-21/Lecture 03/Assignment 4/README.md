@@ -1,5 +1,5 @@
 # 👨🏻‍🏫 Lecture 03 - Java Core
-> This repository is created as a part of assignment for Lecture 02 - Java Core
+> This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## 🧶 Assignment 04 - Multithreading
 ### 💀 Task 1 - Deadlock Explanation and Prevention
@@ -153,9 +153,9 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lec
 ### 📌 Task 4 - Notable Aspects When Using Multiple Threads
 #### ✅ **Advantages**
 - **Improved Performance**
-    - **Parallelism**: By dividing tasks among multiple threads, you can take advantage of multi-core processors to perform computations in parallel. This can lead to significant performance improvements, especially for CPU-bound tasks.
+    - **Parallelism**: By dividing tasks among multiple threads, we can take advantage of multi-core processors to perform computations in parallel. This can lead to significant performance improvements, especially for CPU-bound tasks.
     - **Concurrent I/O**: For applications involving I/O operations (such as reading/writing files or making network requests), multiple threads can handle these operations simultaneously, reducing wait times and improving overall throughput.
-- **Responsiveness**: In GUI applications, you can use background threads to perform long-running tasks (like data loading or processing) while keeping the user interface responsive. The main thread handles user interactions while background threads handle the heavy lifting.
+- **Responsiveness**: In GUI applications, we can use background threads to perform long-running tasks (like data loading or processing) while keeping the user interface responsive. The main thread handles user interactions while background threads handle the heavy lifting.
 - **Resource Sharing**
     - **Efficient Memory Use**: Threads share the same memory space, making them more efficient than processes for tasks that need to share data frequently. This shared memory space allows for fast communication between threads.
     - **Shared Resources**: Threads can easily share common resources, such as caches or buffers, reducing redundancy and memory usage.

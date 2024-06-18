@@ -1,5 +1,5 @@
 # 👨🏻‍🏫 Lecture 03 - Java Core
-> This repository is created as a part of assignment for Lecture 02 - Java Core
+> This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## 💡 Assignment 02 - Abstract Class and Interfaces
 ### ⚔️ Task 1 - Handling Conflicting Default Methods from Multiple Interfaces

@@ -1,5 +1,5 @@
 # 👨🏻‍🏫 Lecture 03 - Java Core
-> This repository is created as a part of assignment for Lecture 02 - Java Core
+> This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## 📚 Assignment 05 - Java Collections
 ### 🔍 Task 1 - Collection Comparison
@@ -105,12 +105,13 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lec
 4. **Output**: After processing all lines, the program prints a success message indicating that duplicates have been removed and the output file (`output.csv`) has been created.
 
 The output of the program shows on this [output.csv](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/output.csv)
+
 <br>
 
 ### 🖨️ Task 4 - Get a Shallow Copy of a `HashMap`
 A shallow copy of a `HashMap` means creating a new `HashMap` instance that has the same key-value pairs as the original. Changes to the new map won’t affect the original map, but changes to the objects (if they are mutable) that the map’s keys or values refer to will affect both maps.
 
-For example, Imagine we have a `HashMap` that maps employee IDs to employee objects. You want to create a copy of this `HashMap` for some operation without affecting the original map.
+For example, Imagine we have a `HashMap` that maps employee IDs to employee objects. We want to create a copy of this `HashMap` for some operation without affecting the original map.
 
 ```java
 import java.util.HashMap;
@@ -145,22 +146,23 @@ The copy constructor `new HashMap<>(originalMap)` creates a new `HashMap` (`copy
 4. **Modifying the Original Map**: `originalMap.put(4, "David");` adds a new entry to `originalMap` after creating the copy.
 5. **Output**: The program prints both `originalMap` and `copyMap`. Since it's a shallow copy, modifying `originalMap` (`put(4, "David")`) affects only `originalMap`, not `copyMap`.
 
-Besides using the copy constructor, you can also use the `putAll()` method to copy the contents of one `HashMap` into anothe.
+Besides using the copy constructor, we can also use the `putAll()` method to copy the contents of one `HashMap` into anothe.
 ```java
 // Alternative method using putAll() for shallow copy
 HashMap<Integer, String> copyMap = new HashMap<>();
 copyMap.putAll(originalMap);
 ```
 Both approaches achieve the same result, which is a shallow copy of the `HashMap`.
+
 <br>
 
 ### 🔀 Task 5 - Converting List to Map in Java
-Imagine we have a `List` of `Employee` objects, and each `Employee` has a unique `employeeID`. You want to convert this `List` into a `Map` where each `employeeID` acts as the key, and the corresponding `Employee` object is the value in the map.
+Imagine we have a `List` of `Employee` objects, and each `Employee` has a unique `employeeID`. We want to convert this `List` into a `Map` where each `employeeID` acts as the key, and the corresponding `Employee` object is the value in the map.
 
 #### ✍ Implementation Steps
 Here i implement class `BankAccount` and `BankAccountDemo`.
 1. **Create a `List` of Objects**: Populate a `List` with objects (Employee objects in this case).
-2. **Define a Key Mapper Function**: Decide how you want to map each object to its key. In our case, it's the `employeeID` of each `Employee`.
+2. **Define a Key Mapper Function**: Decide how we want to map each object to its key. In our case, it's the `employeeID` of each `Employee`.
 3. **Use Java Streams for Transformation**: Utilize Java Streams API to transform the `List` into a `Map`.
 4. **Collect into Map**: Use the `Collectors.toMap()` method to collect elements of the `List` into a `Map` using the specified key and value mappings.
 

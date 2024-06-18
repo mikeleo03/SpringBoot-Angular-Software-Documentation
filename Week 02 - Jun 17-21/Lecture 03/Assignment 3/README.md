@@ -1,5 +1,5 @@
 # 👨🏻‍🏫 Lecture 03 - Java Core
-> This repository is created as a part of assignment for Lecture 02 - Java Core
+> This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## 🚫 Assignment 03 - Exceptions
 ### 🗃️ Task 1 - Research and Explain `try-with-resources`
@@ -153,7 +153,7 @@ Here are the differences of them
 
 #### 🤔 Use Cases
 **`throw`**
-- When we need to explicitly throw an exception based on certain conditions in your code.
+- When we need to explicitly throw an exception based on certain conditions in our code.
 - Example: Validating user input and throwing an exception if the input is invalid.
 
 **`throws`**

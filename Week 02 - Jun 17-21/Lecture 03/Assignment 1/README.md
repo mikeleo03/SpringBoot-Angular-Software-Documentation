@@ -1,5 +1,5 @@
 # 👨🏻‍🏫 Lecture 03 - Java Core
-> This repository is created as a part of assignment for Lecture 02 - Java Core
+> This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## ⚙️ Assignment 01 - Class and Object
 ### 🐕‍🦺 Task 1 - `Dog` Class
