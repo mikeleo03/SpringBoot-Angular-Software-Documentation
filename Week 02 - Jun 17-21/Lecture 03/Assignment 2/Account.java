@@ -8,7 +8,11 @@ public interface Account {
         System.out.println("Account (" + getAccountId() + ") log: " + message);
     }
 
-    static void staticMethod() {
-        System.out.println("Static method in Account interface.");
+    static void isValidAccountId(String accountId) {
+        if (accountId.matches("^(SA|CA)\\d+$")) {
+            System.out.println(">> Valid account ID: " + accountId);
+        } else {
+            System.out.println(">> Invalid account ID: " + accountId);
+        }
     }
 }
