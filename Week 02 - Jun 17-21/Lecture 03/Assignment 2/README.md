@@ -42,6 +42,7 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21//Le
 Here is the explanation on what actually done.
 - `Task1` provides its own `log` method, resolving the conflict by choosing which interface's log method to invoke (in this case, the first interface).
 - The `super` keyword along with the interface name specifies the exact `default` method to use.
+<br>
 
 ### 🆚 Task 2 - Difference Between Abstract Class and Interface
 #### Get to know abstract class and interface
@@ -160,6 +161,7 @@ Here is the explanation on what actually done.
 - `makeSound` is an abstract method that implementing classes must define.
 - `sleep` is a default method with implementation.
 - `eat` is a static method accessible directly through the interface.
+<br>
 
 ### 🤔 Task 3 - Research on `@FunctionalInterface`
 A `@FunctionalInterface` annotation is used to denote an interface that is intended to be a functional interface. A functional interface has exactly one abstract method, making it a suitable target for lambda expressions or method references in Java.
@@ -182,6 +184,7 @@ interface MyFunctionalInterface {
     // void anotherMethod();
 }
 ```
+<br>
 
 ### ✍ Task 4 - Implement `SavingAccount` and `CurrentAccount`
 Here i implement class `SavingAccount` and `CurrentAccount`, both implementing the `Account` interface. Each account type has its unique behaviors, and they log messages with their `accountId`.
