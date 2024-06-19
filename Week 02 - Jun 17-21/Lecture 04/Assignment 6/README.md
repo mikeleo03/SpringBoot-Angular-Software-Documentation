@@ -76,6 +76,7 @@ public class ParallelReduceExample {
                          .reduce(0, Integer::sum);
 
         System.out.println("Sum: " + sum);
+        // Output: Sum: 55
     }
 }
 ```
@@ -131,6 +132,7 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lec
 4. **Avoid Magic Numbers**: Using descriptive variable names like `keyFieldName` makes the code more readable.
 
 Given the CSV file as an input on this [data.csv](/Week%2002%20-%20Jun%2017-21/Lecture%2004/Assignment%206/data/data.csv) and the result is showed up on this [unique.csv](/Week%2002%20-%20Jun%2017-21/Lecture%2004/Assignment%206/data/unique.csv).
+
 <br>
 
 ### #️⃣ Task 4 - Count the Number of Strings Starting with a Specific Letter Using Streams
