@@ -36,7 +36,7 @@ public class RemoveDuplicates {
             System.out.println("Duplicates removed successfully. Output written to " + outputFileName);
             
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("I/O Error occured:" + e);
         }
     }
 }
