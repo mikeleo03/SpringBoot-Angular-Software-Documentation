@@ -3,9 +3,9 @@
 
 ## ⚙️ Assignment 01 - Class and Object
 ### 🐕‍🦺 Task 1 - `Dog` Class
-#### Objective
+#### 📌 Objective
 Create a `Dog` class that models a dog's attributes and behaviors.
-#### Explanation
+#### 💭 Explanation
 **States (Attributes):**
 - `color`: The color of the dog.
 - `name`: The name of the dog.
@@ -27,9 +27,9 @@ Here is the explanation on what actually done.
 <br>
 
 ### 🎓 Task 2 - `Teacher` and `Subject` Classes
-#### Objective
+#### 📌 Objective
 Create `Teacher` and `Subject` classes where a teacher can be assigned a subject to teach.
-#### Explanation
+#### 💭 Explanation
 1. **[Subject Class](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%201/Subject.java)**
     **States (Attributes)**
     - `name`: The name of the subject.
@@ -68,9 +68,9 @@ and here's the result
 <br>
 
 ### 🙋🏻‍♂️ Task 3 - `Student` Class
-#### Objective
+#### 📌 Objective
 Create a `Student` class that models a student who can learn multiple subjects.
-#### Explanation
+#### 💭 Explanation
 **[Student Class](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%201/Student.java)**
 **States (Attributes)**
 - `name`: The name of the student.

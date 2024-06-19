@@ -104,7 +104,7 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lec
     - If the key is not in `seenKeys`, it means the line hasn't been encountered before, so it's written to `output.csv` and added to `seenKeys`.
 4. **Output**: After processing all lines, the program prints a success message indicating that duplicates have been removed and the output file (`output.csv`) has been created.
 
-The output of the program shows on this [output.csv](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/output.csv)
+The output of the program shows on this [`output.csv`](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/data/output.csv)
 
 <br>
 

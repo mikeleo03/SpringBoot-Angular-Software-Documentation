@@ -45,14 +45,14 @@ Here is the explanation on what actually done.
 <br>
 
 ### 🆚 Task 2 - Difference Between Abstract Class and Interface
-#### Get to know abstract class and interface
+#### 🤔 Get to know abstract class and interface
 **Abstract Class**
 An abstract class in Java is a class that cannot be instantiated directly. It is designed to be subclassed and can contain both abstract methods (without implementation) and concrete methods (with implementation).
 
 **Interface**
 An interface in Java is a reference type, similar to a class, that can contain only constants, method signatures, default methods (methods with implementation), static methods, and nested types. Interfaces cannot contain fields that maintain state. Classes implement interfaces to define a contract for behavior.
 
-#### The differences of them
+#### 🤷‍♂️ The differences of them
 Based on the definition and characteristics, hera are the differences between abstract class and interface.
 <table style="width:100%">
     <col width="49%">
@@ -97,7 +97,7 @@ Based on the definition and characteristics, hera are the differences between ab
     </tr>
 </table>
 
-#### Key points
+#### 🗝️ Key points
 | Feature | Abstract Class | Interfaces |
 | ---- | ---- | ---- |
 | Instantiation | Cannot be instantiated | Cannot be instantiated |
@@ -109,7 +109,7 @@ Based on the definition and characteristics, hera are the differences between ab
 | Constructor | Can have constructors	| Cannot have constructors |
 | When to Use | When we have a base class with common code to share | When we want to define a contract for various classes to implement |
 
-#### Examples
+#### 📝 Examples
 **Abstract Class**
 ```java
 public abstract class Animal {

@@ -74,7 +74,7 @@ public class MultipleResourcesExample {
 <br>
 
 ### 🗑️ Task 2 - `throw` vs `throws`
-#### Get to know `throw` and `throws`
+#### 🤔 Get to know `throw` and `throws`
 `throw` and `throws` are both related to exception handling in Java, but they serve different purposes.
 
 ##### **`throw`**
@@ -83,7 +83,7 @@ public class MultipleResourcesExample {
 - **Syntax**: `throw new ExceptionType("Error Message");`
 - **Location**: Can be used inside any method or block of code to indicate that something has gone wrong.
 
-#### The example of `throw`
+##### The example of `throw`
 ```java
 public class ThrowExample {
     public static void main(String[] args) {
@@ -113,7 +113,7 @@ Here is the explanation on what actually done.
 - **Syntax**: `void methodName() throws ExceptionType1, ExceptionType2 { ... }`
 - **Location**: Appears in the method declaration and indicates that the caller of the method must handle or propagate these exceptions.
 
-#### The example of `throws`
+##### The example of `throws`
 ```java
 import java.io.BufferedReader;
 import java.io.FileReader;
