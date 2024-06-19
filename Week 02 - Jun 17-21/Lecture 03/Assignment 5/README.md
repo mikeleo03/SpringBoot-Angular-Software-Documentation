@@ -1,4 +1,4 @@
-# 👨🏻‍🏫 Lecture 03 - Java Core
+# 👩🏻‍🏫 Lecture 03 - Java Core
 > This repository is created as a part of assignment for Lecture 03 - Java Core
 
 ## 📚 Assignment 05 - Java Collections
