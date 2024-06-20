@@ -221,3 +221,35 @@ The output of the program shows like this.
 - **Immutable Classes**: Ensure Student is immutable by making fields final and providing no setters.
 - **Error Handling**: Handle potential errors gracefully, especially when dealing with optional results.
 - **Performance Considerations**: For large lists, consider parallel streams if the operations are independent and performance is critical.
+
+<br>
+
+### 🪄 Task 6 - Converting a List of Employees to a Map with ID as Key Using Java Streams
+In many applications, we may need to convert a list of objects to a map, where a unique identifier from the object serves as the key. Java Streams provide a straightforward way to perform this conversion efficiently.
+
+#### 📢 Concept and Approach
+1. **Define the Employee Class**: Create a class `Employee` with attributes such as `id`, `name`, and `department`.
+2. **Create the List**: Have a list of `Employee` objects.
+3. **Stream and Collect**: Use Java Streams to convert the list to a map by using the `Collectors.toMap` method.
+
+#### 👬🏻 Handling Duplicate Keys
+In some cases, there might be duplicate keys (e.g., employees with the same ID). To handle this, we can provide a merge function to `Collectors.toMap` that specifies how to handle duplicates.
+**Merge Function**: `(existing, replacement) -> existing` specifies that in case of duplicate keys, the existing entry is retained.
+
+#### 👨🏻‍💻 Implementation
+Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lecture%2004/Assignment%206/EmployeeListToMap.java).
+
+Given the input of the array like this
+
+```java
+List<Employee> employees = Arrays.asList(
+    new Employee(1, "Alice", "HR"),
+    new Employee(2, "Bob", "IT"),
+    new Employee(1, "Alicia", "Marketing"), // Duplicate ID 1
+    new Employee(3, "Charlie", "Finance")
+);
+```
+
+The output of the program shows like this.
+
+![Screenshot](img/Task6.png)
