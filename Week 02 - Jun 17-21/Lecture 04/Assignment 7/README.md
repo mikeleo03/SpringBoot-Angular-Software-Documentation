@@ -666,8 +666,6 @@ class ListUtils {
     }
 }
 
-import java.util.*;
-
 public class ListToMap {
     public static void main(String[] args) {
         List<Employee> employees = Arrays.asList(
