@@ -116,7 +116,7 @@ Here is the detailed explanation.
     - `writeObject` method of `ObjectOutputStream` is used to write the list of objects to the file.
     - This method traverses each object, converts it into a byte stream, and stores it in the file.
 
-###### Deserialization Process
+##### Deserialization Process
 1. Opening the Object Stream
     - **`FileInputStream`**: Opens the file to read data.
     - **`ObjectInputStream`**: Wraps the `FileInputStream` and provides methods to deserialize objects.
