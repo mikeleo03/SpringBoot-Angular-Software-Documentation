@@ -97,6 +97,7 @@ Here is some result of the APIs created.
     ![Screenshot](img/api2.png)
 3. **Add New Employee**
     `(POST /api/v1/employee)`
+    
     Body (Raw):
     ```json
     {
@@ -112,6 +113,7 @@ Here is some result of the APIs created.
     ![Screenshot](img/api32.png)
 4. **Edit Employee**
     `(PUT /api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a)`
+    
     Body (Raw):
     ```json
     {

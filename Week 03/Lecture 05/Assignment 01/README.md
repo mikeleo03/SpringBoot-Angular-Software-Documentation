@@ -85,7 +85,7 @@ If all the instruction is well executed, the main-view will be something like th
 ### 📸 Screenshots
 Here is some result of the APIs created. based on the postman collection with slight modification.
 <br>
-**Initial state**
+#### Initial state
 
 ![Screenshot](img/init.png)
 
@@ -99,6 +99,7 @@ Here is some result of the APIs created. based on the postman collection with sl
     ![Screenshot](img/api2.png)
 3. **Add New Contact**
     `(POST /api/v1/contact)`
+    
     Body (Raw):
     ```json
     {
@@ -114,6 +115,7 @@ Here is some result of the APIs created. based on the postman collection with sl
     ![Screenshot](img/api32.png)
 4. **Edit Contact**
     `(PUT /api/v1/contact/b002747b-4cc3-4a81-bd7e-e3184da0410p)`
+    
     Body (Raw):
     ```json
     {
