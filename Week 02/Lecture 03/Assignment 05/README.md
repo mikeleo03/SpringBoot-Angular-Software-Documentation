@@ -80,7 +80,7 @@ To remove duplicate lines from a file:
 4. **Writing Unique Lines**: Write only those lines to a new file that haven't been seen before (not in the `HashSet`).
 
 #### 📋 Case CSV Content
-In this program, i use CSV file [`input.csv`](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/data/input.csv) with content like this.
+In this program, i use CSV file [`input.csv`](/Week%2002/Lecture%2003/Assignment%2005/RemoveDuplicates.java) with content like this.
 ```csv
 employeeID,name,department
 1,Alice,HR
@@ -105,6 +105,16 @@ Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lec
 4. **Output**: After processing all lines, the program prints a success message indicating that duplicates have been removed and the output file (`output.csv`) has been created.
 
 The output of the program shows on this [`output.csv`](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/data/output.csv)
+
+Here is how to run the updated code of program
+```bash
+$ java RemoveDuplicates <inputFile> <outputFile> <keyFieldIndex>
+```
+
+for example.
+```bash
+java RemoveDuplicates data/input.csv data/output.csv 0
+```
 
 <br>
 
@@ -166,7 +176,7 @@ Here i implement class `BankAccount` and `BankAccountDemo`.
 3. **Use Java Streams for Transformation**: Utilize Java Streams API to transform the `List` into a `Map`.
 4. **Collect into Map**: Use the `Collectors.toMap()` method to collect elements of the `List` into a `Map` using the specified key and value mappings.
 
-Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lecture%2003/Assignment%205/ListToMap.java), and the output of the program shows like this.
+Detail implementation is written on [this code](/Week%2002/Lecture%2003/Assignment%2005/ListToMap.java), and the output of the program shows like this (updated based on comment).
 
 ![Screenshot](img/Task5.png)
 
