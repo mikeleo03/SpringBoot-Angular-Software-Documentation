@@ -18,7 +18,6 @@ lecture_5_hw
 │   │   ├── repository/
 │   │   │   └── EmployeeRepository.java
 │   │   ├── utils/
-│   │   ├── repository/
 │   │   │   ├── DateUtils.java
 │   │   │   └── FileUtils.java
 │   │   └── Lecture5HwApplication.java
@@ -124,7 +123,7 @@ Here is some result of the APIs created.
     ```
 
     ![Screenshot](img/api4.png)
-    ![Screenshot](img/api32.png)
+    ![Screenshot](img/api42.png)
 5. **Delete Employee**
     `(DELETE /api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a)`
 
