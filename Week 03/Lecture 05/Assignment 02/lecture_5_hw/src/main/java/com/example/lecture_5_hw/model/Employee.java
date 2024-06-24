@@ -3,8 +3,6 @@ package com.example.lecture_5_hw.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import com.example.lecture_5_hw.utils.DateUtils;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -32,21 +30,6 @@ public class Employee implements Serializable {
         this.dob = dob;
         this.address = address;
         this.department = department;
-    }
-
-    /**
-     * Parses an array of attributes into an Employee object.
-     *
-     * @param attributes an array of strings representing the employee's id, name, date of birth, address, and department.
-     * @return an Employee object created from the provided attributes.
-     */
-    public static Employee fromCSV(String[] attributes) {
-        String id = attributes[0];
-        String name = attributes[1];
-        LocalDate dob = DateUtils.parseDate(attributes[2]);
-        String address = attributes[3];
-        String department = attributes[4];
-        return new Employee(id, name, dob, address, department);
     }
 }
 

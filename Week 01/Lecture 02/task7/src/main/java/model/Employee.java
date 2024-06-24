@@ -20,21 +20,6 @@ public class Employee {
     }
 
     /**
-     * Parses an array of attributes into an Employee object.
-     *
-     * @param attributes an array of strings representing the employee's id, name, date of birth, address, and department.
-     * @return an Employee object created from the provided attributes.
-     */
-    public static Employee fromCSV(String[] attributes) {
-        String id = attributes[0];
-        String name = attributes[1];
-        LocalDate dateOfBirth = DateUtils.parseDate(attributes[2]);
-        String address = attributes[3];
-        String department = attributes[4];
-        return new Employee(id, name, dateOfBirth, address, department);
-    }
-
-    /**
      * Converts the Employee object to a CSV string format.
      *
      * @return a CSV string representation of the Employee object.
