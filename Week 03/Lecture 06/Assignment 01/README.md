@@ -16,6 +16,10 @@ A table is in **1NF** if:
 3. **Each column must have a unique name.**
 4. **The order in which data is stored does not matter.**
 
+**Key Points**
+1. No repeating groups or arrays.
+2. Each field contains only one value.
+
 #### Example
 
 Consider a table `Student` with the following data:
@@ -45,6 +49,10 @@ A table is in **2NF** if:
 2. **All non-key attributes are fully functional dependent on the primary key.**
 
 This means that any attribute that is not part of a candidate key must be dependent on the entire primary key, not just part of it.
+
+**Key Points**
+1. Applies primarily to tables with composite primary keys.
+2. Each non-key attribute must be functionally dependent on the entire primary key.
 
 #### Example
 
@@ -88,6 +96,10 @@ A table is in **3NF** if:
 2. **All the attributes are functionally dependent only on the primary key.**
 
 This means there are no transitive dependencies for non-prime attributes.
+
+**Key Points**
+1. Remove any transitive dependency.
+2. Each non-key attribute should be directly related to the primary key.
 
 #### Example
 
