@@ -189,6 +189,7 @@ Here is the explanation on what the query actually done.
 
 Now, it's testing time!
 1. **Daily Revenue**
+    
     Here is the result if the procedure is called.
     <br>
 
@@ -213,6 +214,7 @@ Now, it's testing time!
     <br>
 
 2. **Monthly Revenue**
+    
     Here is the result if the procedure is called.
     <br>
 
@@ -238,6 +240,7 @@ Now, it's testing time!
     <br>
 
 3. **Annual Revenue**
+    
     Here is the result if the procedure is called.
     <br>
 
