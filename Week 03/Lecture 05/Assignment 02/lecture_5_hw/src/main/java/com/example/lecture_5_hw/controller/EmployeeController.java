@@ -33,9 +33,9 @@ public class EmployeeController {
 
     /**
      * This method retrieves employees from the database.
-     * If a department ID query parameter is provided, it filters employees by department ID.
+     * If a department query parameter is provided, it filters employees by department.
      *
-     * @param departmentId Optional query parameter to filter employees by department ID.
+     * @param department Optional query parameter to filter employees by department.
      * @return ResponseEntity<List<Employee>> - A response entity containing a list of employees.
      * If the list is empty, it returns a HTTP status code 204 (No Content).
      * If the operation is successful, it returns a HTTP status code 200 (OK) with the list of employees.

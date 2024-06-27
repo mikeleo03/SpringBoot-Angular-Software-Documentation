@@ -137,7 +137,7 @@ Here is some result of the APIs created.
     ![Screenshot](img/api6.png)
     ![Screenshot](img/api62.png)
 7. **Get Employees by Department**
-    `(GET /api/v1/employee/by-dept?department=QA)`
+    `(GET /api/v1/employee?department=QA)`
 
     ![Screenshot](img/api7.png)
 
