@@ -3,7 +3,6 @@ package com.example.lecture_5_hw.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +32,29 @@ public class EmployeeController {
     private final EmployeeRepository employeeRepository;
 
     /**
-     * This method retrieves all employees from the database.
+     * This method retrieves employees from the database.
+     * If a department ID query parameter is provided, it filters employees by department ID.
      *
+     * @param departmentId Optional query parameter to filter employees by department ID.
      * @return ResponseEntity<List<Employee>> - A response entity containing a list of employees.
      * If the list is empty, it returns a HTTP status code 204 (No Content).
      * If the operation is successful, it returns a HTTP status code 200 (OK) with the list of employees.
      */
     @GetMapping
-    public ResponseEntity<List<Employee>> listAllEmployee() {
-        List<Employee> listEmployee= employeeRepository.findAll();
-        if(listEmployee.isEmpty()) {
+    public ResponseEntity<List<Employee>> listAllEmployee(@RequestParam(value = "department", required = false) String departmentId) {
+        List<Employee> employees;
+
+        if (departmentId != null && !departmentId.isEmpty()) {
+            employees = employeeRepository.findByDepartmentId(departmentId);
+        } else {
+            employees = employeeRepository.findAll();
+        }
+
+        if (employees.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(listEmployee);
+
+        return ResponseEntity.ok(employees);
     }
 
     /**
@@ -139,26 +148,6 @@ public class EmployeeController {
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    /**
-     * This method receives a department name by query parameter and returns a list of employees in that department.
-     *
-     * @param department The department to filter employees by.
-     * @return ResponseEntity<List<Employee>> - A response entity containing the list of employees in the specified department.
-     */
-    @GetMapping("/by-dept")
-    public ResponseEntity<List<Employee>> findEmployeesByDepartment(@RequestParam("department") String department) {
-        List<Employee> employees = employeeRepository.findAll()
-                .stream()
-                .filter(employee -> department.equalsIgnoreCase(employee.getDepartment()))
-                .collect(Collectors.toList());
-
-        if (employees.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(employees);
     }
 }
 
