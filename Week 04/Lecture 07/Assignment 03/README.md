@@ -142,3 +142,191 @@ This setup effectively demonstrates the request scope in a Spring application, w
 
 ---
 
+### ❓ Task 3 - How to Inject Prototype Bean into Singleton Bean?
+First, we need to understand a common issue in dependency injection within the Spring Framework and how to resolve it.
+
+#### ❗ **Problem Overview**
+
+- **Prototype Scope**: Each time a prototype-scoped bean is requested, a new instance is created.
+- **Singleton Scope**: A single instance of the bean is created and shared throughout the application's lifecycle.
+
+When a prototype bean is injected into a singleton bean directly, only a single instance of the prototype bean is created and shared within the singleton bean. This defeats the purpose of the prototype scope.
+
+To solve this issue, there are several methods to ensure that a new instance of the prototype bean is created each time it is needed within a singleton bean:
+
+1. **Using `ObjectFactory` or `Provider`**: The simplest approach using Spring’s built-in `ObjectFactory` or Java’s `Provider` from `javax.inject`.
+2. **Using `@Lookup` Method Injection**: A method annotated with `@Lookup` will be overridden by the container to return a new instance of a prototype bean.
+3. **Using Application Context**: Manually retrieving the bean from the application context.
+
+#### 1️⃣ **1. Using `ObjectFactory` or `Provider`**
+
+**Implementation Using `ObjectFactory`**
+
+**Create `PrototypeBean`**
+
+```java
+package com.example.service;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
+public class PrototypeBean {
+    public void doSomething() {
+        System.out.println("PrototypeBean instance hash: " + this.hashCode());
+    }
+}
+```
+
+**Modify `SingletonBean`**
+
+```java
+package com.example.service;
+
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SingletonBean {
+    private final ObjectFactory<PrototypeBean> prototypeBeanFactory;
+
+    @Autowired
+    public SingletonBean(ObjectFactory<PrototypeBean> prototypeBeanFactory) {
+        this.prototypeBeanFactory = prototypeBeanFactory;
+    }
+
+    public void usePrototypeBean() {
+        PrototypeBean prototypeBean = prototypeBeanFactory.getObject();
+        prototypeBean.doSomething();
+    }
+}
+```
+
+`ObjectFactory<PrototypeBean>` is used to lazily resolve a new instance of `PrototypeBean` each time it’s called.
+
+#### 2️⃣ **2. Using `@Lookup` Method Injection**
+
+**Modify `SingletonBean`**
+
+```java
+package com.example.service;
+
+import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SingletonBean {
+
+    @Lookup
+    public PrototypeBean getPrototypeBean() {
+        // Spring will override this method to return a new PrototypeBean instance
+        return null;
+    }
+
+    public void usePrototypeBean() {
+        PrototypeBean prototypeBean = getPrototypeBean();
+        prototypeBean.doSomething();
+    }
+}
+```
+
+`@Lookup` annotation tells Spring to override the method to return a new instance of `PrototypeBean`.
+
+#### 3️⃣ **3. Using Application Context**
+
+**Modify `SingletonBean`**
+
+```java
+package com.example.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SingletonBean {
+
+    private final ApplicationContext applicationContext;
+
+    @Autowired
+    public SingletonBean(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    public void usePrototypeBean() {
+        PrototypeBean prototypeBean = applicationContext.getBean(PrototypeBean.class);
+        prototypeBean.doSomething();
+    }
+}
+```
+
+`applicationContext.getBean(PrototypeBean.class)` retrieves a new instance of `PrototypeBean` each time it’s called.
+
+**Usage Example**
+
+```java
+package com.example.controller;
+
+import com.example.service.SingletonBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class SingletonController {
+
+    private final SingletonBean singletonBean;
+
+    @Autowired
+    public SingletonController(SingletonBean singletonBean) {
+        this.singletonBean = singletonBean;
+    }
+
+    @GetMapping("/usePrototype")
+    public String usePrototype() {
+        singletonBean.usePrototypeBean();
+        return "Check the console for the PrototypeBean instance hash code.";
+    }
+}
+```
+
+#### 📝 **Summary**
+
+- **Using `ObjectFactory` or `Provider`**: Provides a factory to create new instances when needed, ensuring prototype behavior within a singleton.
+- **Using `@Lookup` Method Injection**: Uses Spring’s method injection to return new prototype instances each time the method is called.
+- **Using Application Context**: Retrieves prototype beans directly from the application context, creating a new instance each time.
+
+---
+
+ In **task 4**, we need to understand the differences between `BeanFactory` and `ApplicationContext` in the Spring Framework. Both are interfaces used for dependency injection, but they serve different purposes and have distinct features.
+
+---
+
+### 🤷🏻‍♂️ **4. Difference between `BeanFactory` and `ApplicationContext`**
+
+#### ✨ **Overview**
+
+- **`BeanFactory`**: The root interface for accessing the Spring container. It provides basic functionality to manage beans.
+- **`ApplicationContext`**: An extension of `BeanFactory` that adds more enterprise-specific functionality, including event propagation, declarative mechanisms to create a bean, and a more extensive means to work with the container.
+
+#### 🔍 **Detailed Differences**
+| Feature                            | `BeanFactory`                          | `ApplicationContext`                      |
+|------------------------------------|----------------------------------------|-------------------------------------------|
+| Basic Dependency Injection Container                 | Provides the basic mechanism to manage beans. You typically use `getBean` to retrieve beans, and it only instantiates a bean when it’s requested.                                    | Provides all the features of `BeanFactory` and more. It initializes all singleton beans at startup by default, which can be overridden.                                       |
+| Bean Instantiation on Demand       | Yes                                    | No (Eager Initialization by default)      |
+| Event Propagation                  | Does not support event propagation.                                     | Supports event propagation, allowing beans to publish and listen to application events.                                       |
+| Internationalization (i18n)        | Does not support internationalization directly.                                     | Provides support for internationalization (i18n), allowing messages to be resolved in different locales.                                       |
+| ApplicationContext Aware Beans     | Does not support `ApplicationContext` aware beans.                                     | Supports `ApplicationContext` aware beans, allowing them to access the `ApplicationContext` itself.                                       |
+| Autowiring                         | Yes                                    | Yes                                       |
+| BeanPostProcessor Support          | Limited support for `BeanPostProcessor`.                                | Full support for `BeanPostProcessor`, allowing for custom modifications of new bean instances.                                       |
+| Built-in Bean Scopes               | Singleton, Prototype                   | Singleton, Prototype, Request, Session    |
+| Integration with Web Applications  | Basic support for managing beans, not designed for web integration.                                | Rich support for web applications, with features like `WebApplicationContext`, session-scoped beans, and request-scoped beans.                              |
+| Environment Abstraction            | Does not provide environment abstraction.                                     | Provides environment abstraction, allowing you to manage profiles, properties, and other environment configurations.                                       |
+| Lifecycle Management               | Provides basic lifecycle management with `InitializingBean` and `DisposableBean`.                                 | Offers full lifecycle management with additional support for custom lifecycle events and integration with `ApplicationListener`.                                      |
+
+### 📝 **Summary**
+
+- **`BeanFactory`** is lightweight, primarily used for simple DI and is the root interface.
+- **`ApplicationContext`** extends `BeanFactory`, providing more advanced and enterprise-specific features, including event handling, i18n, lifecycle management, and integration with web applications.
