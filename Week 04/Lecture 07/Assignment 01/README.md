@@ -14,10 +14,10 @@ Imagine you are a coffee shop owner. Instead of the coffee shop making its own c
 In programming, this means that a class (like the coffee shop) receives its dependencies (like coffee beans) from an external source rather than creating them itself.
 
 #### ✅ Advantages of Dependency Injection
-Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injection (DI) with more detailed explanations and examples.
-
 1. **Decoupling of Components**
+    
     DI promotes loose coupling between components. Instead of a class creating its dependencies, they are provided externally. This allows components to be developed, tested, and maintained independently of one another.
+    
     **Example**: 
     ```java
     // Without DI
@@ -36,7 +36,9 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
     In the DI example, `Car` can work with any implementation of `Engine`, not just a specific one.
 
 2. **Ease of Testing**
+    
     DI makes it easier to substitute dependencies with mock objects, facilitating unit testing.
+    
     **Example**:
     ```java
     // Car class with DI
@@ -63,7 +65,9 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
     ```
 
 3. **Flexibility and Configurability**
+    
     DI allows the system to be easily reconfigured or extended by changing the external configuration, without modifying the application code.
+    
     **Example**:
     - **XML Configuration**
         
@@ -80,7 +84,9 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
         ```
 
 4. **Improved Readability and Maintainability**
+    
     Dependencies are clearly visible in the constructor or setter methods, making the code more readable and easier to maintain.
+    
     **Example**:
     ```java
     public class Service {
@@ -93,7 +99,9 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
     It’s clear from the constructor that `Service` depends on `Repository`.
 
 5. **Centralized Dependency Management**
+    
     DI frameworks often allow centralized management of dependencies through configuration files or classes, improving control over dependency lifecycle and configuration.
+    
     **Example**:
     ```java
     @Configuration
@@ -114,12 +122,16 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
 #### ❌ **Drawbacks of Dependency Injection**
 
 1. **Steep Learning Curve**
+    
     DI introduces new concepts and patterns that can be difficult for beginners to grasp, especially when using complex DI frameworks.
+    
     **Example**:
     Understanding concepts like bean scopes, lifecycle callbacks, or proxying in Spring can be challenging for newcomers.
 
 2. **Configuration Overhead**
+    
     Extensive configuration can be required, especially in XML-based DI frameworks, leading to verbosity and potential errors.
+    
     **Example**:
     ```xml
     <!-- XML Configuration for a simple dependency -->
@@ -131,23 +143,29 @@ Sure! Let's delve deeper into the advantages and drawbacks of Dependency Injecti
     This overhead is often mitigated by using annotations, but XML can still be verbose.
 
 3. **Performance Considerations**
+    
     DI frameworks introduce a performance overhead due to reflection or dynamic proxies used to resolve and inject dependencies.
+    
     **Example**:
     Creating a proxy for a class or initializing beans lazily can introduce performance hits compared to direct instantiation.
 
 4. **Difficulty in Debugging**:
+    
     Errors in DI configuration or dependency resolution can be hard to debug because they occur outside the normal control flow.
+    
     **Example**:
     Misconfigured beans or missing dependencies might only become evident at runtime, and the stack trace can be less informative.
 
 5. **Overhead for Simple Applications**:
+    
     DI can be overkill for small applications where the benefits of loose coupling and testability are outweighed by the complexity it introduces.
+    
     **Example**:
     For a simple command-line application or script, manually managing dependencies might be simpler and more straightforward than setting up a DI framework.
 
 **Dependency Injection** provides significant benefits like decoupling, testability, and flexibility but comes with its own set of challenges like complexity, configuration overhead, and potential performance issues. The choice to use DI should consider the size and complexity of the project, team expertise, and specific needs for modularity and maintainability.
 
-<br>
+---
 
 ### 🔁 Task 2 - Create `Employee` Class and Convert XML Bean Declaration to Java Configuration
 In this task, i need to:
@@ -235,7 +253,7 @@ If all the instruction is well executed, the result will be something like this.
 
 ![Screenshot](img/result.png)
 
-<br>
+---
 
 ### 💉 Task 3 - Setter-Based Dependency Injection Using `@Configuration`
 #### 🐾 Step-by-Step Explanation
