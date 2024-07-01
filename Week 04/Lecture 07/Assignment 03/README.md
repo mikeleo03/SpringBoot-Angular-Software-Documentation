@@ -9,15 +9,18 @@
 
 #### 👨‍💻 Implementation
 1. [**`EmailServiceImpl` Interface**](/Week%2004/Lecture%2007/Assignment%2003/lecture_7/src/main/java/com/example/lecture_7/service/EmailServiceImpl.java)
-`EmailServiceImpl` is already a singleton by default, but we'll explicitly annotate it for clarity and print its hash code when the `sendEmail` method is called.
+
+    `EmailServiceImpl` is already a singleton by default, but we'll explicitly annotate it for clarity and print its hash code when the `sendEmail` method is called.
 
 2. [**`EmployeeServiceConstructor` Class**](/Week%2004/Lecture%2007/Assignment%2003/lecture_7/src/main/java/com/example/lecture_7/service/EmployeeServiceConstructor.java)
-We'll modify the `EmployeeServiceConstructor` class to demonstrate the prototype scope.
+
+    We'll modify the `EmployeeServiceConstructor` class to demonstrate the prototype scope.
     - The `@Scope("prototype")` annotation makes each request for `EmployeeServiceConstructor` create a new instance.
     - The `notifyEmployee` method will print the hash code of the current `EmployeeServiceConstructor` instance, demonstrating that different instances are created for each call.
 
 3. [**`Lecture7Application` Class**](/Week%2004/Lecture%2007/Assignment%2003/lecture_7/src/main/java/com/example/lecture_7/Lecture7Application.java)
-We’ll print the hash codes to demonstrate that `EmailService` behaves as singleton and `EmployeeServiceConstructor` behaves as a prototype.
+
+    We’ll print the hash codes to demonstrate that `EmailService` behaves as singleton and `EmployeeServiceConstructor` behaves as a prototype.
 
 #### ⚙️ How to run the program
 1. Go to the `lecture_7` directory by using this command
