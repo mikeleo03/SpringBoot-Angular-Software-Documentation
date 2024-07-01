@@ -300,11 +300,7 @@ public class SingletonController {
 
 ---
 
- In **task 4**, we need to understand the differences between `BeanFactory` and `ApplicationContext` in the Spring Framework. Both are interfaces used for dependency injection, but they serve different purposes and have distinct features.
-
----
-
-### 🤷🏻‍♂️ **4. Difference between `BeanFactory` and `ApplicationContext`**
+### 🤷🏻‍♂️ Task 4 - Difference between `BeanFactory` and `ApplicationContext`
 
 #### ✨ **Overview**
 
