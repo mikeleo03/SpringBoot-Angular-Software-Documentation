@@ -65,3 +65,302 @@ If all the instruction is well executed, the test result will be something like 
 ![Screenshot](img/result.png)
 
 From the result, we know that all the test **executed successfully** and all of them **give the same output**.
+
+---
+
+### 🔎 Task 2 - Comparison of Dependency Injection Types
+
+#### 1️⃣ Constructor Injection
+Constructor injection involves injecting dependencies through the class constructor. This is one of the most common and recommended approaches because it ensures that the class is initialized with all required dependencies right from the start.
+
+**Pros**: Dependencies are immutable and explicit.
+**Cons**: Can be verbose with many dependencies.
+
+#### 2️⃣ Field Injection
+Field injection involves injecting dependencies directly into class fields. This approach is simpler to implement but has some drawbacks, such as making dependencies less clear and hindering testability, especially with mocking frameworks.
+
+**Pros**: Simpler and cleaner in terms of code.
+**Cons**: Hides dependencies, making the code less clear and harder to test.
+
+#### 3️⃣ Setter Injection
+Setter injection involves injecting dependencies through setter methods. This approach allows dependencies to be set or changed after the object is constructed. It provides flexibility but can lead to partially initialized objects and is less suitable for required dependencies.
+
+**Pros**: Allows for optional dependencies and changing dependencies.
+**Cons**: Dependencies are mutable, and it's less obvious which dependencies are required.
+
+#### 📌 Summary
+**Constructor Injection**: Best practice, ensures dependencies are provided at object creation, promotes clear and testable code.
+**Field Injection**: Simpler but leads to tighter coupling, harder to test in isolation.
+**Setter Injection**: Flexible but can lead to mutable objects and harder to reason about dependencies.
+
+---
+
+### 🔴 Task 3 - Circular Dependency Injection
+Circular Dependency Injection (CDI) occurs when two or more classes have dependencies on each other directly or indirectly, forming a cycle. This situation can create challenges for dependency injection frameworks because they rely on constructors or setters to inject dependencies, and a circular dependency prevents the straightforward creation of objects.
+
+#### 💡 Understanding Circular Dependency
+
+Consider two classes, `ClassA` and `ClassB`, where:
+
+- `ClassA` depends on `ClassB`.
+- `ClassB` depends on `ClassA`.
+
+```java
+public class ClassA {
+    private ClassB b;
+
+    public ClassA(ClassB b) {
+        this.b = b;
+    }
+    // Methods using b
+}
+
+public class ClassB {
+    private ClassA a;
+
+    public ClassB(ClassA a) {
+        this.a = a;
+    }
+    // Methods using a
+}
+```
+
+In this scenario:
+- `ClassA` requires an instance of `ClassB`.
+- `ClassB` requires an instance of `ClassA`.
+- This forms a circular dependency because `ClassA` depends on `ClassB` and vice versa.
+
+#### 🤯 Challenges with Circular Dependency
+
+Dependency Injection frameworks typically construct objects using constructors or setters. However, with circular dependencies.
+- **Constructor Injection:** Cannot be resolved because each class requires an instance of the other, causing a deadlock during object creation.
+- **Setter Injection:** Faces similar issues if setters are used to inject dependencies after object creation.
+
+#### 🧩 Resolving Circular Dependency
+
+To resolve circular dependencies, dependency injection frameworks like Spring provide several solutions:
+
+1. **Constructor-Based Injection with `@Autowired`**
+   ```java
+   public class ClassA {
+       private ClassB b;
+
+       @Autowired
+       public ClassA(ClassB b) {
+           this.b = b;
+       }
+       // Methods using b
+   }
+
+   public class ClassB {
+       private ClassA a;
+
+       @Autowired
+       public ClassB(ClassA a) {
+           this.a = a;
+       }
+       // Methods using a
+   }
+   ```
+
+   Use `@Autowired` on constructors to allow the framework to manage the creation order of beans.
+
+2. **Setter-Based Injection**
+   ```java
+   public class ClassA {
+       private ClassB b;
+
+       @Autowired
+       public void setB(ClassB b) {
+           this.b = b;
+       }
+       // Methods using b
+   }
+
+   public class ClassB {
+       private ClassA a;
+
+       @Autowired
+       public void setA(ClassA a) {
+           this.a = a;
+       }
+       // Methods using a
+   }
+   ```
+
+   Use setter methods annotated with `@Autowired` to inject dependencies after objects are created.
+
+3. **Interface-Based Proxying:**
+   Dependency injection frameworks may use proxies or lazy initialization to break the circular dependency.
+    ```java
+    @Autowired
+    @Lazy
+    private B b;
+    ```
+    Use `@Lazy` annotation to create a proxy for one of the beans.
+
+4. **Refactoring:**
+   Sometimes, refactoring the design to eliminate the circular dependency by introducing an intermediary interface or by rethinking class responsibilities can resolve the issue.
+
+#### 🤔 Best Practices
+
+- **Prefer Constructor Injection:** Whenever possible, use constructor injection as it ensures dependencies are resolved at object creation time.
+- **Avoid Circular Dependencies:** Design classes to minimize or eliminate circular dependencies, as they complicate testing and maintenance.
+- **Use Dependency Injection Framework Features:** Leverage features provided by dependency injection frameworks to manage circular dependencies, such as lazy initialization or proxies.
+
+---
+
+### 💯 Task 4 - Some Annotations Explanation and Examples
+#### `@Configuration`
+**Purpose**: Marks a class as a source of bean definitions for the application context.
+
+**Example**:
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AppConfig {
+    @Bean
+    public EmailService emailService() {
+        return new EmailServiceImpl();
+    }
+}
+```
+
+#### `@Bean`
+**Purpose**: Indicates that a method produces a bean to be managed by the Spring container.
+
+**Example**:
+```java
+@Bean
+public EmailService emailService() {
+    return new EmailServiceImpl();
+}
+```
+
+#### `@ComponentScan`
+**Purpose**: Configures component scanning directives for use with `@Configuration` classes.
+
+**Example**:
+```java
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan(basePackages = "com.example")
+public class AppConfig {
+}
+```
+
+#### `@Component`
+**Purpose**: Indicates that a class is a Spring component.
+
+**Example**:
+```java
+import org.springframework.stereotype.Component;
+
+@Component
+public class EmailServiceImpl implements EmailService {
+    // Implementation
+}
+```
+
+#### `@Service`
+**Purpose**: Indicates that a class is a service component in the business layer.
+
+**Example**:
+```java
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmployeeService {
+    // Implementation
+}
+```
+
+#### `@Repository`
+**Purpose**: Indicates that a class is a data repository and provides an abstraction of data access.
+
+**Example**:
+```java
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class EmployeeRepository {
+    // Implementation
+}
+```
+
+#### `@Autowired`
+**Purpose**: Enables automatic injection of dependencies.
+
+**Example**:
+```java
+@Autowired
+private EmailService emailService;
+```
+
+#### `@Scope`
+**Purpose**: Specifies the scope of a bean (singleton, prototype, etc.).
+
+**Example**:
+```java
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
+public class EmailServiceImpl implements EmailService {
+    // Implementation
+}
+```
+
+#### `@Qualifier`
+**Purpose**: Disambiguates injection when multiple beans of the same type exist.
+
+**Example**:
+```java
+@Autowired
+@Qualifier("emailServiceImpl")
+private EmailService emailService;
+```
+
+#### `@PropertySource` and `@Value`
+**Purpose**: Allows for externalizing property values into a properties file.
+
+**Example**:
+```java
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+@Configuration
+@PropertySource("classpath:application.properties")
+public class AppConfig {
+    @Value("${email.service.url}")
+    private String emailServiceUrl;
+}
+```
+
+#### `@PreDestroy` and `@PostConstruct`
+**Purpose**: Used for lifecycle callback methods to release resources before bean destruction or perform initialization after bean creation.
+
+**Example**:
+```java
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+@Component
+public class EmailServiceImpl implements EmailService {
+    @PostConstruct
+    public void init() {
+        // Initialization code
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        // Cleanup code
+    }
+}
+```
