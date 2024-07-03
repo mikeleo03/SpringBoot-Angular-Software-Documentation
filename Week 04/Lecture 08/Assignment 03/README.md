@@ -98,7 +98,7 @@ Spring provides ways to manage transactions, even across multiple data sources, 
     Update the `EmployeeController` to use `EmployeeService` for transaction handling.
 
 #### Simulation
-###### 🗄️ Create Another Employee Table in MySQL
+##### 🗄️ Create Another Employee Table in MySQL
 
 Execute the following SQL script to create the database and the `employee` table in MySQL on another database:
 
