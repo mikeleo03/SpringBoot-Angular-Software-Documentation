@@ -1,15 +1,16 @@
 package com.example.lecture_8_2.repository;
 
-import com.example.lecture_8_2.model.Employee;
+import java.sql.ResultSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
+import com.example.lecture_8_2.model.Employee;
 
 @Repository
 public class EmployeeRepository {
@@ -18,17 +19,14 @@ public class EmployeeRepository {
     private JdbcTemplate jdbcTemplate;
 
     // RowMapper to map ResultSet to Employee
-    private static final RowMapper<Employee> EMPLOYEE_ROW_MAPPER = new RowMapper<>() {
-        @Override
-        public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Employee employee = new Employee();
-            employee.setId(rs.getString("id"));
-            employee.setName(rs.getString("name"));
-            employee.setDob(rs.getDate("dob").toLocalDate());
-            employee.setAddress(rs.getString("address"));
-            employee.setDepartment(rs.getString("department"));
-            return employee;
-        }
+    private static final RowMapper<Employee> EMPLOYEE_ROW_MAPPER = (ResultSet rs, int rowNum) -> {
+        Employee employee = new Employee();
+        employee.setId(rs.getString("id"));
+        employee.setName(rs.getString("name"));
+        employee.setDob(rs.getDate("dob").toLocalDate());
+        employee.setAddress(rs.getString("address"));
+        employee.setDepartment(rs.getString("department"));
+        return employee;
     };
 
     // Find all employees
@@ -43,7 +41,7 @@ public class EmployeeRepository {
         try {
             Employee employee = jdbcTemplate.queryForObject(sql, EMPLOYEE_ROW_MAPPER, id);
             return Optional.ofNullable(employee);
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             return Optional.empty();
         }
     }
