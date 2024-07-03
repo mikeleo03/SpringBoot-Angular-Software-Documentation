@@ -24,7 +24,7 @@ public class EmployeeRepository {
             Employee employee = new Employee();
             employee.setId(rs.getString("id"));
             employee.setName(rs.getString("name"));
-            employee.setDob(rs.getDate("dob"));
+            employee.setDob(rs.getDate("dob").toLocalDate());
             employee.setAddress(rs.getString("address"));
             employee.setDepartment(rs.getString("department"));
             return employee;
