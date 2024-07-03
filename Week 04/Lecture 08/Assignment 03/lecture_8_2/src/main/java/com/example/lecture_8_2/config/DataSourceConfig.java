@@ -7,10 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.transaction.ChainedTransactionManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -29,6 +27,7 @@ public class DataSourceConfig {
     }
 
     @Bean
+    @Primary
     public DataSourceTransactionManager transactionManager1(@Qualifier("dataSource1") DataSource dataSource1) {
         return new DataSourceTransactionManager(dataSource1);
     }
@@ -47,15 +46,6 @@ public class DataSourceConfig {
     @Bean
     public DataSourceTransactionManager transactionManager2(@Qualifier("dataSource2") DataSource dataSource2) {
         return new DataSourceTransactionManager(dataSource2);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Bean
-    @Primary
-    public PlatformTransactionManager chainedTransactionManager(
-            @Qualifier("transactionManager1") DataSourceTransactionManager transactionManager1,
-            @Qualifier("transactionManager2") DataSourceTransactionManager transactionManager2) {
-        return new ChainedTransactionManager(transactionManager1, transactionManager2);
     }
 
     @Bean

@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.lecture_8_2.model.Employee;
-import com.example.lecture_8_2.repository.EmployeeRepository;
+import com.example.lecture_8_2.service.EmployeeService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/employee")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeController {
 
     @Autowired
-    private final EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
 
     @GetMapping("/ds1")
     public ResponseEntity<List<Employee>> listAllEmployeeFromDataSource1() {
-        List<Employee> employees = employeeRepository.findAllFromDS1();
+        List<Employee> employees = employeeService.findAllFromDS1();
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -38,7 +38,7 @@ public class EmployeeController {
 
     @GetMapping("/ds2")
     public ResponseEntity<List<Employee>> listAllEmployeeFromDataSource2() {
-        List<Employee> employees = employeeRepository.findAllFromDS2();
+        List<Employee> employees = employeeService.findAllFromDS2();
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -47,35 +47,64 @@ public class EmployeeController {
 
     @GetMapping("/ds1/{id}")
     public ResponseEntity<Employee> findEmployeeByIdFromDataSource1(@PathVariable("id") String id) {
-        Optional<Employee> employeeOpt = employeeRepository.findByIdFromDS1(id);
+        Optional<Employee> employeeOpt = employeeService.findByIdFromDS1(id);
         return employeeOpt.map(ResponseEntity::ok)
                           .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/ds2/{id}")
     public ResponseEntity<Employee> findEmployeeByIdFromDataSource2(@PathVariable("id") String id) {
-        Optional<Employee> employeeOpt = employeeRepository.findByIdFromDS2(id);
+        Optional<Employee> employeeOpt = employeeService.findByIdFromDS2(id);
         return employeeOpt.map(ResponseEntity::ok)
                           .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Employee> insertEmployee(@RequestBody Employee employee) {
-        employeeRepository.save(employee);
-        return ResponseEntity.ok(employee);
+        try {
+            Employee savedEmployee = employeeService.save(employee);
+            return ResponseEntity.ok(savedEmployee);
+        } catch (Exception e) {
+            System.out.println("Transaction failed. All succesful operations will be rolled back.");
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") String id,
-                                                   @RequestBody Employee employeeForm) {
-        employeeForm.setId(id);
-        employeeRepository.update(employeeForm);
-        return ResponseEntity.ok(employeeForm);
+    @PostMapping("/fail")
+    public ResponseEntity<Employee> insertEmployeeFail(@RequestBody Employee employee) {
+        try {
+            Employee savedEmployee = employeeService.saveFail(employee);
+            return ResponseEntity.ok(savedEmployee);
+        } catch (Exception e) {
+            System.out.println("Transaction failed. All succesful operations will be rolled back.");
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") String id, @RequestBody Employee employeeForm) {
+        try {
+            employeeForm.setId(id);
+            Employee updatedEmployee = employeeService.update(employeeForm);
+            return ResponseEntity.ok(updatedEmployee);
+        } catch (Exception e) {
+            System.out.println("Transaction failed. All succesful operations will be rolled back.");
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") String id) {
-        employeeRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        try {
+            employeeService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.out.println("Transaction failed. All succesful operations will be rolled back.");
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

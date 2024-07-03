@@ -12,13 +12,13 @@ We need to add properties for each data source in the `application.properties`.
 spring.application.name=lecture_8_2
 
 # DataSource 1
-spring.datasource1.url=jdbc:mysql://localhost:3308/week4_lecture8?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource1.jdbc-url=jdbc:mysql://localhost:3308/week4_lecture8?allowPublicKeyRetrieval=true&useSSL=false
 spring.datasource1.username=root
 spring.datasource1.password=Michaeleon16606_
 spring.datasource1.driver-class-name=com.mysql.jdbc.Driver
 
 # DataSource 2
-spring.datasource2.url=jdbc:mysql://localhost:3308/week4_lecture8_clone?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource2.jdbc-url=jdbc:mysql://localhost:3308/week4_lecture8_clone?allowPublicKeyRetrieval=true&useSSL=false
 spring.datasource2.username=root
 spring.datasource2.password=Michaeleon16606_
 spring.datasource2.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -29,56 +29,27 @@ spring.jpa.show-sql=true
 
 #### 🔧 **Create DataSource Configuration Class**
 
-Create a new Java configuration class to define the `DataSource` bean. Define each `DataSource` as a separate bean in a configuration class.
-
-```java
-package com.example.lecture_8_2.config;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.sql.DataSource;
-
-@Configuration
-public class DataSourceConfig {
-
-    @Bean(name = "dataSource1")
-    @ConfigurationProperties(prefix = "spring.datasource1")
-    public DataSource dataSource1() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "dataSource2")
-    @ConfigurationProperties(prefix = "spring.datasource2")
-    public DataSource dataSource2() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "jdbcTemplate1")
-    public JdbcTemplate jdbcTemplate1(@Qualifier("dataSource1") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
-
-    @Bean(name = "jdbcTemplate2")
-    public JdbcTemplate jdbcTemplate2(@Qualifier("dataSource2") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
-}
-```
+Create a new Java configuration class to define the `DataSource` bean. Define each `DataSource` as a separate bean in a configuration class. It is defined on [this file](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/config/DataSourceConfig.java)
 
 #### 🤝 **Dependencies**
 
-Make sure to have the following dependencies in your `pom.xml`:
+Make sure to have the following dependencies in the `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-dbcp2</artifactId>
-    <version>2.9.0</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-commons</artifactId>
+    <version>3.2.0</version>
 </dependency>
 ```
 
@@ -109,49 +80,21 @@ When working with multiple data sources, transactions become more complex becaus
 
 #### 👨🏻‍💻 Implementing Transactions in Multiple Data Sources with Spring
 
-Spring provides ways to manage transactions, even across multiple data sources, using its transaction management abstractions. By **using `@Transactional` annotation** to methods in your service layer with, we ensure that they are executed within a transaction context.
+Spring provides ways to manage transactions, even across multiple data sources, using its transaction management abstractions. By **using `@Transactional` annotation** to methods in the service layer with, we ensure that they are executed within a transaction context.
 
 1. [**`DataSource` Configuration**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/config/DataSourceConfig.java)
     
     Ensure that the two data sources and their corresponding transaction managers are configured.
 
-    ```java
-    package com.example.lecture_8_2.config;
-
-    import org.springframework.beans.factory.annotation.Qualifier;
-    import org.springframework.boot.context.properties.ConfigurationProperties;
-    import org.springframework.boot.jdbc.DataSourceBuilder;
-    import org.springframework.context.annotation.Bean;
-    import org.springframework.context.annotation.Configuration;
-    import org.springframework.jdbc.core.JdbcTemplate;
-    import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-    import org.springframework.transaction.PlatformTransactionManager;
-    import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-    import javax.sql.DataSource;
-
-    @Configuration
-    @EnableTransactionManagement
-    public class DataSourceConfig {
-        ....
-
-        @Bean(name = "transactionManager1")
-        public PlatformTransactionManager transactionManager1(@Qualifier("dataSource1") DataSource dataSource) {
-            return new DataSourceTransactionManager(dataSource);
-        }
-
-        @Bean(name = "transactionManager2")
-        public PlatformTransactionManager transactionManager2(@Qualifier("dataSource2") DataSource dataSource) {
-            return new DataSourceTransactionManager(dataSource);
-        }
-    }
-    ```
-
-2. [**Service Layer**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/repository/EmployeeRepository.java)
+2. [**Repository Layer**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/repository/EmployeeRepository.java)
     
-    Ensure that the two data sources and their corresponding transaction managers are configured by modifying `EmployeeRepository` class. The service layer will manage the transactions across both data sources.
+    Ensure that the two data sources and their corresponding transaction managers are configured by modifying `EmployeeRepository` class. The repository layer will manage the transactions across both data sources.
 
-2. [**Controller Layer**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/controller/EmployeeController.java)
+3. [**Service Layer**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/service/EmployeeService.java)
+    
+    This layer taking control on how the transaction for both datasources is handled gracefully. This service including `commit` and `rollback` mechanism over stransactions.
+
+4. [**Controller Layer**](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/controller/EmployeeController.java)
     Update the `EmployeeController` to use `EmployeeService` for transaction handling.
 
 #### Simulation
@@ -200,6 +143,8 @@ lecture_8_2
 │   │   │   └── Employee.java
 │   │   ├── repository/
 │   │   │   └── EmployeeRepository.java
+│   │   ├── service/
+│   │   │   └── EmployeeService.java
 │   │   └── Lecture82Application.java
 │   └── resources/
 │       ├── schema.sql
@@ -235,11 +180,19 @@ Here is some result of the APIs created.
     `(GET /api/v1/employee/ds1)`
 
     ![Screenshot](img/api1.png)
-2. **Get Employee By ID**
-    `(GET /api/v1/employee/3ccd3c90-890e-41c4-9fa3-456f3d97f999)`
+2. **Get All Employees from DataSource 2** 
+    `(GET /api/v1/employee/ds2)`
 
     ![Screenshot](img/api2.png)
-3. **Add New Employee**
+3. **Get Employee By ID from DataSource 1**
+    `(GET /api/v1/employee/ds1/3ccd3c90-890e-41c4-9fa3-456f3d97f999)`
+
+    ![Screenshot](img/api3.png)
+4. **Get Employee By ID from DataSource 2**
+    `(GET /api/v1/employee/ds2/3ccd3c90-890e-41c4-9fa3-456f3d97f999)`
+
+    ![Screenshot](img/api4.png)
+5. **Add New Employee**
     `(POST /api/v1/employee)`
     
     Body (Raw):
@@ -253,9 +206,16 @@ Here is some result of the APIs created.
     }
     ```
 
-    ![Screenshot](img/api3.png)
-    ![Screenshot](img/api32.png)
-4. **Edit Employee**
+    ![Screenshot](img/api5.png)
+
+    Result on DataSource 1
+
+    ![Screenshot](img/api52.png)
+
+    Result on DataSource 2
+
+    ![Screenshot](img/api53.png)
+6. **Edit Employee**
     `(PUT /api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a)`
     
     Body (Raw):
@@ -268,28 +228,59 @@ Here is some result of the APIs created.
     }
     ```
 
-    ![Screenshot](img/api4.png)
-    ![Screenshot](img/api42.png)
-5. **Delete Employee**
-    `(DELETE /api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a)`
-
-    ![Screenshot](img/api5.png)
-    ![Screenshot](img/api52.png)
-6. **Get Employees by Department**
-    `(GET /api/v1/employee?department=QA)`
-
     ![Screenshot](img/api6.png)
 
+    Result on DataSource 1
+
+    ![Screenshot](img/api62.png)
+
+    Result on DataSource 2
+    
+    ![Screenshot](img/api63.png)
+7. **Delete Employee**
+    `(DELETE /api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a)`
+
+    ![Screenshot](img/api7.png)
+
+    Result on DataSource 1
+
+    ![Screenshot](img/api72.png)
+
+    Result on DataSource 2
+    
+    ![Screenshot](img/api73.png)
+8. **Add New Employee - Fail Transaction Simulation**
+    `(POST /api/v1/employee/fail)`
+
+    This process is simulated by inserting to wrong field in the employee model on DataSource 2, which results failure and DataSource 1 needs to be rolled back.
+
+    ![Screenshot](img/api8.png)
+
+    Result on DataSource 1
+
+    ![Screenshot](img/api82.png)
+
+    Result on DataSource 2
+    
+    ![Screenshot](img/api83.png)
+
+    Result on Console, inclusing 3 last transaction (insert, udpate, delete)
+    
+    ![Screenshot](img/api84.png)
+
 #### 📬 Postman Collection
-Here is the [postman collection](/Week%2004/Lecture%2008/Assignment%2002/Lecture%2008%20-%20Assignment%2002.postman_collection.json) you can use to demo the API functionality.
+Here is the [postman collection](/Week%2004/Lecture%2008/Assignment%2003/Lecture%2008%20-%20Assignment%2003.postman_collection.json) you can use to demo the API functionality.
 
 ---
 
-### 3. Research Lombok and Add to Project
+### 💡 3. Research Lombok and Add to Project
 
-**Add Lombok Dependency:**
+#### 🤔 What is Lombok?
+Lombok is a Java library that reduces boilerplate code in Java applications by automatically generating common methods such as getters, setters, equals, hashCode, toString, and constructors at compile time. This can significantly reduce the amount of code we need to write and maintain.
 
-Add Lombok to your `pom.xml`:
+#### 📝 Add Lombok Dependency
+
+Add Lombok to the `pom.xml`:
 
 ```xml
 <dependency>
@@ -300,124 +291,24 @@ Add Lombok to your `pom.xml`:
 </dependency>
 ```
 
-**Enable Annotation Processing:**
+#### 👉 Use Lombok Annotations
 
-In your IDE (e.g., IntelliJ IDEA), enable annotation processing:
-- Go to `File -> Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors` and check `Enable annotation processing`.
+Now we can simplify the `Employee` model by using Lombok annotations like `@Data`, `@NoArgsConstructor`, and `@AllArgsConstructor`.
 
-**Use Lombok Annotations:**
+The implementation is written on [this file](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/model/Employee.java).
 
-You can now simplify your `Employee` model by using Lombok annotations like `@Data`, `@NoArgsConstructor`, and `@AllArgsConstructor`.
+We can also use `@RequiredArgsConstructor` on `EmployeeController` class to simplify the constructor injection.
 
-**Example Employee Model:**
+The implementation is written on [this file](/Week%2004/Lecture%2008/Assignment%2003/lecture_8_2/src/main/java/com/example/lecture_8_2/controller/EmployeeController.java).
 
-```java
-package com.example.lecture_8_2.model;
+#### 🔎 Detail on Lombok Annotations
+Here are some common Lombok annotations:
+- `@Getter` and `@Setter`: Generate getters and setters for the fields.
+- `@ToString`: Generates a toString method.
+- `@EqualsAndHashCode`: Generates equals and hashCode methods.
+- `@NoArgsConstructor`: Generates a no-argument constructor.
+- `@AllArgsConstructor`: Generates a constructor with one parameter for each field.
+- `@RequiredArgsConstructor`: Generates a constructor for final fields.
+- `@Builder`: Provides a builder pattern implementation
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.sql.Date;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Employee {
-    private String id;
-    private String name;
-    private Date dob;
-    private String address;
-    private String department;
-}
-```
-
-**Simplify `EmployeeController`:**
-
-Use `@RequiredArgsConstructor` to simplify the constructor injection.
-
-```java
-package com.example.lecture_8_2.controller;
-
-import com.example.lecture_8_2.model.Employee;
-import com.example.lecture_8_2.service.EmployeeService;
-import com.example.lecture_8_2.repository.EmployeeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("/api/v1/employee")
-@RequiredArgsConstructor
-public class EmployeeController {
-
-    private final EmployeeService employeeService;
-    private final EmployeeRepository employeeRepository;
-
-    @GetMapping
-    public ResponseEntity<List<Employee>> listAllEmployee(@RequestParam(value = "department", required = false) String departmentId) {
-        List<Employee> employees;
-
-        if (departmentId != null && !departmentId.isEmpty()) {
-            employees = employeeRepository.findByDepartmentId(departmentId);
-        } else {
-            employees = employeeRepository.findAll();
-        }
-
-        if (employees.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(employees);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Employee> findEmployeeById(@PathVariable("id") String id) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(id);
-        return employeeOpt.map(ResponseEntity::ok)
-                          .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(employee.getId());
-        if (employeeOpt.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-        Employee savedEmployee = employeeService.saveEmployee(employee);
-        return ResponseEntity.ok(savedEmployee);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") String id, @RequestBody Employee employeeForm) {
-        Employee updatedEmployee = employeeService.updateEmployee(id, employeeForm);
-        if (updatedEmployee != null) {
-            return ResponseEntity.ok(updatedEmployee);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") String id) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(id);
-        if (employeeOpt.isPresent()) {
-            employeeRepository.deleteById(id);
-            return ResponseEntity.ok().build();
-        }
-       
-
- return ResponseEntity.notFound().build();
-    }
-}
-```
-
-### Summary
-
-1. **Configured DataSource using Beans** in a Java configuration class.
-2. **Handled transactions** using `@Transactional` in the service layer.
-3. **Added Lombok** for cleaner and more concise code.
-
-Make sure to rebuild your project and test these changes thoroughly. If you encounter any issues or need further adjustments, let me know!
+Lombok annotations can also be combined with validation annotations from other libraries. For instance, if we're using javax.validation or jakarta.validation for bean validation, we can add annotations like `@NotNull`, `@Size`, etc., directly to the fields of the Lombok-managed classes.

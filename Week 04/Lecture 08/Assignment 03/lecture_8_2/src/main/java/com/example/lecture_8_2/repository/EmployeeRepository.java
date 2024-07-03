@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lecture_8_2.model.Employee;
 
@@ -65,26 +64,38 @@ public class EmployeeRepository {
         }
     }
 
-    @Transactional
-    public Employee save(Employee employee) {
+    public void saveToDS1(Employee employee) {
         String sql = "INSERT INTO employee (id, name, dob, address, department) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate1.update(sql, employee.getId(), employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment());
-        jdbcTemplate2.update(sql, employee.getId(), employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment());
-        return employee;
     }
 
-    @Transactional
-    public Employee update(Employee employee) {
+    public void saveToDS2(Employee employee) {
+        String sql = "INSERT INTO employee (id, name, dob, address, department) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate2.update(sql, employee.getId(), employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment());
+    }
+
+    public void saveToDS2Fail(Employee employee) {
+        String sql = "INSERT INTO employee (id, name, dateOfBirth, address, department) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate2.update(sql, employee.getId(), employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment());
+    }
+
+    public void updateInDS1(Employee employee) {
         String sql = "UPDATE employee SET name = ?, dob = ?, address = ?, department = ? WHERE id = ?";
         jdbcTemplate1.update(sql, employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment(), employee.getId());
-        jdbcTemplate2.update(sql, employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment(), employee.getId());
-        return employee;
     }
 
-    @Transactional
-    public void deleteById(String id) {
+    public void updateInDS2(Employee employee) {
+        String sql = "UPDATE employee SET name = ?, dob = ?, address = ?, department = ? WHERE id = ?";
+        jdbcTemplate2.update(sql, employee.getName(), employee.getDob(), employee.getAddress(), employee.getDepartment(), employee.getId());
+    }
+
+    public void deleteFromDS1ById(String id) {
         String sql = "DELETE FROM employee WHERE id = ?";
         jdbcTemplate1.update(sql, id);
+    }
+
+    public void deleteFromDS2ById(String id) {
+        String sql = "DELETE FROM employee WHERE id = ?";
         jdbcTemplate2.update(sql, id);
     }
 }
