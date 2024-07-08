@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 // Assume Employee class with fields: int employeeID, String name, String department
 class Employee {
@@ -46,11 +46,15 @@ public class ListToMap {
                 new Employee(3, "Charlie", "Finance")
         );
 
-        // Convert List to Map using employeeID as key
-        Map<Integer, Employee> employeeMap = employees.stream()
-                .collect(Collectors.toMap(Employee::getEmployeeID, emp -> emp));
+        // Creating employeeMap using TreeMap
+        Map<Integer, String> employeesMap = new TreeMap<>();
+
+        // Convert List to Map
+        for (Employee emp : employees){
+            employeesMap.put(emp.getEmployeeID(), emp.getName());
+        }
 
         // Print the resulting Map
-        employeeMap.forEach((id, emp) -> System.out.println("Employee ID: " + id + ", Employee: " + emp));
+        employeesMap.forEach((id, emp) -> System.out.println("Employee ID: " + id + ", Employee: " + emp));
     }
 }
