@@ -1,7 +1,8 @@
 package com.example.lecture_9_2.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,21 +25,19 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     /**
-     * This method retrieves all employees from the database and returns a view named "list-employees".
-     * It populates the Spring Model with a list of employees and returns the view name.
-     * 
-     * @param theModel The Spring Model to which the list of employees will be added as an attribute.
-     * @return The view name "list-employees" which will be rendered by the Spring framework.
-    */
+     * This method retrieves a paginated list of employees from the database and renders it in the "employees/list-employees" view.
+     * The page number is specified as a request parameter, with a default value of 1.
+     * The page size is set to 20, but can be adjusted as needed.
+     *
+     * @param theModel The Spring Model to which the paginated list of employees will be added as an attribute.
+     * @param page The page number of the paginated list of employees. Defaults to 1 if not provided.
+     * @return The view name "employees/list-employees" which will be rendered by the Spring framework.
+     */
     @GetMapping("/list")
-    public String listEmployees(Model theModel) {
-        // Get the employees from database
-        List<Employee> theEmployees = employeeService.findAll();
-
-        // Set employee as a model attribute to pre-populate the form
-        theModel.addAttribute("employees", theEmployees);
-
-        // Send over to our form
+    public String listEmployees(Model theModel, @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 20); // 20 items per page
+        Page<Employee> employeePage = employeeService.findAll(pageable);
+        theModel.addAttribute("employeePage", employeePage);
         return "employees/list-employees";
     }
 

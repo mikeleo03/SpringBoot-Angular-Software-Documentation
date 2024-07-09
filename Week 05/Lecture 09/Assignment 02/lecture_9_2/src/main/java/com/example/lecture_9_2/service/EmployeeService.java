@@ -2,6 +2,8 @@ package com.example.lecture_9_2.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.lecture_9_2.model.Employee;
@@ -9,6 +11,8 @@ import com.example.lecture_9_2.model.Employee;
 public interface EmployeeService {
     // Retrieves all employees from the database, sorted by their names in ascending order.
     List<Employee> findAll();
+
+    Page<Employee> findAll(Pageable pageable);
 
     // Retrieves an employee from the database by their unique identifier.
     Employee findById(String theId);

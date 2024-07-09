@@ -3,6 +3,8 @@ package com.example.lecture_9_2.service.impl;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAllByOrderByNameAsc();
+    }
+
+    /**
+     * Retrieves a paginated list of all employees from the database, sorted by their names in ascending order.
+     *
+     * @param pageable the pagination and sorting parameters
+     * @return a paginated list of all employees in the database, sorted by their names.
+     *         The returned Page object contains the list of employees, the total number of pages, and the total number of elements.
+     * @throws IllegalArgumentException if the provided Pageable object is null
+     */
+    @Override
+    public Page<Employee> findAll(Pageable pageable) {
+        if (pageable == null) {
+            throw new IllegalArgumentException("Invalid pagination and sorting parameters: null object");
+        }
+        return employeeRepository.findAllByOrderByNameAsc(pageable);
     }
 
     /**
