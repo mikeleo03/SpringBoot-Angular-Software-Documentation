@@ -28,23 +28,23 @@
 
         <form th:action="@{/employees/save}" th:object="${employee}" method="POST">
             <div class="form-group">
-                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{id}" required/>
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name" required>
             </div>
             <div class="form-group">
                 <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" th:field="*{dob}" class="form-control" placeholder="Date of Birth">
+                <input type="date" id="dob" th:field="*{dob}" class="form-control" placeholder="Date of Birth" required>
             </div>
             <div class="form-group">
                 <label for="address">Address</label>
-                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Address">
+                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Address" required>
             </div>
             <div class="form-group">
                 <label for="department">Department</label>
-                <input type="text" id="department" th:field="*{department}" class="form-control" placeholder="Department">
+                <input type="text" id="department" th:field="*{department}" class="form-control" placeholder="Department" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>

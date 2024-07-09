@@ -1,47 +1,62 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const submitButton = document.querySelector('button[type="submit"]');
-    const inputs = form.querySelectorAll('input, select, textarea');
-
-    function checkFormCompletion() {
-        let isComplete = true;
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-                isComplete = false;
-            }
-        });
-
-        if (isComplete) {
-            submitButton.disabled = false;
-        } else {
-            submitButton.disabled = true;
-        }
+function validateForm() {
+    var fileInput = document.getElementById('csvFile');
+    var filePath = fileInput.value;
+    var allowedExtensions = /(\.csv)$/i;
+    
+    // Check if file extension is .csv
+    if (!allowedExtensions.exec(filePath)) {
+        fileInput.value = '';
+        Toastify({
+            text: "Please check your CSV file.",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#f44336",
+        }).showToast();
+        return false;
     }
-
-    inputs.forEach(input => {
-        input.addEventListener('input', checkFormCompletion);
-    });
-
-    form.addEventListener('submit', function(event) {
-        if (!submitButton.disabled) {
+    
+    // Read the file contents
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var contents = e.target.result;
+        
+        // Split contents into lines
+        var lines = contents.split(/\r\n|\n/);
+        
+        // Check if the first line (header) matches expected format
+        var expectedHeader = "ID,Name,DateOfBirth,Address,Department";
+        var actualHeader = lines[0].trim();
+        
+        if (actualHeader !== expectedHeader) {
+            fileInput.value = '';
             Toastify({
-                text: "Form submitted successfully!",
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "#4caf50",
-            }).showToast();
-        } else {
-            event.preventDefault();
-            Toastify({
-                text: "Please complete all fields.",
+                text: "Invalid CSV format. Please check your CSV file.",
                 duration: 3000,
                 close: true,
                 gravity: "top",
                 position: "right",
                 backgroundColor: "#f44336",
             }).showToast();
+            return false;
         }
-    });
-});
+        
+        // If all validations pass
+        Toastify({
+            text: "CSV submitted successfully!",
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#4caf50",
+        }).showToast();
+        return true;
+    };
+    
+    // Read the file as text
+    reader.readAsText(fileInput.files[0]);
+    
+    // Prevent form submission for now
+    return false;
+}
