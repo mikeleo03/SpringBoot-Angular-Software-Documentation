@@ -30,6 +30,10 @@ lecture_9_2
 │   │   └── Lecture92Application.java
 │   └── resources/
 │       ├── static/
+│       │   ├── css
+│       │   │   └── style.css
+│       │   ├── js
+│       │   │   └── script.js
 │       │   └── index.html
 │       ├── templates/employees/
 │       │   ├── employee-form.html
