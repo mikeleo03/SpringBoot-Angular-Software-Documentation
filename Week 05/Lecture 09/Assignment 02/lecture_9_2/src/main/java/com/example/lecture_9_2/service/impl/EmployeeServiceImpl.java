@@ -19,26 +19,65 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    /**
+     * Retrieves all employees from the database, sorted by their names in ascending order.
+     * @return a list of all employees in the database, sorted by their names.
+     */
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAllByOrderByNameAsc();
     }
 
+    /**
+     * Retrieves an employee from the database by their unique identifier.
+     *
+     * @param theId the unique identifier of the employee to be retrieved
+     * @return the employee with the given identifier, or throws an exception if not found
+     * @throws IllegalArgumentException if the provided identifier is null or empty
+     */
     @Override
     public Employee findById(String theId) {
+        if (theId == null || theId.isEmpty()) {
+            throw new IllegalArgumentException("Invalid employee identifier: null or empty string");
+        }
         return employeeRepository.findById(theId).orElseThrow();
     }
 
+    /**
+     * Saves the given employee to the database.
+     *
+     * @param theEmployee the employee object to be saved
+     * @throws IllegalArgumentException if the provided employee is null
+     */
     @Override
     public void save(Employee theEmployee) {
+        if (theEmployee == null) {
+            throw new IllegalArgumentException("Invalid employee: null object");
+        }
         employeeRepository.save(theEmployee);
     }
 
+    /**
+     * Deletes an employee from the database by their unique identifier.
+     *
+     * @param theId the unique identifier of the employee to be deleted
+     * @throws IllegalArgumentException if the provided identifier is null or empty
+     */
     @Override
     public void deleteById(String theId) {
+        if (theId == null || theId.isEmpty()) {
+            throw new IllegalArgumentException("Invalid employee identifier: null or empty string");
+        }
         employeeRepository.deleteById(theId);
     }
 
+    /**
+     * Uploads a CSV file containing employee data and saves it to the database.
+     *
+     * @param file the MultipartFile containing the CSV data
+     * @throws IOException if an error occurs while reading the CSV file
+     * @throws RuntimeException if an error occurs while uploading the CSV file
+     */
     @Override
     public void uploadCsv(MultipartFile file) {
         try {
