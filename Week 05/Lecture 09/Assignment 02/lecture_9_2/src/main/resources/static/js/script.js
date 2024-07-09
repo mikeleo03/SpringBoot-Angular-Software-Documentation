@@ -42,7 +42,10 @@ function validateForm() {
             return false;
         }
         
-        // If all validations pass
+        // If all validations pass, allow form submission
+        fileInput.closest('form').submit();
+        
+        // Optionally, show success message using Toastify or other method
         Toastify({
             text: "CSV submitted successfully!",
             duration: 3000,
@@ -51,7 +54,6 @@ function validateForm() {
             position: "right",
             backgroundColor: "#4caf50",
         }).showToast();
-        return true;
     };
     
     // Read the file as text
