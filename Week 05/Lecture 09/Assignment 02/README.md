@@ -107,8 +107,6 @@ spring.datasource.password=<your_password>
 
 If all the instruction is well executed, the main-view will be something like this. Open [localhost:8080](http://localhost:8080) to see the view.
 
-![Screenshot](img/start.png)
-
 ### 📸 Screenshots
 Here is some result of the views and APIs created based on simple MVC architecture. 
 <br>
