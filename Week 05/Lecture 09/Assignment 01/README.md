@@ -17,6 +17,11 @@ lecture_9
 │   │   │   └── ContactRepository.java
 │   │   └── Lecture5Application.java
 │   └── resources/
+│       ├── static/
+│       │   └── index.html
+│       ├── templates/employees/
+│       │   ├── employee-form.html
+│       │   └── list-employees.html
 │       └── application.properties
 ├── .gitignore
 ├── mvnw
