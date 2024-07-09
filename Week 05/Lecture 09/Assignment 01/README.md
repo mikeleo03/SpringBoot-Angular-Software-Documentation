@@ -10,12 +10,16 @@ lecture_9
 ├── src/main/
 │   ├── java/com/example/lecture_9/
 │   │   ├── controller/
-│   │   │   └── ContactController.java
+│   │   │   └── EmployeeController.java
 │   │   ├── model/
-│   │   │   └── Contact.java
+│   │   │   └── Employee.java
 │   │   ├── repository/
-│   │   │   └── ContactRepository.java
-│   │   └── Lecture5Application.java
+│   │   │   └── EmployeeRepository.java
+│   │   ├── service/
+│   │   │   ├── impl/
+│   │   │   │   └─ EmployeeServiceImpl.java
+│   │   │   └── EmployeeService.java
+│   │   └── Lecture9Application.java
 │   └── resources/
 │       ├── static/
 │       │   └── index.html
