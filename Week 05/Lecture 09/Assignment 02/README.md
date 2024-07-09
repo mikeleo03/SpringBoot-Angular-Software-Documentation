@@ -105,7 +105,7 @@ spring.datasource.password=<your_password>
     $ ./run.sh
     ```
 
-If all the instruction is well executed, the main-view will be something like this.
+If all the instruction is well executed, the main-view will be something like this. Open [localhost:8080](http://localhost:8080) to see the view.
 
 ![Screenshot](img/start.png)
 
@@ -117,12 +117,37 @@ Here is some result of the views and APIs created based on simple MVC architectu
 1. **Get All Employees**
 
     ![Screenshot](img/api1.png)
-2. **Add New Employee**
+2. **Add New Employee (Empty Field Exist)**
 
     ![Screenshot](img/api2.png)
-3. **Edit Existing Employee Data**
+3. **Add New Employee (Valid)**
 
     ![Screenshot](img/api3.png)
-4. **Delete Employee**
+4. **Edit Existing Employee Data**
 
     ![Screenshot](img/api4.png)
+
+    ![Screenshot](img/api5.png)
+5. **Delete Employee**
+
+    ![Screenshot](img/api6.png)
+
+    ![Screenshot](img/api7.png)
+6. **Empty Employees**
+
+    ![Screenshot](img/api8.png)
+7. **Upload Employees Data via CSV (Invalid Format)**
+
+    ![Screenshot](img/api9.png)
+8. **Upload Employees Data via CSV (Valid Format)**
+
+    ![Screenshot](img/api10.png)
+
+    ![Screenshot](img/api11.png)
+9. **Pagination View**
+
+    ![Screenshot](img/api12.png)
+
+    ![Screenshot](img/api13.png)
+
+    ![Screenshot](img/api14.png)
