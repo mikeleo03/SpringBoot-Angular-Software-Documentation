@@ -6,44 +6,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <!-- Include Toastify CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <title>Save Employee</title>
 </head>
 
 <body>
     <div class="container">
-        <h3>Employee management</h3>
+        <h3>Employee Management</h3>
         <hr>
 
         <p class="h4 mb-4">Save Employee</p>
 
-        <form action="#" th:action="@{/employees/save}"
-                         th:object="${employee}" method="POST">
+        <form th:action="@{/employees/save}" th:object="${employee}" method="POST">
+            <div class="form-group">
+                <input type="hidden" th:field="*{id}" />
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" th:field="*{dob}" class="form-control" placeholder="Date of Birth">
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Address">
+            </div>
+            <div class="form-group">
+                <label for="department">Department</label>
+                <input type="text" id="department" th:field="*{department}" class="form-control" placeholder="Department">
+            </div>
 
-            <!-- Add hidden form field to handle update -->
-            <input type="hidden" th:field="*{id}" />
-
-            <input type="text" th:field="*{name}"
-                   class="form-control mb-4 w-25" placeholder="Name">
-
-            <input type="date" th:field="*{dob}"
-                   class="form-control mb-4 w-25" placeholder="Date of Birth">
-
-            <input type="text" th:field="*{address}"
-                   class="form-control mb-4 w-25" placeholder="Address">
-
-            <input type="text" th:field="*{department}"
-                   class="form-control mb-4 w-25" placeholder="Department">
-
-            <button type="submit" class="btn btn-info col-2">Save</button>
-        
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
 
         <hr>
         <a th:href="@{/employees/list}">Back to Employees List</a>
     </div>
+
+    <!-- Custom JS -->
+    <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>
