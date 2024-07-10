@@ -62,3 +62,10 @@ function validateForm() {
     // Prevent form submission for now
     return false;
 }
+
+function updateFileName() {
+    var input = document.getElementById('csvFile');
+    var fileName = input.files[0].name;
+    var label = document.getElementById('file-label');
+    label.textContent = fileName;
+}
