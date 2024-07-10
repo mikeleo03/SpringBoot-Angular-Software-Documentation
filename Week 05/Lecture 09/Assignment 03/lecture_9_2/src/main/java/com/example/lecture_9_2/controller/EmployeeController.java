@@ -43,7 +43,7 @@ public class EmployeeController {
      * @param page The page number of the paginated list of employees. Defaults to 1 if not provided.
      * @return The view name "employees/list-employees" which will be rendered by the Spring framework.
      */
-    @GetMapping("/list")
+    @GetMapping
     public String listEmployees(Model theModel, @RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 20); // 20 items per page
         Page<Employee> employeePage = employeeService.findAllPaginate(pageable);
@@ -95,10 +95,10 @@ public class EmployeeController {
 
     /**
      * This method saves the provided employee object to the database using the {@link EmployeeService}.
-     * After the employee is saved, a redirect is performed to the "/employees/list" endpoint to prevent duplicate submissions.
+     * After the employee is saved, a redirect is performed to the "/employees" endpoint to prevent duplicate submissions.
      *
      * @param theEmployee The {@link Employee} object to be saved.
-     * @return A string representing the redirect URL to the "/employees/list" endpoint.
+     * @return A string representing the redirect URL to the "/employees" endpoint.
      */
     @PostMapping("/save")
     public String saveEmployee(@ModelAttribute("employee") Employee theEmployee) {
@@ -106,41 +106,41 @@ public class EmployeeController {
         employeeService.save(theEmployee);
 
         // Use a redirect to prevent duplicate submissions
-        return "redirect:/employees/list";
+        return "redirect:/employees";
     }
 
     /**
      * This method deletes an employee from the database using the provided employeeId.
-     * After the employee is deleted, a redirect is performed to the "/employees/list" endpoint to prevent duplicate submissions.
+     * After the employee is deleted, a redirect is performed to the "/employees" endpoint to prevent duplicate submissions.
      *
      * @param employeeId The unique identifier of the employee to be deleted.
-     * @return A string representing the redirect URL to the "/employees/list" endpoint.
+     * @return A string representing the redirect URL to the "/employees" endpoint.
      */
     @PostMapping("/delete")
     public String delete(@RequestParam("employeeId") String id) {
         // Delete the employee
         employeeService.deleteById(id);
 
-        // Redirect to /employees/list
-        return "redirect:/employees/list";
+        // Redirect to /employees
+        return "redirect:/employees";
     }
 
     /**
      * This method is responsible for uploading a CSV file containing employee data to the server.
      * The uploaded file is processed by the {@link EmployeeService} to import the employee data into the database.
-     * After the file is uploaded and processed, the method redirects the user to the "/employees/list" endpoint to display the updated list of employees.
+     * After the file is uploaded and processed, the method redirects the user to the "/employees" endpoint to display the updated list of employees.
      *
      * @param file The {@link MultipartFile} object representing the CSV file to be uploaded.
-     * @return A string representing the redirect URL to the "/employees/list" endpoint.
+     * @return A string representing the redirect URL to the "/employees" endpoint.
      */
     @PostMapping("/upload")
     public String uploadCsvFile(@RequestParam("file") MultipartFile file) {
         try {
             employeeService.uploadCsvAndStore(file);
-            return "redirect:/employees/list";
+            return "redirect:/employees";
         } catch (IOException e) {
             // Handle exception appropriately (e.g., show error message)
-            return "redirect:/employees/list";
+            return "redirect:/employees";
         }
     }
 
@@ -173,5 +173,15 @@ public class EmployeeController {
             // Handle exception appropriately (e.g., show error message)
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/search")
+    public String searchEmployees(@RequestParam("query") String query,
+                                @RequestParam(defaultValue = "0") int page,
+                                Model model) {
+        Pageable pageable = PageRequest.of(page, 20); // 20 items per page
+        Page<Employee> employeePage = employeeService.searchEmployees(query, pageable);
+        model.addAttribute("employeePage", employeePage);
+        return "employees/list-employees";
     }
 }

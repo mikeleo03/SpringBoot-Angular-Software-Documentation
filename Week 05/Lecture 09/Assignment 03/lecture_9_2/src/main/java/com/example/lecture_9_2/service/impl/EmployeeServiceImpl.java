@@ -155,4 +155,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<String> findEmployeeWithLowestSalary() {
         return employeeRepository.findEmployeeNamesWithLowestSalary();
     }
+
+    /**
+     * Searches for employees in the database based on a given query string.
+     * The method uses the provided query string to search for employee names that contain the query string,
+     * ignoring case sensitivity. The search results are then paginated and sorted according to the provided Pageable object.
+     *
+     * @param query the query string to search for in employee names
+     * @param pageable the pagination and sorting parameters
+     * @return a paginated list of employees that contain the query string in their names, sorted by their names in ascending order.
+     *         The returned Page object contains the list of employees, the total number of pages, and the total number of elements.
+     * @throws IllegalArgumentException if the provided Pageable object is null
+     */
+    @Override
+    public Page<Employee> searchEmployees(String query, Pageable pageable) {
+        if (pageable == null) {
+            throw new IllegalArgumentException("Invalid pagination and sorting parameters: null object");
+        }
+        return employeeRepository.findByNameContainingIgnoreCase(query, pageable);
+    }
 }

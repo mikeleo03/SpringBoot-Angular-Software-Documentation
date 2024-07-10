@@ -19,6 +19,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     // Retrieves a paginated list of all employees from the database, sorted by their names in ascending order.
     Page<Employee> findAllByOrderByNameAsc(Pageable pageable);
 
+    Page<Employee> findByNameContainingIgnoreCase(String query, Pageable pageable);
+
     @Query(value = "SELECT MAX(salary) FROM employee", nativeQuery = true)
     Optional<Integer> findMaxSalary();
 

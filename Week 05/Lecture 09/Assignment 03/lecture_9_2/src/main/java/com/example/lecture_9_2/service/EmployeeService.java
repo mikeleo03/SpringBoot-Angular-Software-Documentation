@@ -43,4 +43,7 @@ public interface EmployeeService {
 
     // Retrieves the name of the employee with the lowest salary in the database.
     List<String> findEmployeeWithLowestSalary();
+
+    // Searches for employees in the database based on a given query string.
+    Page<Employee> searchEmployees(String query, Pageable pageable);
 }
