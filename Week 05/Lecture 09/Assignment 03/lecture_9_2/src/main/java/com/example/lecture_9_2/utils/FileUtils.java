@@ -47,6 +47,7 @@ public class FileUtils {
         LocalDate dob = DateUtils.parseDate(attributes[2]);
         String address = attributes[3];
         String department = attributes[4];
-        return new Employee(id, name, dob, address, department);
+        int salary = Integer.parseInt(attributes[5]);
+        return new Employee(id, name, dob, address, department, salary);
     }
 }

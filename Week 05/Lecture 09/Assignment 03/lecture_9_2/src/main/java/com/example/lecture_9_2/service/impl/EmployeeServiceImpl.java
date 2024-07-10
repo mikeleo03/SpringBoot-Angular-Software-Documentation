@@ -2,6 +2,7 @@ package com.example.lecture_9_2.service.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +13,6 @@ import com.example.lecture_9_2.model.Employee;
 import com.example.lecture_9_2.repository.EmployeeRepository;
 import com.example.lecture_9_2.service.EmployeeService;
 import com.example.lecture_9_2.utils.FileUtils;
-import com.example.lecture_9_2.utils.PDFGenerator;
-import com.lowagie.text.DocumentException;
 
 import lombok.AllArgsConstructor;
 
@@ -41,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @throws IllegalArgumentException if the provided Pageable object is null
      */
     @Override
-    public Page<Employee> findAll(Pageable pageable) {
+    public Page<Employee> findAllPaginate(Pageable pageable) {
         if (pageable == null) {
             throw new IllegalArgumentException("Invalid pagination and sorting parameters: null object");
         }
@@ -92,28 +91,68 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * Uploads a CSV file containing employee data and saves the employees to the database.
+     * Uploads a CSV file containing employee data and reads the contents into a list of Employee objects.
+     * After reading the contents, the method saves all the read employees to the database.
      *
-     * @param file the MultipartFile object containing the CSV file to be uploaded
+     * @param file the MultipartFile containing the CSV data
      * @throws IOException if an error occurs while reading the CSV file
      */
     @Override
-    public void uploadCsv(MultipartFile file) throws IOException {
+    public void uploadCsvAndStore(MultipartFile file) throws IOException {
         List<Employee> employees = FileUtils.readEmployeesFromCSV(file);
         employeeRepository.saveAll(employees);
     }
 
     /**
-     * Generates a PDF document containing the employee data from the provided CSV file.
+     * Retrieves the maximum salary among all employees in the database.
      *
-     * @param file the MultipartFile object containing the CSV file to be used for generating the PDF
-     * @return a byte array representing the generated PDF document
-     * @throws IOException if an error occurs while reading the CSV file
-     * @throws DocumentException if an error occurs while generating the PDF
+     * @return an Optional containing the maximum salary, or an empty Optional if no employees are found.
+     *         The maximum salary is represented as an Integer.
      */
     @Override
-    public byte[] generatePdfFromCsv(MultipartFile file) throws IOException, DocumentException {
-        List<Employee> employees = FileUtils.readEmployeesFromCSV(file); // Read data from CSV file
-        return PDFGenerator.generatePdfFromEmployees(employees);
+    public Optional<Integer> findMaxSalary() {
+        return employeeRepository.findMaxSalary();
+    }
+
+    /**
+     * Retrieves the minimum salary among all employees in the database.
+     *
+     * @return an Optional containing the minimum salary, or an empty Optional if no employees are found.
+     *         The minimum salary is represented as an Integer.
+     */
+    @Override
+    public Optional<Integer> findMinSalary() {
+        return employeeRepository.findMinSalary();
+    }
+
+    /**
+     * Retrieves the average salary among all employees in the database.
+     *
+     * @return a Double representing the average salary of all employees in the database.
+     *         If no employees are found, the method returns null.
+     */
+    @Override
+    public Double findAverageSalary() {
+        return employeeRepository.findAverageSalary();
+    }
+
+    /**
+     * Retrieves the name of the employee with the highest salary in the database.
+     *
+     * @return an Optional containing the name of the employee with the highest salary, or an empty Optional if no employees are found.
+     */
+    @Override
+    public List<String> findEmployeeWithHighestSalary() {
+        return employeeRepository.findEmployeeNamesWithHighestSalary();
+    }
+
+    /**
+     * Retrieves the name of the employee with the lowest salary in the database.
+     *
+     * @return an Optional containing the name of the employee with the lowest salary, or an empty Optional if no employees are found.
+     */
+    @Override
+    public List<String> findEmployeeWithLowestSalary() {
+        return employeeRepository.findEmployeeNamesWithLowestSalary();
     }
 }

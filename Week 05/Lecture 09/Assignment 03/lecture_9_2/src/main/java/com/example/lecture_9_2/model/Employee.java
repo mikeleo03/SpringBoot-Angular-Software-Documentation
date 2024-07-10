@@ -27,4 +27,5 @@ public class Employee {
     private LocalDate dob;
     private String address;
     private String department;
+    private int salary;
 }
