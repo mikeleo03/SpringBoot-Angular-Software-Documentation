@@ -56,10 +56,10 @@ lecture_9_2
 Here is the SQL query to create the database, table, and instantiate some data.
 ```sql
 -- Create the database
-CREATE DATABASE week5_lecture9_2;
+CREATE DATABASE week5_lecture9_3;
 
 -- Use the database
-USE week5_lecture9_2;
+USE week5_lecture9_3;
 
 -- Create the employee table
 CREATE TABLE `employee` (
@@ -68,22 +68,23 @@ CREATE TABLE `employee` (
     `dob` DATE NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `department` VARCHAR(100) NOT NULL,
+    `salary` INT NOT NULL,
     PRIMARY KEY (id)
 );
 
 -- Insert dummy data into the employee table
-INSERT INTO Employee (id, name, dob, address, department) VALUES
-('1caa1b8e-678c-41a2-9d91-234f1d75f777', 'Alice Johnson', '1985-05-15', '123 Elm Street, Springfield', 'WEB'),
-('2bff2b8f-789d-41b3-9e92-345f2d86f888', 'Bob Smith', '1979-12-22', '456 Oak Avenue, Springfield', 'SYSTEM'),
-('3ccd3c90-890e-41c4-9fa3-456f3d97f999', 'Carol Davis', '1990-08-12', '789 Pine Road, Springfield', 'MOBILE'),
-('4dde4d91-901f-41d5-9fb4-567f4e08faaa', 'David Wilson', '1988-07-04', '321 Maple Street, Springfield', 'QA'),
-('5eef5e92-0120-41e6-9fc5-678f5e19fbbb', 'Eva Brown', '1992-03-28', '654 Birch Lane, Springfield', 'ADMIN');
+INSERT INTO Employee (id, name, dob, address, department, salary) VALUES
+('1caa1b8e-678c-41a2-9d91-234f1d75f777', 'Alice Johnson', '1985-05-15', '123 Elm Street, Springfield', 'WEB', 2000),
+('2bff2b8f-789d-41b3-9e92-345f2d86f888', 'Bob Smith', '1979-12-22', '456 Oak Avenue, Springfield', 'SYSTEM', 1000),
+('3ccd3c90-890e-41c4-9fa3-456f3d97f999', 'Carol Davis', '1990-08-12', '789 Pine Road, Springfield', 'MOBILE', 1500),
+('4dde4d91-901f-41d5-9fb4-567f4e08faaa', 'David Wilson', '1988-07-04', '321 Maple Street, Springfield', 'QA', 1700),
+('5eef5e92-0120-41e6-9fc5-678f5e19fbbb', 'Eva Brown', '1992-03-28', '654 Birch Lane, Springfield', 'ADMIN', 2500);
 ```
 
 and here is the query to drop the database
 ```sql
 -- Drop the database
-DROP DATABASE IF EXISTS week5_lecture9_2;
+DROP DATABASE IF EXISTS week5_lecture9_3;
 ```
 
 Also don't forget to configure [application properties](/Week%2005/Lecture%2009/Assignment%2002/lecture_9_2/src/main/resources/application.properties) with this format
