@@ -1,7 +1,7 @@
 # 👨🏻‍🏫 Lecture 09 - Spring MVC
 > This repository is created as a part of assignment for Lecture 09 - Spring MVC
 
-## ✍🏼 Assignment 02 - CRUD Project for Employee Management
+## ✍🏼 Assignment 03 - Employee Management and PDF Generating
 ### 🌳 Project Structure
 ```bash
 lecture_9_2
@@ -14,6 +14,7 @@ lecture_9_2
 │   │   ├── controller/
 │   │   │   └── EmployeeController.java
 │   │   ├── data/
+│   │   │   ├── employees.pdf
 │   │   │   └── ImportData.csv
 │   │   ├── model/
 │   │   │   └── Employee.java
@@ -26,18 +27,22 @@ lecture_9_2
 │   │   ├── utils/
 │   │   │   ├── DateUtils.java
 │   │   │   ├── FileUtils.java
+│   │   │   ├── PDFGenerator.java
 │   │   │   └── ThymeleafUtils.java
 │   │   └── Lecture92Application.java
 │   └── resources/
 │       ├── static/
 │       │   ├── css
-│       │   │   └── style.css
+│       │   │   ├── style.css
+│       │   │   └── template.css
 │       │   ├── js
 │       │   │   └── script.js
 │       │   └── index.html
-│       ├── templates/employees/
-│       │   ├── employee-form.html
-│       │   └── list-employees.html
+│       ├── templates/
+│       │   ├── employees/
+│       │   │   ├── employee-form.html
+│       │   │   └── list-employees.html
+│       │   └── pdf-template.html
 │       └── application.properties
 ├── .gitignore
 ├── mvnw
@@ -108,44 +113,16 @@ spring.datasource.password=<your_password>
 If all the instruction is well executed, the main-view will be something like this. Open [localhost:8080](http://localhost:8080) to see the view.
 
 ### 📸 Screenshots
-Here is some result of the views and APIs created based on simple MVC architecture. 
-<br>
-#### Initial state
+The main modification of the program is now the program can generate a PDF based on CSV file given from the input. Here's the documentation
 
-1. **Get All Employees**
+1. **Full page**
 
     ![Screenshot](img/api1.png)
-2. **Add New Employee (Empty Field Exist)**
+2. **Give PDF input**
 
     ![Screenshot](img/api2.png)
-3. **Add New Employee (Valid)**
+3. **PDF Generated**
 
     ![Screenshot](img/api3.png)
-4. **Edit Existing Employee Data**
 
-    ![Screenshot](img/api4.png)
-
-    ![Screenshot](img/api5.png)
-5. **Delete Employee**
-
-    ![Screenshot](img/api6.png)
-
-    ![Screenshot](img/api7.png)
-6. **Empty Employees**
-
-    ![Screenshot](img/api8.png)
-7. **Upload Employees Data via CSV (Invalid Format)**
-
-    ![Screenshot](img/api9.png)
-8. **Upload Employees Data via CSV (Valid Format)**
-
-    ![Screenshot](img/api10.png)
-
-    ![Screenshot](img/api11.png)
-9. **Pagination View**
-
-    ![Screenshot](img/api12.png)
-
-    ![Screenshot](img/api13.png)
-
-    ![Screenshot](img/api14.png)
+    By using [this CSV file](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/ImportData.csv), you can see the generated PDF [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/employees.pdf)
