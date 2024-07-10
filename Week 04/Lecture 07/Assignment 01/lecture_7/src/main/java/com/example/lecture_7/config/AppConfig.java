@@ -17,8 +17,8 @@ public class AppConfig {
     // Constructor Injection
     // uncomment this and comment the Setter Injection implementation to demo
     /* @Bean
-    public Employee employee() {
-        return new Employee("101", "John Doe", 30, employeeWork());
+    public Employee employee(EmployeeWork employeeWork) {
+        return new Employee("101", "John Doe", 30, employeeWork);
     } */
 
     // Setter Injection
