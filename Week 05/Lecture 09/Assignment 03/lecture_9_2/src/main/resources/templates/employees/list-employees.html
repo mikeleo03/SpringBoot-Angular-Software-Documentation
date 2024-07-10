@@ -7,6 +7,7 @@
 
         <!-- Custom CSS -->
         <link th:href="@{/css/style.css}" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -44,25 +45,25 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Date of Birth</th>
-                        <th>Address</th>
-                        <th>Department</th>
-                        <th>Salary</th>
-                        <th>Action</th>
+            <table class="table table-bordered table-striped w-full">
+                <thead class="table-dark w-full">
+                    <tr class="w-full">
+                        <th class="w-2/12">Name</th>
+                        <th class="w-1/12">Date of Birth</th>
+                        <th class="w-3/12">Address</th>
+                        <th class="w-2/12">Department</th>
+                        <th class="w-1/12">Salary</th>
+                        <th class="w-3/12">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr th:each="employee : ${employeePage.content}">
-                        <td th:text="${employee.name}"></td>
-                        <td th:text="${@thymeleafUtils.formatDate(employee.dob)}"></td>
-                        <td th:text="${employee.address}"></td>
-                        <td th:text="${employee.department}"></td>
-                        <td th:text="${employee.salary}"></td>
-                        <td>
+                <tbody class="w-full">
+                    <tr class="w-full" th:each="employee : ${employeePage.content}">
+                        <td class="w-2/12" th:text="${employee.name}"></td>
+                        <td class="w-2/12 text-center" th:text="${@thymeleafUtils.formatDate(employee.dob)}"></td>
+                        <td class="w-3/12" th:text="${employee.address}"></td>
+                        <td class="w-2/12" th:text="${employee.department}"></td>
+                        <td class="w-1/12 text-center" th:text="${employee.salary}"></td>
+                        <td class="w-2/12 justify-center">
                             <div class="row">
                                 <div class="col-small">
                                     <!-- Add "update" button/link with pencil icon -->
