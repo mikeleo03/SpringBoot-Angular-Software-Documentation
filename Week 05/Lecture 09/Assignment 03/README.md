@@ -116,7 +116,7 @@ spring.datasource.password=<your_password>
 If all the instruction is well executed, the main-view will be something like this. Open [localhost:8080](http://localhost:8080) to see the view.
 
 ### 📸 Screenshots
-The main modification of the program is now the program can generate a PDF based on CSV file given from the input. Here's the documentation
+The main modification of the program is now the program can generate a PDF based on CSV file given from the input. Here's the documentation.
 
 1. **Full Page**
 
@@ -129,3 +129,43 @@ The main modification of the program is now the program can generate a PDF based
     ![Screenshot](img/api3.png)
 
 By using [this CSV file](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/sampleData.csv), you can see the printed template [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/template-employees.pdf) and generated PDF based on the data [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/employees.pdf)
+
+### 🔥 Bonus
+I try to fed my curiousness, especially on **Tyhmeleaf** which i never use before, by experimented with web styling, handling edge cases, and adding new features such as employee name search. Here's a detailed breakdown of what I've explored:
+
+#### Styling with TailwindCSS
+I used **TailwindCSS** to style my web application, which offers a wide range of design possibilities. Below are some screenshots showcasing the new look.
+
+![Screenshot](img/api4.png)
+
+**New UI** on main page.
+
+#### Pagination
+I implemented pagination for the employee data. This optimization ensures the backend processes only the requested data, significantly speeding up data loading.
+
+![Screenshot](img/api5.png)
+
+Pagination across all employee data.
+
+#### Add Employee Page
+I updated the **Add Employee Page** for a better user experience.
+
+![Screenshot](img/api6.png)
+
+Updated Add Employee Page.
+
+#### Edit Employee Page
+Similarly, I enhanced the **Edit Employee Page**.
+
+![Screenshot](img/api7.png)
+
+Updated Edit Employee Page.
+
+#### Search Feature
+I introduced a **search feature**! that allows users to search for employees by name, matching the search query partially.
+
+![Screenshot](img/api8.png)
+
+![Screenshot](img/api9.png)
+
+Search Feature in action.
