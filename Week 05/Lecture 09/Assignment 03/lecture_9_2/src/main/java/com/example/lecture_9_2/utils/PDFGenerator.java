@@ -1,110 +1,68 @@
 package com.example.lecture_9_2.utils;
 
-import com.example.lecture_9_2.model.Employee;
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
-import java.awt.Color;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
+import java.time.LocalDate;
+import org.springframework.stereotype.Component;
+import java.io.IOException;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.example.lecture_9_2.model.Employee;
+import com.example.lecture_9_2.service.EmployeeService;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
 
+@Component
 public class PDFGenerator {
 
+    private final SpringTemplateEngine templateEngine;
+    private final EmployeeService employeeService;
+
+    public PDFGenerator(SpringTemplateEngine templateEngine, EmployeeService employeeService) {
+        this.templateEngine = templateEngine;
+        this.employeeService = employeeService;
+    }
+
     /**
-     * Generates a PDF document containing employee data in a table format.
+     * Generates a PDF document containing information about a list of employees.
      *
-     * @param employees A list of {@link Employee} objects containing the data to be included in the PDF.
-     * @return A byte array representing the generated PDF document.
-     * @throws IOException If an error occurs while writing to the ByteArrayOutputStream.
-     * @throws DocumentException If an error occurs while creating or manipulating the PDF document.
+     * @param listEmployees a list of {@link Employee} objects to be included in the PDF.
+     * @return a byte array representing the generated PDF document.
+     * @throws IOException if an error occurs while generating the PDF.
      */
-    public static byte[] generatePdfFromEmployees(List<Employee> employees) throws IOException, DocumentException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (Document document = new Document(PageSize.A4)) {
-            PdfWriter.getInstance(document, baos);
-            // Set document margins
-            document.setMargins(50, 50, 50, 50);
-            
-            // Open the document
-            document.open();
-            
-            // Add title
-            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Color.BLUE);
-            Paragraph title = new Paragraph("Employee Data", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-            
-            // Add empty line
-            document.add(new Paragraph(" "));
-            
-            // Create a table with 5 columns
-            PdfPTable table = new PdfPTable(5);
-            table.setWidthPercentage(100); // Set table width to 100% of page width
-            
-            // Add table headers
-            addTableHeader(table);
-            
-            // Add table rows with employee data
-            addRows(table, employees);
-            
-            // Add the table to the document
-            document.add(table);
-        }
+    public byte[] generateEmployeeInfo(List<Employee> listEmployees) throws IOException {
+        // Create a context
+        Context context = new Context();
+
+        // Gather the users data needed to generate the file
+        Optional<Integer> maxSalary = employeeService.findMaxSalary();      // MaxSalary
+        Optional<Integer> minSalary = employeeService.findMinSalary();      // MinSalary
+        Double aveSalary = employeeService.findAverageSalary();             // AverageSalary
+        List<String> nameHighSal = employeeService.findEmployeeWithHighestSalary(); // Employee with Highest Salary
+        List<String> nameLowSal = employeeService.findEmployeeWithLowestSalary();   // Employee with Lowest Salary
         
-        // Return the generated PDF as a byte array
-        return baos.toByteArray();
-    }
+        // Gather info record and localDate
+        int totalRecord = listEmployees.size();
+        LocalDate currentDate = LocalDate.now();
+    
+        // Binding data to the context
+        context.setVariable("customer", "Michael Leon");
+        context.setVariable("maxSalary", maxSalary.orElse(0));
+        context.setVariable("minSalary", minSalary.orElse(0));
+        context.setVariable("aveSalary", aveSalary);
+        context.setVariable("employees", listEmployees);
+        context.setVariable("record", totalRecord);
+        context.setVariable("currentDate", currentDate);
+        context.setVariable("nameHighSal", String.join(", ", nameHighSal));
+        context.setVariable("nameLowSal", String.join(", ", nameLowSal));
 
-    /**
-     * Adds table headers to the specified PdfPTable.
-     *
-     * @param table The PdfPTable to which headers will be added.
-     */
-    private static void addTableHeader(PdfPTable table) {
-        // Define header texts
-        String[] headerTexts = {"ID", "Name", "Date of Birth", "Address", "Department"};
+        // Gather the template
+        String processedHtml = templateEngine.process("pdf/pdf-template", context);
 
-        // Define header font
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-
-        // Iterate over header texts to create header cells
-        for (String header : headerTexts) {
-            // Create a PdfPCell for each header text
-            PdfPCell headerCell = new PdfPCell();
-
-            // Set padding for the cell
-            headerCell.setPadding(5);
-
-            // Set background color for the cell header
-            headerCell.setBackgroundColor(Color.LIGHT_GRAY);
-
-            // Set the header text and font in the cell
-            headerCell.setPhrase(new Phrase(header, headerFont));
-
-            // Add the header cell to the table
-            table.addCell(headerCell);
-        }
-    }
-
-    /**
-     * Adds rows of employee data to the specified PdfPTable.
-     *
-     * @param table     The PdfPTable to which rows will be added.
-     * @param employees The list of Employee objects containing data to be added as rows.
-     */
-    private static void addRows(PdfPTable table, List<Employee> employees) {
-        // Define font for cell data
-        Font cellFont = FontFactory.getFont(FontFactory.HELVETICA);
-
-        // Iterate over the list of employees to add each employee's data as a row
-        for (Employee employee : employees) {
-            // Add each employee's data as a separate cell in the table
-            table.addCell(new Phrase(employee.getId(), cellFont));
-            table.addCell(new Phrase(employee.getName(), cellFont));
-            table.addCell(new Phrase(employee.getDob().toString(), cellFont)); // Format date as needed
-            table.addCell(new Phrase(employee.getAddress(), cellFont));
-            table.addCell(new Phrase(employee.getDepartment(), cellFont));
-        }
-    }
+        // Processing all the bytearrays and ready to send
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        HtmlConverter.convertToPdf(processedHtml, stream);
+        stream.flush();
+        return stream.toByteArray();
+    }    
 }
