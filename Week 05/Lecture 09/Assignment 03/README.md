@@ -15,7 +15,8 @@ lecture_9_2
 │   │   │   └── EmployeeController.java
 │   │   ├── data/
 │   │   │   ├── employees.pdf
-│   │   │   └── ImportData.csv
+│   │   │   ├── sampleData.csv
+│   │   │   └── template-employees.pdf
 │   │   ├── model/
 │   │   │   └── Employee.java
 │   │   ├── repository/
@@ -42,7 +43,8 @@ lecture_9_2
 │       │   ├── employees/
 │       │   │   ├── employee-form.html
 │       │   │   └── list-employees.html
-│       │   └── pdf-template.html
+│       │   └── pdf/
+│       │       └── pdf-template.html
 │       └── application.properties
 ├── .gitignore
 ├── mvnw
@@ -116,14 +118,14 @@ If all the instruction is well executed, the main-view will be something like th
 ### 📸 Screenshots
 The main modification of the program is now the program can generate a PDF based on CSV file given from the input. Here's the documentation
 
-1. **Full page**
+1. **Full Page**
 
     ![Screenshot](img/api1.png)
-2. **Give PDF input**
+2. **Full Page After CSV Uploaded**
 
     ![Screenshot](img/api2.png)
 3. **PDF Generated**
 
     ![Screenshot](img/api3.png)
 
-    By using [this CSV file](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/ImportData.csv), you can see the generated PDF [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/employees.pdf)
+By using [this CSV file](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/sampleData.csv), you can see the printed template [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/template-employees.pdf) and generated PDF based on the data [here](/Week%2005/Lecture%2009/Assignment%2003/lecture_9_2/src/main/java/com/example/lecture_9_2/data/employees.pdf)
