@@ -38,8 +38,7 @@
                     </form>
 
                     <!-- Download PDF button -->
-                    <form action="#" th:action="@{/employees/downloadPdf}" method="POST" enctype="multipart/form-data" class="d-inline">
-                        <input type="file" name="file" id="csvFile" class="form-control-file" accept=".csv" required>
+                    <form action="#" th:action="@{/employees/downloadPDF}" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-download" aria-hidden="true"></i> &nbsp; Download PDF</button>
                     </form>
                 </div>
@@ -52,6 +51,7 @@
                         <th>Date of Birth</th>
                         <th>Address</th>
                         <th>Department</th>
+                        <th>Salary</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -61,6 +61,7 @@
                         <td th:text="${@thymeleafUtils.formatDate(employee.dob)}"></td>
                         <td th:text="${employee.address}"></td>
                         <td th:text="${employee.department}"></td>
+                        <td th:text="${employee.salary}"></td>
                         <td>
                             <div class="row">
                                 <div class="col-small">

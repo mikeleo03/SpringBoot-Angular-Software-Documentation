@@ -26,7 +26,7 @@ function validateForm() {
         var lines = contents.split(/\r\n|\n/);
         
         // Check if the first line (header) matches expected format
-        var expectedHeader = "ID,Name,DateOfBirth,Address,Department";
+        var expectedHeader = "ID,Name,DateOfBirth,Address,Department,Salary";
         var actualHeader = lines[0].trim();
         
         if (actualHeader !== expectedHeader) {
