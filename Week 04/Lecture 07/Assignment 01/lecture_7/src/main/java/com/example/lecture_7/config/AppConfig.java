@@ -23,12 +23,12 @@ public class AppConfig {
 
     // Setter Injection
     @Bean
-    public Employee employee() {
+    public Employee employee(EmployeeWork employeeWork) {
         Employee employee = new Employee();
         employee.setId("101");
         employee.setName("John Doe");
         employee.setAge(30);
-        employee.setEmployeeWork(employeeWork());
+        employee.setEmployeeWork(employeeWork);
         return employee;
     }
 }
