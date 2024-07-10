@@ -12,6 +12,8 @@ import com.example.lecture_9_2.model.Employee;
 import com.example.lecture_9_2.repository.EmployeeRepository;
 import com.example.lecture_9_2.service.EmployeeService;
 import com.example.lecture_9_2.utils.FileUtils;
+import com.example.lecture_9_2.utils.PDFGenerator;
+import com.lowagie.text.DocumentException;
 
 import lombok.AllArgsConstructor;
 
@@ -90,19 +92,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * Uploads a CSV file containing employee data and saves it to the database.
+     * Uploads a CSV file containing employee data and saves the employees to the database.
      *
-     * @param file the MultipartFile containing the CSV data
+     * @param file the MultipartFile object containing the CSV file to be uploaded
      * @throws IOException if an error occurs while reading the CSV file
-     * @throws RuntimeException if an error occurs while uploading the CSV file
      */
     @Override
-    public void uploadCsv(MultipartFile file) {
-        try {
-            List<Employee> employees = FileUtils.readEmployeesFromCSV(file);
-            employeeRepository.saveAll(employees);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to upload CSV file: " + e.getMessage());
-        }
+    public void uploadCsv(MultipartFile file) throws IOException {
+        List<Employee> employees = FileUtils.readEmployeesFromCSV(file);
+        employeeRepository.saveAll(employees);
+    }
+
+    /**
+     * Generates a PDF document containing the employee data from the provided CSV file.
+     *
+     * @param file the MultipartFile object containing the CSV file to be used for generating the PDF
+     * @return a byte array representing the generated PDF document
+     * @throws IOException if an error occurs while reading the CSV file
+     * @throws DocumentException if an error occurs while generating the PDF
+     */
+    @Override
+    public byte[] generatePdfFromCsv(MultipartFile file) throws IOException, DocumentException {
+        List<Employee> employees = FileUtils.readEmployeesFromCSV(file); // Read data from CSV file
+        return PDFGenerator.generatePdfFromEmployees(employees);
     }
 }
