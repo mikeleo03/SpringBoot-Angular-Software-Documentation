@@ -1,4 +1,4 @@
-package com.example.lecture_10.repository;
+package com.example.lecture_10.data.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.lecture_10.model.Employee;
+import com.example.lecture_10.data.model.Employee;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {

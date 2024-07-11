@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.lecture_10.model.Employee;
+import com.example.lecture_10.data.model.Employee;
 
 public class FileUtils {
     /**
@@ -38,7 +38,7 @@ public class FileUtils {
     /**
      * Parses an array of attributes into an Employee object.
      *
-     * @param attributes an array of strings representing the employee's id, name, date of birth, address, and department.
+     * @param attributes an array of strings representing the employee's id, name, date of birth, address, and others.
      * @return an Employee object created from the provided attributes.
      */
     public static Employee fromCSV(String[] attributes) {
@@ -47,6 +47,9 @@ public class FileUtils {
         LocalDate dob = DateUtils.parseDate(attributes[2]);
         String address = attributes[3];
         String department = attributes[4];
-        return new Employee(id, name, dob, address, department);
+        String email = attributes[5];
+        String phone = attributes[6];
+        
+        return new Employee(id, name, dob, address, department, email, phone);
     }
 }
