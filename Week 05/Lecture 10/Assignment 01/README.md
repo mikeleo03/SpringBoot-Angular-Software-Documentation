@@ -1,7 +1,7 @@
-# 👨🏻‍🏫 Lecture 05 - Basic Backend, Spring
-> This repository is created as a part of assignment for Lecture 05 - Basic Backend, Spring
+# 👨🏻‍🏫 Lecture 10 - SpringBoot REST API
+> This repository is created as a part of assignment for Lecture 10 - SpringBoot REST API
 
-## ✍🏼 Assignment 02 - CRUD Project for Employee Management
+## ✍🏼 Assignment 01 - CRUD Project for Employee Management
 ### 🌳 Project Structure
 ```bash
 lecture_10
@@ -88,10 +88,6 @@ DROP DATABASE IF EXISTS week5_lecture10;
     $ chmod +x run.sh
     $ ./run.sh
     ```
-
-If all the instruction is well executed, the main-view will be something like this.
-
-![Screenshot](img/start.png)
 
 ### 📸 Screenshots
 Here is some result of the APIs created.
