@@ -12,13 +12,11 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "titles")
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Title {
