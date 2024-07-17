@@ -2,6 +2,98 @@
 > This repository is created as a part of assignment for Lecture 11 - Spring Data JPA
 
 ## 📝 Assignment 01 - Implementation of Model, JPA, Repositories, Services, and REST APIs
+
+### 🔎 [Research] Composite Key in JPA
+
+Implementing a composite key in JPA (Java Persistence API) involves using an `@Embeddable` class to represent the composite key and embedding it into the entity class. Here’s a short explanation and steps to implement it:
+
+#### Steps to Implement Composite Key in JPA
+
+1. **Create the Embeddable Key Class**:
+    - Define a class to represent the composite key.
+    - Annotate the class with `@Embeddable`.
+    - Implement `Serializable` interface.
+    - Override `equals()` and `hashCode()` methods. In this case i'm using using `@Data` and `@EqualsAndHashCode` from Lombok to automatically generate it.
+
+2. **Embed the Key in the Entity Class**:
+    - Use `@EmbeddedId` annotation in the entity class to include the composite key.
+    - Annotate the entity class with `@Entity` and other necessary JPA annotations.
+
+3. **Map the Composite Key Columns**:
+    - Map the fields of the embeddable key class to the corresponding columns in the database.
+
+#### Example
+
+##### Embeddable Key Class
+For this example i will use [SalaryId Class](/Week%2006/Lecture%2011/Assignment%2001/lecture_11/src/main/java/com/example/lecture_11/data/model/composite/SalaryId.java).
+
+```java
+import java.io.Serializable;
+import java.time.LocalDate;
+import jakarta.persistence.Embeddable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@Embeddable
+@EqualsAndHashCode
+public class SalaryId implements Serializable {
+    private Integer empNo;
+    private LocalDate fromDate;
+}
+```
+
+##### Entity Class
+For this example i will use [Salary Class](/Week%2006/Lecture%2011/Assignment%2001/lecture_11/src/main/java/com/example/lecture_11/data/model/Salary.java).
+```java
+import java.time.LocalDate;
+import com.example.lecture_11.data.model.composite.SalaryId;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Entity
+@Table(name = "salaries")
+@NoArgsConstructor
+@AllArgsConstructor
+public class Salary {
+    
+    @EmbeddedId
+    private SalaryId id;
+
+    @Column(nullable = false)
+    private Integer salary;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private LocalDate toDate;
+}
+```
+
+#### Explanation
+
+1. **SalaryId Class**:
+    - Annotated with `@Embeddable`, indicating it is a composite key.
+    - Implements `Serializable`.
+    - Includes necessary fields (`empNo`, `fromDate`) that form the composite key.
+    - Uses Lombok's `@EqualsAndHashCode` to automatically generate `equals()` and `hashCode()` methods based on the fields of the class.
+
+2. **Salary Class**:
+    - Annotated with `@Entity` to indicate it is a JPA entity.
+    - Uses `@EmbeddedId` to include `SalaryId` as the primary key.
+    - Defines other entity attributes (`salary`, `toDate`).
+
+By following these steps, i successfully implement and use composite keys in the JPA entities.
+
+Using Lombok's `@EqualsAndHashCode` simplifies the code and ensures that the `equals()` and `hashCode()` methods are correctly implemented based on the fields of the composite key class. This approach reduces boilerplate code and makes the implementation cleaner and easier to maintain.
+
 ### 🌳 Project Structure
 ```bash
 lecture_11
