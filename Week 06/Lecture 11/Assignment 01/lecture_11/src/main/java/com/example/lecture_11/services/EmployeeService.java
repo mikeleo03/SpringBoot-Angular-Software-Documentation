@@ -15,7 +15,7 @@ public interface EmployeeService {
     Optional<Employee> findById(Integer empNo);
 
     // Saves or updates an {@link Employee} entity in the database.
-    Employee saveOrUpdate(Employee employee);
+    Employee save(Employee employee);
 
     // Deletes an {@link Employee} entity from the database by its unique identifier.
     void deleteById(Integer empNo);

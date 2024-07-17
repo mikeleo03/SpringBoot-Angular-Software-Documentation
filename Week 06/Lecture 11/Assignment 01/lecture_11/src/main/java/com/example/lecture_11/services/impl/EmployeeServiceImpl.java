@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return The saved or updated {@link Employee} entity.
      */
     @Override
-    public Employee saveOrUpdate(Employee employee) {
+    public Employee save(Employee employee) {
         return employeeRepository.save(employee);
     }
 

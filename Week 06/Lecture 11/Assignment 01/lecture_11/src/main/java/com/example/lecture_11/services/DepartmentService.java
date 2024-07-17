@@ -15,7 +15,7 @@ public interface DepartmentService {
     Optional<Department> findById(String deptNo);
 
     // Saves or updates an {@link Department} entity in the database.
-    Department saveOrUpdate(Department department);
+    Department save(Department department);
 
     // Deletes an {@link Department} entity from the database by its unique identifier.
     void deleteById(String deptNo);

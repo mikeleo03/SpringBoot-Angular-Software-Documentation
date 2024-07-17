@@ -35,7 +35,7 @@ public class SalaryServiceImpl implements SalaryService {
      * @return The saved or updated {@link Salary} entity.
      */
     @Override
-    public Salary saveOrUpdate(Salary salary) {
+    public Salary save(Salary salary) {
         return salaryRepository.save(salary);
     }
 

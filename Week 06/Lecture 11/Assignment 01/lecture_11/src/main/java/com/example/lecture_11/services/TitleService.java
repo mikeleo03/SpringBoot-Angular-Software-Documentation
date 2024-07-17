@@ -10,7 +10,7 @@ public interface TitleService {
     Optional<Title> findById(TitleId id);
 
     // Saves or updates an {@link Title} entity in the database.
-    Title saveOrUpdate(Title title);
+    Title save(Title title);
 
     // Deletes an {@link Title} entity from the database by its unique identifier.
     void deleteById(TitleId id);

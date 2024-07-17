@@ -10,7 +10,7 @@ public interface SalaryService {
     Optional<Salary> findById(SalaryId id);
 
     // Saves or updates an {@link Salary} entity in the database.
-    Salary saveOrUpdate(Salary salary);
+    Salary save(Salary salary);
 
     // Deletes an {@link Salary} entity from the database by its unique identifier.
     void deleteById(SalaryId id);

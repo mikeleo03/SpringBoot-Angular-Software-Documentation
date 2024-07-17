@@ -47,7 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return The saved or updated {@link Department} entity.
      */
     @Override
-    public Department saveOrUpdate(Department department) {
+    public Department save(Department department) {
         return departmentRepository.save(department);
     }
 

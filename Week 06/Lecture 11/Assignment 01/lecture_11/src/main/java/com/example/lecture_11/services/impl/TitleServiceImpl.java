@@ -35,7 +35,7 @@ public class TitleServiceImpl implements TitleService {
      * @return The saved or updated {@link Title} entity.
      */
     @Override
-    public Title saveOrUpdate(Title title) {
+    public Title save(Title title) {
         return titleRepository.save(title);
     }
 
