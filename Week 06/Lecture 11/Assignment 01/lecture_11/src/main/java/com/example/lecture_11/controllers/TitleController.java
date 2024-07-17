@@ -2,12 +2,9 @@ package com.example.lecture_11.controllers;
 
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,31 +24,13 @@ public class TitleController {
     private final TitleService titleService;
 
     /**
-     * This method retrieves {@link Page} of {@link Title} from the database.
+     * This method retrieves a {@link Title} from the database by its unique identifier.
      *
-     * @return ResponseEntity<List<Title>> - A response entity containing a pages of {@link Title}.
-     * If the pages is empty, it returns a HTTP status code 204 (No Content).
-     * If the operation is successful, it returns a HTTP status code 200 (OK) with the pages of {@link Title}.
-     */
-    @GetMapping
-    public ResponseEntity<Page<Title>> findAll(Pageable pageable) {
-        Page<Title> titles = titleService.findAll(pageable);
-
-        if (titles.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(titles);
-    }
-
-     /**
-     * This method retrieves an {@link Title} from the database by its id.
-     *
-     * @param id The unique identifier of the {@link Title}.
+     * @param id The unique identifier of the {@link Title} to be retrieved.
      * @return ResponseEntity<Title> - A response entity containing the {@link Title} if found, or a 404 Not Found status code if not found.
      */
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Title> findTitleById(@PathVariable("id") TitleId id) {
+    @GetMapping
+    public ResponseEntity<Title> findTitleById(@RequestBody TitleId id) {
         Optional<Title> titleOpt= titleService.findById(id);
 
         if(titleOpt.isPresent()) {
@@ -61,19 +40,18 @@ public class TitleController {
         return ResponseEntity.notFound().build();
     }
 
+
     /**
-     * This method saves or updates a {@link Title} to the database.
+     * This method saves or updates a {@link Title} in the database.
      *
-     * @param title The title object to be saved.
-     * @return ResponseEntity<Title> - A response entity containing the saved {@link Title}.
-     * If the {@link Title} already exists in the database, it returns a HTTP status code 400 (Bad Request).
+     * @param title The {@link Title} object to be saved or updated.
+     * @return ResponseEntity<Title> - A response entity containing the saved or updated {@link Title} if successful, or a 400 Bad Request status code if the {@link Title} with the same id already exists in the database.
      */
     @PostMapping
     public ResponseEntity<Title> saveOrUpdate(@RequestBody Title title) {
-        TitleId titleId = new TitleId(title.getEmpNo(), title.getTitle(), title.getFromDate());
-        Optional<Title> titleOpt = titleService.findById(titleId);
-        
-        if(titleOpt.isPresent()) {
+        Optional<Title> titleOpt = titleService.findById(title.getId());
+
+        if (titleOpt.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -81,16 +59,16 @@ public class TitleController {
     }
 
     /**
-     * This method deletes an {@link Title} from the database by its id.
+     * This method deletes a {@link Title} from the database by its unique identifier.
      *
      * @param id The unique identifier of the {@link Title} to be deleted.
-     * @return ResponseEntity<Title> - A response entity containing the deleted {@link Title} if found, or a 404 Not Found status code if not found.
+     * @return ResponseEntity<Title> - A response entity containing the deleted {@link Title} if found and successfully deleted, or a 404 Not Found status code if not found.
      */
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Title> deleteTitle(@PathVariable(value = "id") TitleId id) {
+    @DeleteMapping
+    public ResponseEntity<Title> deleteTitle(@RequestBody TitleId id) {
         Optional<Title> titleOpt = titleService.findById(id);
 
-        if(titleOpt.isPresent()) {
+        if (titleOpt.isPresent()) {
             titleService.deleteById(id);
             return ResponseEntity.ok().build();
         }
