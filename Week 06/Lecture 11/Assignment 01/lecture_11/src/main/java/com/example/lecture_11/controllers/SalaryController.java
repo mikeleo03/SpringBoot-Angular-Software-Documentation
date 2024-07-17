@@ -46,16 +46,9 @@ public class SalaryController {
      *
      * @param salary The salary object to be saved.
      * @return ResponseEntity<Salary> - A response entity containing the saved {@link Salary}.
-     * If the {@link Salary} already exists in the database, it returns a HTTP status code 400 (Bad Request).
      */
     @PostMapping
     public ResponseEntity<Salary> save(@RequestBody Salary salary) {
-        Optional<Salary> salaryOpt = salaryService.findById(salary.getId());
-        
-        if (salaryOpt.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-
         return ResponseEntity.ok(salaryService.save(salary));
     }
 

@@ -51,12 +51,6 @@ public class TitleController {
      */
     @PostMapping
     public ResponseEntity<Title> save(@RequestBody Title title) {
-        Optional<Title> titleOpt = titleService.findById(title.getId());
-        
-        if (titleOpt.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-
         return ResponseEntity.ok(titleService.save(title));
     }
 
