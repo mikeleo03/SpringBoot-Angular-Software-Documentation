@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import com.example.lecture_11.data.model.composite.SalaryId;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -25,15 +25,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Salary {
     
-    @Id
-    private Integer empNo;
+    @EmbeddedId
+    private SalaryId id;
 
     @Column(nullable = false)
     private Integer salary;
-
-    @Id
-    @Temporal(TemporalType.DATE)
-    private LocalDate fromDate;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
