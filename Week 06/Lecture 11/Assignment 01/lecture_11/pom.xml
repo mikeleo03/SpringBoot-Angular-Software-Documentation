@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>lecture_11</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>lecture_11</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -54,6 +54,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+			<scope>runtime</scope>
         </dependency>
 
 		<!-- Lombok Annotation -->
