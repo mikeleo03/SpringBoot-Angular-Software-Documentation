@@ -1,17 +1,11 @@
 package com.example.lecture_11.services;
 
+import java.util.Optional;
+
 import com.example.lecture_11.data.model.Salary;
 import com.example.lecture_11.data.model.composite.SalaryId;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
-
 public interface SalaryService {
-    // Retrieves a paginated list of {@link Salary} entities.
-    Page<Salary> findAll(Pageable pageable);
-
     // Retrieves an {@link Salary} entity by its unique identifier.
     Optional<Salary> findById(SalaryId id);
 

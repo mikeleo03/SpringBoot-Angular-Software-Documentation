@@ -2,8 +2,6 @@ package com.example.lecture_11.services.impl;
 
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.lecture_11.data.model.Title;
@@ -18,17 +16,6 @@ import lombok.AllArgsConstructor;
 public class TitleServiceImpl implements TitleService {
     
     private final TitleRepository titleRepository;
-
-    /**
-     * Retrieves a paginated list of {@link Title} entities.
-     *
-     * @param pageable The pagination and sorting parameters.
-     * @return A {@link Page} of {@link Title} entities.
-     */
-    @Override
-    public Page<Title> findAll(Pageable pageable) {
-        return titleRepository.findAll(pageable);
-    }
 
     /**
      * Retrieves an {@link Title} entity by its unique identifier.

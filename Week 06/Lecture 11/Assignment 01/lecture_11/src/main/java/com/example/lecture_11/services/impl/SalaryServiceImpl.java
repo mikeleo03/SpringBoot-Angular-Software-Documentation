@@ -2,8 +2,6 @@ package com.example.lecture_11.services.impl;
 
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.lecture_11.data.model.Salary;
@@ -18,17 +16,6 @@ import lombok.AllArgsConstructor;
 public class SalaryServiceImpl implements SalaryService {
     
     private final SalaryRepository salaryRepository;
-
-    /**
-     * Retrieves a paginated list of {@link Salary} entities.
-     *
-     * @param pageable The pagination and sorting parameters.
-     * @return A {@link Page} of {@link Salary} entities.
-     */
-    @Override
-    public Page<Salary> findAll(Pageable pageable) {
-        return salaryRepository.findAll(pageable);
-    }
 
     /**
      * Retrieves an {@link Salary} entity by its unique identifier.
