@@ -3,6 +3,7 @@ package com.example.lecture_11.controllers;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.lecture_11.data.model.Employee;
@@ -29,12 +31,15 @@ public class EmployeeController {
     /**
      * This method retrieves {@link Page} of {@link Employee} from the database.
      *
-     * @return ResponseEntity<List<Employee>> - A response entity containing a pages of {@link Employee}.
-     * If the pages is empty, it returns a HTTP status code 204 (No Content).
-     * If the operation is successful, it returns a HTTP status code 200 (OK) with the pages of {@link Employee}.
+     * @param page The page number to retrieve (0-based index).
+     * @param size The number of elements per page.
+     * @return ResponseEntity<Page<Employee>> - A response entity containing a page of {@link Employee}.
+     * If the page is empty, it returns a HTTP status code 204 (No Content).
+     * If the operation is successful, it returns a HTTP status code 200 (OK) with the page of {@link Employee}.
      */
     @GetMapping
-    public ResponseEntity<Page<Employee>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<Employee>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<Employee> employees = employeeService.findAll(pageable);
 
         if (employees.isEmpty()) {
@@ -66,16 +71,9 @@ public class EmployeeController {
      *
      * @param employee The employee object to be saved.
      * @return ResponseEntity<Employee> - A response entity containing the saved {@link Employee}.
-     * If the {@link Employee} already exists in the database, it returns a HTTP status code 400 (Bad Request).
      */
     @PostMapping
     public ResponseEntity<Employee> save(@RequestBody Employee employee) {
-        Optional<Employee> employeeOpt = employeeService.findById(employee.getEmpNo());
-        
-        if (employeeOpt.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-
         return ResponseEntity.ok(employeeService.save(employee));
     }
 
@@ -88,13 +86,14 @@ public class EmployeeController {
      * If the {@link Employee} does not exist in the database, it returns a HTTP status code 404 (Not Found).
      */
     @PutMapping(value = "/{empNo}")
-    public ResponseEntity<Employee> update(@PathVariable(value = "/{empNo}") Integer empNo, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> update(@PathVariable Integer empNo, @RequestBody Employee employee) {
         Optional<Employee> employeeOpt = employeeService.findById(empNo);
         
         if (employeeOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
+        employee.setEmpNo(empNo);
         return ResponseEntity.ok(employeeService.save(employee));
     }
 

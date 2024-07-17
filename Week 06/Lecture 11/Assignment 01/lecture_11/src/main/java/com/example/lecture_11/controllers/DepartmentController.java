@@ -3,6 +3,7 @@ package com.example.lecture_11.controllers;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.lecture_11.data.model.Department;
@@ -29,12 +31,15 @@ public class DepartmentController {
     /**
      * This method retrieves {@link Page} of {@link Department} from the database.
      *
+     * @param page The page number to retrieve (0-based index).
+     * @param size The number of elements per page.
      * @return ResponseEntity<List<Department>> - A response entity containing a pages of {@link Department}.
      * If the pages is empty, it returns a HTTP status code 204 (No Content).
      * If the operation is successful, it returns a HTTP status code 200 (OK) with the pages of {@link Department}.
      */
     @GetMapping
-    public ResponseEntity<Page<Department>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<Department>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<Department> departments = departmentService.findAll(pageable);
 
         if (departments.isEmpty()) {
@@ -87,7 +92,7 @@ public class DepartmentController {
      * If the {@link Department} does not exist in the database, it returns a HTTP status code 404 (Not Found).
      */
     @PutMapping(value = "/{deptNo}")
-    public ResponseEntity<Department> update(@PathVariable(value = "deptNo") String deptNo, @RequestBody Department department) {
+    public ResponseEntity<Department> update(@PathVariable("deptNo") String deptNo, @RequestBody Department department) {
         Optional<Department> departmentOpt = departmentService.findById(deptNo);
         
         if (departmentOpt.isEmpty()) {
