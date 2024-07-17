@@ -254,6 +254,30 @@ to do database seeding using JPA Hibernate.
 
 If all the instruction is well executed, Open [localhost:8080](http://localhost:8080) to see that the REST APIs is now works.
 
+### 🔑 List of Endpoints
+| Endpoint                                | Method | Description                                                                                 |
+|-----------------------------------------|:--------: |---------------------------------------------------------------------------------------------|
+| /api/v1/employees                       | GET    | Retrieve all employees with default pagination (page 0 with size 20 elements/page).                                                                     |
+| /api/v1/employees?page=1&size=5         | GET    | Retrieve employees with pagination (page 1 with size 5 elements/page).                                         |
+| /api/v1/employees/{empNo}               | GET    | Retrieve a specific employee by employee number.                                            |
+| /api/v1/employees                       | POST   | Create a new employee.                                                                      |
+| /api/v1/employees/{empNo}               | PUT    | Update an existing employee by employee number.                                             |
+| /api/v1/employees/{empNo}               | DELETE | Delete an employee by employee number.                                                      |
+| /api/v1/departments                     | GET    | Retrieve all departments with default pagination (page 0 with size 20 elements/page).                                                                   |
+| /api/v1/departments?page=0&size=2       | GET    | Retrieve departments with pagination (page 0 with size 2 elements/page).                                       |
+| /api/v1/departments/{deptNo}            | GET    | Retrieve a specific department by department number.                                        |
+| /api/v1/departments                     | POST   | Create a new department.                                                                    |
+| /api/v1/departments/{deptNo}            | PUT    | Update an existing department by department number.                                         |
+| /api/v1/departments/{deptNo}            | DELETE | Delete a department by department number.                                                   |
+| /api/v1/salaries                        | GET    | Retrieve salary by ID.                                                                      |
+| /api/v1/salaries                        | POST   | Create a new salary record.                                                                 |
+| /api/v1/salaries                        | PUT    | Update an existing salary record.                                                           |
+| /api/v1/salaries                        | DELETE | Delete a salary record by ID.                                                               |
+| /api/v1/titles                          | GET    | Retrieve title by ID.                                                                       |
+| /api/v1/titles                          | POST   | Create a new title.                                                                         |
+| /api/v1/titles                          | PUT    | Update an existing title.                                                                   |
+| /api/v1/titles                          | DELETE | Delete a title record by ID.                                                                |
+
 ### 📬 Postman Collection
 
 Here is the [postman collection](/Week%2006/Lecture%2011/Assignment%2001/Lecture%2011%20-%20Assignment%2001.postman_collection.json) you can use to demo the API functionality.
