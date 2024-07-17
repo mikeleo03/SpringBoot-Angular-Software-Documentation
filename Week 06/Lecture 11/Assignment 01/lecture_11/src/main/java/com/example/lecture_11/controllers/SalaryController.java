@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,20 +42,39 @@ public class SalaryController {
     }
 
     /**
-     * This method deletes a {@link Salary} from the database by its unique identifier.
+     * This method saves a {@link Salary} to the database.
      *
-     * @param id The unique identifier of the {@link Salary} to be deleted.
-     * @return ResponseEntity<Salary> - A response entity containing the deleted {@link Salary} if found and successfully deleted, or a 404 Not Found status code if not found.
+     * @param salary The salary object to be saved.
+     * @return ResponseEntity<Salary> - A response entity containing the saved {@link Salary}.
+     * If the {@link Salary} already exists in the database, it returns a HTTP status code 400 (Bad Request).
      */
     @PostMapping
-    public ResponseEntity<Salary> saveOrUpdate(@RequestBody Salary salary) {
+    public ResponseEntity<Salary> save(@RequestBody Salary salary) {
         Optional<Salary> salaryOpt = salaryService.findById(salary.getId());
         
-        if(salaryOpt.isPresent()) {
+        if (salaryOpt.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(salaryService.saveOrUpdate(salary));
+        return ResponseEntity.ok(salaryService.save(salary));
+    }
+
+    /**
+     * This method updates an existing {@link Salary} in the database.
+     *
+     * @param salary The salary object to be updated.
+     * @return ResponseEntity<Salary> - A response entity containing the updated {@link Salary}.
+     * If the {@link Salary} does not exist in the database, it returns a HTTP status code 404 (Not Found).
+     */
+    @PutMapping
+    public ResponseEntity<Salary> update(@RequestBody Salary salary) {
+        Optional<Salary> salaryOpt = salaryService.findById(salary.getId());
+        
+        if (salaryOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(salaryService.save(salary));
     }
 
     /**

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,20 +43,39 @@ public class TitleController {
 
 
     /**
-     * This method saves or updates a {@link Title} in the database.
+     * This method saves a {@link Title} to the database.
      *
-     * @param title The {@link Title} object to be saved or updated.
-     * @return ResponseEntity<Title> - A response entity containing the saved or updated {@link Title} if successful, or a 400 Bad Request status code if the {@link Title} with the same id already exists in the database.
+     * @param title The title object to be saved.
+     * @return ResponseEntity<Title> - A response entity containing the saved {@link Title}.
+     * If the {@link Title} already exists in the database, it returns a HTTP status code 400 (Bad Request).
      */
     @PostMapping
-    public ResponseEntity<Title> saveOrUpdate(@RequestBody Title title) {
+    public ResponseEntity<Title> save(@RequestBody Title title) {
         Optional<Title> titleOpt = titleService.findById(title.getId());
-
+        
         if (titleOpt.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(titleService.saveOrUpdate(title));
+        return ResponseEntity.ok(titleService.save(title));
+    }
+
+    /**
+     * This method updates an existing {@link Title} in the database.
+     *
+     * @param title The title object to be updated.
+     * @return ResponseEntity<Title> - A response entity containing the updated {@link Title}.
+     * If the {@link Title} does not exist in the database, it returns a HTTP status code 404 (Not Found).
+     */
+    @PutMapping
+    public ResponseEntity<Title> update(@RequestBody Title title) {
+        Optional<Title> titleOpt = titleService.findById(title.getId());
+        
+        if (titleOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(titleService.save(title));
     }
 
     /**

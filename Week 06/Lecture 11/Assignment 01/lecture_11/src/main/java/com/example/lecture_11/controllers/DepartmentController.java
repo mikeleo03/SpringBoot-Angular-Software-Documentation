@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,21 +62,39 @@ public class DepartmentController {
     }
 
     /**
-     * This method saves or updates an {@link Department} to the database.
+     * This method saves a {@link Department} to the database.
      *
      * @param department The department object to be saved.
      * @return ResponseEntity<Department> - A response entity containing the saved {@link Department}.
      * If the {@link Department} already exists in the database, it returns a HTTP status code 400 (Bad Request).
      */
     @PostMapping
-    public ResponseEntity<Department> saveOrUpdate(@RequestBody Department department) {
+    public ResponseEntity<Department> save(@RequestBody Department department) {
         Optional<Department> departmentOpt = departmentService.findById(department.getDeptNo());
         
-        if(departmentOpt.isPresent()) {
+        if (departmentOpt.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(departmentService.saveOrUpdate(department));
+        return ResponseEntity.ok(departmentService.save(department));
+    }
+
+    /**
+     * This method updates an existing {@link Department} in the database.
+     *
+     * @param department The department object to be updated.
+     * @return ResponseEntity<Department> - A response entity containing the updated {@link Department}.
+     * If the {@link Department} does not exist in the database, it returns a HTTP status code 404 (Not Found).
+     */
+    @PutMapping(value = "/{deptNo}")
+    public ResponseEntity<Department> update(@PathVariable(value = "deptNo") String deptNo, @RequestBody Department department) {
+        Optional<Department> departmentOpt = departmentService.findById(deptNo);
+        
+        if (departmentOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(departmentService.save(department));
     }
 
     /**
