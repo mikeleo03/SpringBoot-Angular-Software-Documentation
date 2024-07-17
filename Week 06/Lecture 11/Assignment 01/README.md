@@ -232,7 +232,6 @@ spring.datasource.password=<your_password>
 
 and don't forget to add this
 ```java
-spring.datasource.initialization-mode=always
 spring.jpa.hibernate.ddl-auto=update
 ```
 to do database seeding using JPA Hibernate.
@@ -257,4 +256,4 @@ If all the instruction is well executed, Open [localhost:8080](http://localhost:
 
 ### 📬 Postman Collection
 
-Here is the [postman collection] you can use to demo the API functionality.
+Here is the [postman collection](/Week%2006/Lecture%2011/Assignment%2001/Lecture%2011%20-%20Assignment%2001.postman_collection.json) you can use to demo the API functionality.
