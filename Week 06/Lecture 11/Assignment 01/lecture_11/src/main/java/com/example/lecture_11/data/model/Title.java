@@ -7,7 +7,6 @@ import com.example.lecture_11.data.model.composite.TitleId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "titles")
-@IdClass(TitleId.class)
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
