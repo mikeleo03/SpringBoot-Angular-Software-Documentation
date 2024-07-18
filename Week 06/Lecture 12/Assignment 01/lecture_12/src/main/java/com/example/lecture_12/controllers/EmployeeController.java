@@ -52,12 +52,13 @@ public class EmployeeController {
 
     /**
      * Endpoint to search for {@link Employee} entities based on the provided search criteria.
-     * Supports pagination and sorting.
+     * Supports pagination, sorting, and various operations.
      *
-     * @param criteria The criteria object of {@link EmployeeSearchCriteriaDTO} containing fields to filter the search.
+     * @param criteria The criteria object containing fields to filter the search.
      * @param page     The page number to retrieve (default is 0).
      * @param size     The number of elements per page (default is 20).
-     * @return ResponseEntity containing a {@link Page} of {@link Employee} entities that match the criteria,  
+     * @return ResponseEntity containing a {@link Page} of {@link Employee} entities that match the criteria,
+     *         or HTTP status code 204 (No Content) if no employees match the criteria.
      */
     @GetMapping("/search")
     public ResponseEntity<Page<Employee>> searchEmployees(EmployeeSearchCriteriaDTO criteria, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
