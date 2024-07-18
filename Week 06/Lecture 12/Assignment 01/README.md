@@ -391,8 +391,8 @@ Here is some demo on how to search employees based on dynamic search queries. Al
 |-----------------------------------------|---------------------------------------------------------------------------------------------|
 | /api/v1/employees/search?firstName=Paul&gender=M                       | Retrieve all male employees who the first name is Paul.                                                                     |
 | /api/v1/employees/search?birthDate=1991-03-22&lastName=Garcia                       | Retrieve all employees who the birth date is March 22nd, 1991 and the last name is Garcia.                                                                     |
-| api/v1/employees/search?gender=F&page=1&size=3                       | Retrieve all the female employees with pagination (page 1 with size 3 elements/page).                                                                     |
-| api/v1/employees/search                       | Retrieve all the employees data with default pagination.                                                                     |
+| /api/v1/employees/search?gender=F&page=1&size=3                       | Retrieve all the female employees with pagination (page 1 with size 3 elements/page).                                                                     |
+| /api/v1/employees/search                       | Retrieve all the employees data with default pagination.                                                                     |
 
 ### 📬 Postman Collection
 
