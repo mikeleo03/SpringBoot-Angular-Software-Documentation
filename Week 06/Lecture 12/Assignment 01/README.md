@@ -324,13 +324,13 @@ CREATE TABLE titles (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2006/Lecture%2011/lecture_11/src/main/resources/data.sql). Here is the query to drop the database
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/data.sql). Here is the query to drop the database
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week6_lecture12;
 ```
 
-Also don't forget to configure [application properties](/Week%2006/Lecture%2011/lecture_11/src/main/resources/application.propertiess) with this format
+Also don't forget to configure [application properties](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/application.properties) with this format
 ```java
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 spring.datasource.url=jdbc:mysql://localhost:3306/<my_database>
@@ -365,13 +365,13 @@ If all the instruction is well executed, Open [localhost:8080](http://localhost:
 ### 🔑 List of Endpoints
 | Endpoint                                | Method | Description                                                                                 |
 |-----------------------------------------|:--------: |---------------------------------------------------------------------------------------------|
-| /api/v1/employees                       | GET    | Retrieve all employees with default pagination (page 0 with size 20 elements/page).                                                                     |
+| /api/v1/employees                       | GET    | Retrieve all employees with default pagination (page 1 with size 20 elements/page).                                                                     |
 | /api/v1/employees?page=1&size=5         | GET    | Retrieve employees with pagination (page 2 with size 5 elements/page).                                         |
 | /api/v1/employees/{empNo}               | GET    | Retrieve a specific employee by employee number.                                            |
 | /api/v1/employees                       | POST   | Create a new employee.                                                                      |
 | /api/v1/employees/{empNo}               | PUT    | Update an existing employee by employee number.                                             |
 | /api/v1/employees/{empNo}               | DELETE | Delete an employee by employee number.                                                      |
-| /api/v1/departments                     | GET    | Retrieve all departments with default pagination (page 0 with size 20 elements/page).                                                                   |
+| /api/v1/departments                     | GET    | Retrieve all departments with default pagination (page 1 with size 20 elements/page).                                                                   |
 | /api/v1/departments?page=0&size=2       | GET    | Retrieve departments with pagination (page 1 with size 2 elements/page).                                       |
 | /api/v1/departments/{deptNo}            | GET    | Retrieve a specific department by department number.                                        |
 | /api/v1/departments                     | POST   | Create a new department.                                                                    |
