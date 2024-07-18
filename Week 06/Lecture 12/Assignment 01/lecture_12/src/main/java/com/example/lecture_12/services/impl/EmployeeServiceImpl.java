@@ -1,15 +1,20 @@
 package com.example.lecture_12.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.lecture_12.data.model.Employee;
 import com.example.lecture_12.data.repository.EmployeeRepository;
+import com.example.lecture_12.dto.EmployeeSearchCriteriaDTO;
 import com.example.lecture_12.services.EmployeeService;
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -27,6 +32,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Page<Employee> findAll(Pageable pageable) {
         return employeeRepository.findAll(pageable);
+    }
+
+    /**
+     * Retrieves a paginated list of {@link Employee} entities based on the provided search criteria.
+     *
+     * @param criteria The criteria object containing fields to filter the search.
+     * @param pageable Pagination and sorting parameters.
+     * @return A {@link Page} of {@link Employee} entities that match the specified criteria.
+     */
+    @Override
+    public Page<Employee> findByCriteria(EmployeeSearchCriteriaDTO criteria, Pageable pageable) {
+        return employeeRepository.findAll((Specification<Employee>) (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            
+            if (criteria.getBirthDate() != null) { predicates.add(cb.equal(root.get("birthDate"), criteria.getBirthDate())); }
+            if (criteria.getFirstName() != null) { predicates.add(cb.equal(root.get("firstName"), criteria.getFirstName())); }
+            if (criteria.getLastName() != null) { predicates.add(cb.equal(root.get("lastName"), criteria.getLastName())); }
+            if (criteria.getGender() != null) { predicates.add(cb.equal(root.get("gender"), criteria.getGender())); }
+            if (criteria.getHireDate() != null) { predicates.add(cb.equal(root.get("hireDate"), criteria.getHireDate())); }
+
+            return cb.and(predicates.toArray(Predicate[]::new));
+        }, pageable);
     }
 
     /**

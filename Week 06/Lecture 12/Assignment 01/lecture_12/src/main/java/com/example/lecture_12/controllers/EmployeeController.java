@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.lecture_12.data.model.Employee;
+import com.example.lecture_12.dto.EmployeeSearchCriteriaDTO;
 import com.example.lecture_12.services.EmployeeService;
 
 import lombok.AllArgsConstructor;
@@ -41,6 +42,27 @@ public class EmployeeController {
     public ResponseEntity<Page<Employee>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Employee> employees = employeeService.findAll(pageable);
+
+        if (employees.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(employees);
+    }
+
+    /**
+     * Endpoint to search for {@link Employee} entities based on the provided search criteria.
+     * Supports pagination and sorting.
+     *
+     * @param criteria The criteria object of {@link EmployeeSearchCriteriaDTO} containing fields to filter the search.
+     * @param page     The page number to retrieve (default is 0).
+     * @param size     The number of elements per page (default is 20).
+     * @return ResponseEntity containing a {@link Page} of {@link Employee} entities that match the criteria,  
+     */
+    @GetMapping("/search")
+    public ResponseEntity<Page<Employee>> searchEmployees(EmployeeSearchCriteriaDTO criteria, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Employee> employees = employeeService.findByCriteria(criteria, pageable);
 
         if (employees.isEmpty()) {
             return ResponseEntity.noContent().build();
