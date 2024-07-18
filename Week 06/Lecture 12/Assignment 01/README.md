@@ -1,98 +1,203 @@
-# 👨🏻‍🏫 Lecture 11 - Spring Data JPA
-> This repository is created as a part of assignment for Lecture 11 - Spring Data JPA
+# 👩🏻‍🏫 Lecture 12 - Spring Data JPA
+> This repository is created as a part of assignment for Lecture 12 - Spring Data JPA
 
-## 📝 Assignment 01 - Implementation of Model, JPA, Repositories, Services, and REST APIs
+## ⚡ Assignment 01 - Adding Dynamic Criteria for Employee Search
 
-### 🔎 [Research] Composite Key in JPA
+### 🔎 Dynamic Search Criteria 😵😵
 
-Implementing a composite key in JPA (Java Persistence API) involves using an `@Embeddable` class to represent the composite key and embedding it into the entity class. Here’s a short explanation and steps to implement it:
+To implement dynamic criteria search APIs for every attribute on my `Employee` model, i'll need to enhance my existing codebase to support filtering based on various attributes. Here's a detailed approach:
 
-#### Steps to Implement Composite Key in JPA
+### 👣 Step-by-Step Explanation
 
-1. **Create the Embeddable Key Class**:
-    - Define a class to represent the composite key.
-    - Annotate the class with `@Embeddable`.
-    - Implement `Serializable` interface.
-    - Override `equals()` and `hashCode()` methods. In this case i'm using using `@Data` and `@EqualsAndHashCode` from Lombok to automatically generate it.
+1. **Define Search Criteria**: I decided how i want to pass search criteria to my API. Common approaches include query parameters (`/api/v1/employees?firstName=John&gender=M`) or a JSON object in the request body (`POST` request with a JSON body containing search criteria). In this implementation, i choose the query parameters.
 
-2. **Embed the Key in the Entity Class**:
-    - Use `@EmbeddedId` annotation in the entity class to include the composite key.
-    - Annotate the entity class with `@Entity` and other necessary JPA annotations.
+2. **DTO (Data Transfer Object)**: I used DTOs to transfer data between layers (controller, service, repository). This helps in decoupling my API contract from my entity structure and provides flexibility in handling incoming requests.
 
-3. **Map the Composite Key Columns**:
-    - Map the fields of the embeddable key class to the corresponding columns in the database.
+3. **Service Layer Modification**: I enhanced my service layer to handle dynamic filtering using specifications or query methods. Specifications are particularly useful for complex queries involving multiple criteria.
 
-#### Example
+4. **Controller Layer Modification**: I also modified my controller to accept dynamic search criteria and delegate the search to the service layer.
 
-##### Embeddable Key Class
-For this example i will use [SalaryId Class](/Week%2006/Lecture%2011/Assignment%2001/lecture_11/src/main/java/com/example/lecture_11/data/model/composite/SalaryId.java).
+5. **Implementation Considerations**: I also not forget to handle various scenarios such as no search criteria provided, pagination, sorting, and proper error handling for invalid queries.
+
+### 👨🏻‍💻 Implementation:
+
+#### 1. Create a DTO for Search Criteria ([EmployeeSearchCriteriaDTO.java](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/java/com/example/lecture_12/dto/EmployeeSearchCriteriaDTO.java))
 
 ```java
-import java.io.Serializable;
+package com.example.lecture_12.dto;
+
 import java.time.LocalDate;
-import jakarta.persistence.Embeddable;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@Embeddable
-@EqualsAndHashCode
-public class SalaryId implements Serializable {
-    private Integer empNo;
-    private LocalDate fromDate;
+public class EmployeeSearchCriteriaDTO {
+    private LocalDate birthDate;
+    private String firstName;
+    private String lastName;
+    private String gender;
+    private LocalDate hireDate;
 }
 ```
 
-##### Entity Class
-For this example i will use [Salary Class](/Week%2006/Lecture%2011/Assignment%2001/lecture_11/src/main/java/com/example/lecture_11/data/model/Salary.java).
+#### 2. Update Employee Repository ([EmployeeRepository.java](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/java/com/example/lecture_12/data/repository/EmployeeRepository.java))
+
 ```java
-import java.time.LocalDate;
-import com.example.lecture_11.data.model.composite.SalaryId;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+package com.example.lecture_12.data.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.lecture_12.data.model.Employee;
+
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    // Define a custom query method using Specification and Pageable
+    Page<Employee> findAll(Specification<Employee> spec, Pageable pageable);
+}
+```
+
+#### 3. Modify Employee Service Interface ([EmployeeService.java](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/java/com/example/lecture_12/services/EmployeeService.java))
+
+```java
+package com.example.lecture_12.services;
+
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.example.lecture_12.data.model.Employee;
+import com.example.lecture_12.dto.EmployeeSearchCriteriaDTO;
+
+public interface EmployeeService {
+    ....
+
+    // Retrieves a paginated list of {@link Employee} entities based on the provided search criteria.
+    Page<Employee> findByCriteria(EmployeeSearchCriteriaDTO criteria, Pageable pageable);
+
+    ....
+}
+```
+
+#### 4. Implement Employee Service ([EmployeeServiceImpl.java](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/java/com/example/lecture_12/services/impl/EmployeeServiceImpl.java))
+
+```java
+package com.example.lecture_12.services.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import com.example.lecture_12.data.model.Employee;
+import com.example.lecture_12.data.repository.EmployeeRepository;
+import com.example.lecture_12.dto.EmployeeSearchCriteriaDTO;
+import com.example.lecture_12.services.EmployeeService;
+import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Entity
-@Table(name = "salaries")
-@NoArgsConstructor
+@Service
 @AllArgsConstructor
-public class Salary {
+public class EmployeeServiceImpl implements EmployeeService {
     
-    @EmbeddedId
-    private SalaryId id;
+    private final EmployeeRepository employeeRepository;
 
-    @Column(nullable = false)
-    private Integer salary;
+    ....
 
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private LocalDate toDate;
+    /**
+     * Retrieves a paginated list of {@link Employee} entities based on the provided search criteria.
+     *
+     * @param criteria The criteria object containing fields to filter the search.
+     * @param pageable Pagination and sorting parameters.
+     * @return A {@link Page} of {@link Employee} entities that match the specified criteria.
+     */
+    @Override
+    public Page<Employee> findByCriteria(EmployeeSearchCriteriaDTO criteria, Pageable pageable) {
+        return employeeRepository.findAll((Specification<Employee>) (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            
+            if (criteria.getBirthDate() != null) { predicates.add(cb.equal(root.get("birthDate"), criteria.getBirthDate())); }
+            if (criteria.getFirstName() != null) { predicates.add(cb.equal(root.get("firstName"), criteria.getFirstName())); }
+            if (criteria.getLastName() != null) { predicates.add(cb.equal(root.get("lastName"), criteria.getLastName())); }
+            if (criteria.getGender() != null) { predicates.add(cb.equal(root.get("gender"), criteria.getGender())); }
+            if (criteria.getHireDate() != null) { predicates.add(cb.equal(root.get("hireDate"), criteria.getHireDate())); }
+
+            return cb.and(predicates.toArray(Predicate[]::new));
+        }, pageable);
+    }
+
+    ....
 }
 ```
 
-#### Explanation
+#### 5. Update Employee Controller ([EmployeeController.java](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/java/com/example/lecture_12/controllers/EmployeeController.java))
 
-1. **SalaryId Class**:
-    - Annotated with `@Embeddable`, indicating it is a composite key.
-    - Implements `Serializable`.
-    - Includes necessary fields (`empNo`, `fromDate`) that form the composite key.
-    - Uses Lombok's `@EqualsAndHashCode` to automatically generate `equals()` and `hashCode()` methods based on the fields of the class.
+```java
+package com.example.lecture_12.controllers;
 
-2. **Salary Class**:
-    - Annotated with `@Entity` to indicate it is a JPA entity.
-    - Uses `@EmbeddedId` to include `SalaryId` as the primary key.
-    - Defines other entity attributes (`salary`, `toDate`).
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import com.example.lecture_12.data.model.Employee;
+import com.example.lecture_12.dto.EmployeeSearchCriteriaDTO;
+import com.example.lecture_12.services.EmployeeService;
+import lombok.AllArgsConstructor;
 
-By following these steps, i successfully implement and use composite keys in the JPA entities.
+@RestController
+@RequestMapping("/api/v1/employees")
+@AllArgsConstructor
+public class EmployeeController {
 
-Using Lombok's `@EqualsAndHashCode` simplifies the code and ensures that the `equals()` and `hashCode()` methods are correctly implemented based on the fields of the composite key class. This approach reduces boilerplate code and makes the implementation cleaner and easier to maintain.
+    private final EmployeeService employeeService;
+
+    ....
+
+    /**
+     * Endpoint to search for {@link Employee} entities based on the provided search criteria.
+     * Supports pagination and sorting.
+     *
+     * @param criteria The criteria object of {@link EmployeeSearchCriteriaDTO} containing fields to filter the search.
+     * @param page     The page number to retrieve (default is 0).
+     * @param size     The number of elements per page (default is 20).
+     * @return ResponseEntity containing a {@link Page} of {@link Employee} entities that match the criteria,  
+     */
+    @GetMapping("/search")
+    public ResponseEntity<Page<Employee>> searchEmployees(EmployeeSearchCriteriaDTO criteria, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Employee> employees = employeeService.findByCriteria(criteria, pageable);
+
+        if (employees.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(employees);
+    }
+
+    ....
+}
+```
+
+### 📢 Explanation of Code
+Here is the detail explanation on what i already done throughout the code.
+
+- **DTO**: `EmployeeSearchCriteriaDTO` is a simple class to hold search criteria. Each attribute corresponds to a field in the `Employee` entity.
+- **Database Layer (JPA)**: adding `findAll` with Specification and Pageable on `EmployeeRepository` to handle spesific search query criteria dynamically from the database also to implement pagination easily.
+- **Service Layer**: `EmployeeServiceImpl` implements `findByCriteria` method using JPA Specifications to dynamically build predicates based on provided criteria.
+- **Controller Layer**: `EmployeeController` exposes a `GET` endpoint `/api/v1/employees/search` to accept search criteria as query parameters and returns a list of matching `Employee` entities.
+
+### 📝 Some Notable Mentions
+
+- **Security**: I'm ensuring to validate and sanitize input to prevent injection attacks.
+- **Performance**: Instead of just showing all the filtered criteria, i also use pagination (`Pageable`) to handle large result sets efficiently.
+- **Flexibility**: In the program i implemented, i expand the approach by handling more complex queries using JPA `Specifications` which makes the execution more smooth and dynamic.
+
+This approach ensures my API to be flexible, maintainable, and follows best practices for handling dynamic search criteria in a Spring Boot application using JPA.
 
 ### 🌳 Project Structure
 ```bash
@@ -126,6 +231,8 @@ lecture_11
 │   │   │       ├── EmployeeRepository.java
 │   │   │       ├── Salary.Repositoryjava
 │   │   │       └── TitleRepository.java
+│   │   ├── dto/
+│   │   │   └── EmployeeSearchCriteriaDTO.java
 │   │   ├── service/
 │   │   │   ├── impl/
 │   │   │   │   ├── DepartmentServiceImpl.java
@@ -151,10 +258,10 @@ lecture_11
 Here is the SQL query to create the database, table, and instantiate some data.
 ```sql
 -- Create the database
-CREATE DATABASE week6_lecture11;
+CREATE DATABASE week6_lecture12;
 
 -- Use the database
-USE week6_lecture11;
+USE week6_lecture12;
 
 -- Create employees table
 CREATE TABLE employees (
@@ -311,15 +418,15 @@ INSERT INTO titles (emp_no, title, from_date, to_date) VALUES
 All the MySQL queries is available on [this file](/Week%2006/Lecture%2011/lecture_11/src/main/resources/data.sql). Here is the query to drop the database
 ```sql
 -- Drop the database
-DROP DATABASE IF EXISTS week6_lecture11;
+DROP DATABASE IF EXISTS week6_lecture12;
 ```
 
 Also don't forget to configure [application properties](/Week%2006/Lecture%2011/lecture_11/src/main/resources/application.propertiess) with this format
 ```java
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
-spring.datasource.url=jdbc:mysql://localhost:3306/<your_database>
-spring.datasource.username=<your_user_name>
-spring.datasource.password=<your_password>
+spring.datasource.url=jdbc:mysql://localhost:3306/<my_database>
+spring.datasource.username=<my_user_name>
+spring.datasource.password=<my_password>
 ```
 
 and don't forget to add this
@@ -329,11 +436,11 @@ spring.jpa.hibernate.ddl-auto=update
 to do database seeding using JPA Hibernate.
 
 ### ⚙️ How to run the program
-1. Go to the `lecture_11` directory by using this command
+1. Go to the `lecture_12` directory by using this command
     ```bash
-    $ cd lecture_11
+    $ cd lecture_12
     ```
-2. Make sure you have maven installed on your computer, use `mvn -v` to check the version.
+2. Make sure you have maven installed on my computer, use `mvn -v` to check the version.
 3. If you are using windows, you can run the program by using this command.
     ```bash
     $ ./run.bat
