@@ -199,6 +199,8 @@ Here is the detail explanation on what i already done throughout the code.
 
 This approach ensures my API to be flexible, maintainable, and follows best practices for handling dynamic search criteria in a Spring Boot application using JPA.
 
+---
+
 ### 🌳 Project Structure
 ```bash
 lecture_11
@@ -364,13 +366,13 @@ If all the instruction is well executed, Open [localhost:8080](http://localhost:
 | Endpoint                                | Method | Description                                                                                 |
 |-----------------------------------------|:--------: |---------------------------------------------------------------------------------------------|
 | /api/v1/employees                       | GET    | Retrieve all employees with default pagination (page 0 with size 20 elements/page).                                                                     |
-| /api/v1/employees?page=1&size=5         | GET    | Retrieve employees with pagination (page 1 with size 5 elements/page).                                         |
+| /api/v1/employees?page=1&size=5         | GET    | Retrieve employees with pagination (page 2 with size 5 elements/page).                                         |
 | /api/v1/employees/{empNo}               | GET    | Retrieve a specific employee by employee number.                                            |
 | /api/v1/employees                       | POST   | Create a new employee.                                                                      |
 | /api/v1/employees/{empNo}               | PUT    | Update an existing employee by employee number.                                             |
 | /api/v1/employees/{empNo}               | DELETE | Delete an employee by employee number.                                                      |
 | /api/v1/departments                     | GET    | Retrieve all departments with default pagination (page 0 with size 20 elements/page).                                                                   |
-| /api/v1/departments?page=0&size=2       | GET    | Retrieve departments with pagination (page 0 with size 2 elements/page).                                       |
+| /api/v1/departments?page=0&size=2       | GET    | Retrieve departments with pagination (page 1 with size 2 elements/page).                                       |
 | /api/v1/departments/{deptNo}            | GET    | Retrieve a specific department by department number.                                        |
 | /api/v1/departments                     | POST   | Create a new department.                                                                    |
 | /api/v1/departments/{deptNo}            | PUT    | Update an existing department by department number.                                         |
@@ -391,9 +393,97 @@ Here is some demo on how to search employees based on dynamic search queries. Al
 |-----------------------------------------|---------------------------------------------------------------------------------------------|
 | /api/v1/employees/search?firstName=Paul&gender=M                       | Retrieve all male employees who the first name is Paul.                                                                     |
 | /api/v1/employees/search?birthDate=1991-03-22&lastName=Garcia                       | Retrieve all employees who the birth date is March 22nd, 1991 and the last name is Garcia.                                                                     |
-| /api/v1/employees/search?gender=F&page=1&size=3                       | Retrieve all the female employees with pagination (page 1 with size 3 elements/page).                                                                     |
+| /api/v1/employees/search?gender=F&page=1&size=3                       | Retrieve all the female employees with pagination (page 2 with size 3 elements/page).                                                                     |
 | /api/v1/employees/search                       | Retrieve all the employees data with default pagination.                                                                     |
+
+---
+
+### 🔥 Bonus - Advanced Query Functionality
+#### Overview
+
+This part of assignment implements advanced query functionality for the `Employee` entity. The main motivation was to allow users to perform flexible and complex searches based on various criteria, including sorting and advanced operations like greater than, less than, and querying by specific date parts (e.g., month, year). The implementation uses Spring Data JPA's Specification and Criteria API to dynamically construct queries based on the provided search criteria (basically just modifying what i already made previously).
+
+#### Features
+1. **Dynamic Filtering**: Allows filtering based on multiple criteria.
+2. **Advanced Operations**: Supports operations like equals, greater than, less than, greater than or equal to, and less than or equal to.
+3. **Date Part Queries**: Enables querying by specific parts of dates, such as month and year.
+4. **Sorting**: Supports sorting by any field in ascending or descending order.
+5. **Pagination**: Handles large datasets efficiently by providing pagination.
+
+#### Functionalities
+
+- Filter by first name, last name, gender, birth date, and hire date.
+- Perform advanced operations (`eq`, `gt`, `lt`, `geq`, `leq`) on dates.
+- Query by specific date parts (month, year).
+- Sort results by any field.
+- Paginate results to handle large datasets.
+
+The updated endpoint for searching employees with advanced criteria will look like this:
+
+##### Endpoint: `GET /api/v1/employees/search`
+
+##### Parameters
+
+- **page** (optional): The page number to retrieve (default is 0).
+- **size** (optional): The number of elements per page (default is 20).
+- **sortBy** (optional): The field to sort by (e.g., "firstName", "hireDate").
+- **sortOrder** (optional): The sort order ("asc" or "desc").
+- **firstName** (optional): The first name to filter by.
+- **firstNameOperation** (optional): The operation for first name ("eq" for equals, "like" for like).
+- **lastName** (optional): The last name to filter by.
+- **lastNameOperation** (optional): The operation for last name ("eq" for equals, "like" for like).
+- **gender** (optional): The gender to filter by.
+- **genderOperation** (optional): The operation for gender ("eq" for equals).
+- **birthDate** (optional): The birth date to filter by (format: YYYY-MM-DD).
+- **birthDateOperation** (optional): The operation for birth date ("eq", "gt", "lt", "geq", "leq").
+- **hireDate** (optional): The hire date to filter by (format: YYYY-MM-DD).
+- **hireDateOperation** (optional): The operation for hire date ("eq", "gt", "lt", "geq", "leq").
+- **birthMonth** (optional): The birth month to filter by (1-12).
+- **birthYear** (optional): The birth year to filter by (e.g., 1970).
+- **hireMonth** (optional): The hire month to filter by (1-12).
+- **hireYear** (optional): The hire year to filter by (e.g., 2020).
+
+##### Example Request
+Here is the URL `GET` request query to do this:
+
+Find all employees with the first name containing "John", hired after January 1st, 2020, sorted by last name in ascending order. The result will be paginated with custom pagination where maximum 10 employees/page and show the employees data on page 1 (0-based index).
+```http
+GET /api/v1/employees/search?page=0&size=10&sortBy=lastName&sortOrder=asc&firstName=John&firstNameOperation=like&hireDate=2020-01-01&hireDateOperation=gt
+```
+
+#### Advanced Query Examples
+
+Here are 10 examples of advanced queries you can perform with this implementation. All the method used are `GET`.
+
+| Endpoint                                |  Description                                                                                 |
+|-----------------------------------------|---------------------------------------------------------------------------------------------|
+| /api/v1/employees/search?firstName=John&firstNameOperation=like&sortBy=lastName&sortOrder=asc                       | Find employees with first name containing "John" and sort by last name ascending.                                                                     |
+| /api/v1/employees/search?hireDate=2020-06-01&hireDateOperation=lt&size=40&page=2                       | Find employees hired before June 1st, 2020 with custom pagination (page 3 with size 40 elements/page).                                                                     |
+| /api/v1/employees/search?birthDate=1990-01-01&birthDateOperation=gt&page=1                       | Find employees born after January 1st, 1990 with default pagination, show employees on page 2.                                                                     |
+| /api/v1/employees/search?lastName=Smith&hireYear=2015                       | Find employees with last name "Smith" and hired in the year 2015.                                                                     |
+| /api/v1/employees/search?birthMonth=2                       | Find employees born in February.                                                                     |
+| /api/v1/employees/search?firstName=Albert&lastName=B&lastNameOperation=like&gender=M                       | Find male employees with first name "Albert" and last name starting with "B".                                                                     |
+| /api/v1/employees/search?firstName=Bobby&birthDate=1985-01-01&birthDateOperation=geq                       | Find employees with first name "Bobby" and birth date greater than or equal to January 1st, 1985.                                                                     |
+| /api/v1/employees/search?hireDate=2010-12-31&hireDateOperation=leq&sortBy=hireDate&sortOrder=desc&page=4                       | Find employees hired on or before December 31st, 2010, and sort by hire date descending with default pagination, show employees on page 5.                                                                     |
+| /api/v1/employees/search?birthMonth=8&hireYear=2011                       | Find employees born in August and hired in the year 2011.                                                                     |
+| /api/v1/employees/search?firstName=Michael&birthDate=1977-09-05&birthDateOperation=eq                       | Find employees with first name "Michael" and birth date equal to September 5th, 1977.                                                                     |
+
+#### Remarks and Conclusion
+
+In the industry, building flexible and advanced search functionality for REST APIs is a common practice, especially for applications that handle complex data retrieval requirements. The approach i made is in line with how such functionality is typically implemented. Here are a few points that highlight common practices in the industry:
+
+1. **Specification and Criteria API**: Using the JPA Specification and Criteria API is a standard approach to build dynamic queries in a type-safe way. This allows for complex query construction based on various criteria, which is a common requirement in many applications.
+
+2. **Pagination and Sorting**: Providing support for pagination and sorting in API endpoints is essential for handling large datasets. This is typically done using Spring Data's `Pageable` and `Sort` interfaces, which i've included in the `findByCriteria` method.
+
+3. **DTOs for Search Criteria**: Using Data Transfer Objects (DTOs) to encapsulate search criteria is a common practice. This helps in structuring the input parameters and makes the API more maintainable and understandable.
+
+4. **Combining Filters and Operations**: Allowing different operations (e.g., equality, greater than, less than) and combining them with logical operators (AND, OR) is a typical requirement for advanced search functionality. The use of predicates in the Specification API facilitates this.
+
+5. **Documentation and Consistency**: Documenting the API endpoints and ensuring consistent parameter naming conventions is crucial. This helps other developers understand and use the API correctly.
+
+This advanced query functionality significantly enhances the flexibility and usability of the `Employee` API. By supporting complex query operations, sorting, and pagination, it caters to a wide range of search requirements, making it a robust solution for applications that need sophisticated data retrieval capabilities.
 
 ### 📬 Postman Collection
 
-Here is the [postman collection](/Week%2006/Lecture%2011/Assignment%2001/Lecture%2011%20-%20Assignment%2001.postman_collection.json) you can use to demo the API functionality.
+Here is the [postman collection](/Week%2006/Lecture%2012/Assignment%2001/Lecture%2012%20-%20Assignment%2001.postman_collection.json) you can use to demo the API functionality, including the bonus part i already made on the separate APIs folder.
