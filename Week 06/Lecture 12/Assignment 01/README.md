@@ -203,11 +203,13 @@ This approach ensures my API to be flexible, maintainable, and follows best prac
 
 ### 🌳 Project Structure
 ```bash
-lecture_11
+lecture_12
 ├── .mvn/wrapper/
 │   └── maven-wrapper.properties
 ├── src/main/
-│   ├── java/com/example/lecture_11/
+│   ├── java/com/example/lecture_12/
+│   │   ├── config/
+│   │   │   └── WebConfig.java
 │   │   ├── controller/
 │   │   │   ├── DepartmentController.java
 │   │   │   ├── EmployeeController.java
@@ -245,7 +247,7 @@ lecture_11
 │   │   │   ├── EmployeeService.java
 │   │   │   ├── SalaryService.java
 │   │   │   └── TitleService.java
-│   │   └── Lecture11Application.java
+│   │   └── Lecture12Application.java
 │   └── resources/
 │       └── application.properties
 ├── .gitignore
@@ -324,13 +326,13 @@ CREATE TABLE titles (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/data.sql). Here is the query to drop the database
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week6_lecture12;
 ```
 
-Also don't forget to configure [application properties](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/application.properties) with this format
+Also don't forget to configure [application properties](/Week%2006/Lecture%2012/Assignment%2001/lecture_12/src/main/resources/application.properties) with this format.
 ```java
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 spring.datasource.url=jdbc:mysql://localhost:3306/<my_database>
@@ -338,11 +340,19 @@ spring.datasource.username=<my_user_name>
 spring.datasource.password=<my_password>
 ```
 
-and don't forget to add this
+and don't forget to add this to re-update the SQL DDL queries.
 ```java
 spring.jpa.hibernate.ddl-auto=update
 ```
-to do database seeding using JPA Hibernate.
+
+finally, don't forget to add this for hibernate SQL logging.
+```java
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+```
+
 
 ### ⚙️ How to run the program
 1. Go to the `lecture_12` directory by using this command
@@ -450,6 +460,10 @@ Find all employees with the first name containing "John", hired after January 1s
 ```http
 GET /api/v1/employees/search?page=0&size=10&sortBy=lastName&sortOrder=asc&firstName=John&firstNameOperation=like&hireDate=2020-01-01&hireDateOperation=gt
 ```
+
+and here's the query used through hibernate logging:
+
+![Screenshot](img/hibernate.png)
 
 #### Advanced Query Examples
 
