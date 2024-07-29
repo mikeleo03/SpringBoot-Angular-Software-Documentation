@@ -15,6 +15,16 @@ CREATE TABLE Customer (
     updatedAt DATETIME
 );
 
+-- Create `APIKey` table
+CREATE TABLE APIKey (
+    ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    api_key VARCHAR(255) NOT NULL,
+    description VARCHAR(255),         -- Description or label for the API key
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of creation
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp of last update
+    active BOOLEAN DEFAULT TRUE       -- Status to enable or disable the API key
+);
+
 -- Initialize data on table with DML
 -- Insert 20 customers
 INSERT INTO Customer (ID, name, phone_number, status, created_at, updated_at) VALUES
@@ -38,3 +48,8 @@ INSERT INTO Customer (ID, name, phone_number, status, created_at, updated_at) VA
 (UUID_TO_BIN(UUID()), 'Rachel Allen', '6677883344', 'Active', NOW(), NOW()),
 (UUID_TO_BIN(UUID()), 'Sam King', '9988773344', 'Active', NOW(), NOW()),
 (UUID_TO_BIN(UUID()), 'Tina Scott', '5566778899', 'Active', NOW(), NOW());
+
+-- Prepare API Keys
+INSERT INTO APIKey (api_key, description, created_at, updated_at, active) VALUES 
+('12345-ABCDE', 'Primary API Key for System Access', NOW(), NOW(), TRUE),
+('67890-FGHIJ', 'Secondary API Key for Testing', NOW(), NOW(), FALSE);
