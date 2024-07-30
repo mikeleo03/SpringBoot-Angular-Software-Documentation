@@ -344,6 +344,11 @@ Data stored on APIKey table from database.
 
 The current Customer API username.
 
+#### Swagger Documentation
+I use swagger for documentation, you can access it [here](http://localhost:8080/swagger-ui/index.html)
+
+![Screenshots](/Week%2008/Lecture%2013/Assignment%2003/img/swagger.png)
+
 #### Logs
 Here is the log printed from the console (excluding the SQL Hibernate log) when `GET` request to `/api/v1/customers` is called with the defined headers.
 ```java
