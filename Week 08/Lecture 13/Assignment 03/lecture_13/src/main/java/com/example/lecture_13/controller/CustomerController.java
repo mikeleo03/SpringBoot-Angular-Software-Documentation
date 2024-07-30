@@ -1,5 +1,6 @@
 package com.example.lecture_13.controller;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.lecture_13.data.model.APIKey;
 import com.example.lecture_13.data.model.Status;
+import com.example.lecture_13.data.repository.APIKeyRepository;
 import com.example.lecture_13.dto.CustomerDTO;
 import com.example.lecture_13.dto.CustomerSaveDTO;
 import com.example.lecture_13.dto.CustomerShowDTO;
@@ -37,6 +41,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private APIKeyRepository apiKeyRepository;
 
     /**
      * Retrieves all customers from the database.
@@ -150,5 +157,18 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable("id") UUID id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "Get the username of current API User.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Username retrieved successfully"),
+    })
+    @GetMapping("/username")
+    public String printUsername(@RequestHeader("api-key") String apiKey) {
+        Optional<APIKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
+        if (apiKeyOpt.isPresent() && apiKeyOpt.get().getApiKey().equals(apiKey)) {
+            return "Username: " + apiKeyOpt.get().getUsername();
+        }
+        return "Invalid API Key";
     }
 }

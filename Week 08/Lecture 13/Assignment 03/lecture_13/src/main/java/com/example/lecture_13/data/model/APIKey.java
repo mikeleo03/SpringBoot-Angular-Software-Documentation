@@ -24,8 +24,10 @@ public class APIKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String apiKey;
+    private String username; // Added username field
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
+    private LocalDateTime lastUsedAt; // Added last used field
 }

@@ -3,6 +3,8 @@ package com.example.lecture_13.config.filter;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,9 +24,13 @@ public class APIKeyFilter extends OncePerRequestFilter {
     @Autowired
     private APIKeyRepository apiKeyRepository;
 
+    private final static Logger logger = LoggerFactory.getLogger(APIKeyFilter.class);
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
             throws ServletException, IOException {
+        
+        logger.info("[Filter][" + request + "]" + "[" + request.getMethod()+ "]" + request.getRequestURI());
         String requestApiKey = request.getHeader("api-key");
 
         Optional<APIKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
@@ -44,5 +50,7 @@ public class APIKeyFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"API Key not configured or inactive\"}");
         }
+
+        logger.info("[Filter] Logging Response : {}", response.getStatus());
     }
 }

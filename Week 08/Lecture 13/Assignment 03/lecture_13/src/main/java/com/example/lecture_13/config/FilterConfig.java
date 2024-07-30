@@ -13,7 +13,7 @@ public class FilterConfig {
     public FilterRegistrationBean<APIKeyFilter> apiKeyFilter(APIKeyFilter apiKeyFilter) {
         FilterRegistrationBean<APIKeyFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(apiKeyFilter);
-        registrationBean.addUrlPatterns("/api/v1/*"); // All Customer API
+        registrationBean.addUrlPatterns("/api/*"); // All Customer API
         return registrationBean;
     }
 }
