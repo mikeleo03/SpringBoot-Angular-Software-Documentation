@@ -14,7 +14,7 @@ Here’s a step-by-step guide:
 
 ### 📦 Storing API Key in the Database
 
-**Idea**: Create a table to store the API key. You can have a single record in this table that holds the API key.
+**Idea**: Create a table to store the API key. We can have a single record in this table that holds the API key.
 
 **Table Schema**
 See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/resources/data.sql).
