@@ -332,15 +332,15 @@ If all the instruction is well executed, Open [localhost:8080](http://localhost:
 
 ### 🚀 Demonstration
 #### Screenshots
-![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo1.png)
+![Screenshots](/Week%2008/Lecture%2013/Assignment%2003/img/demo1.png)
 
 The request headers used and the response headers returned.
 
-![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo2.png)
+![Screenshots](/Week%2008/Lecture%2013/Assignment%2003/img/demo2.png)
 
 Data stored on APIKey table from database.
 
-![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo3.png)
+![Screenshots](/Week%2008/Lecture%2013/Assignment%2003/img/demo3.png)
 
 The current Customer API username.
 
