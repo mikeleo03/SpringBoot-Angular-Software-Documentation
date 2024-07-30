@@ -5,33 +5,17 @@
 
 ### 🧐 Detailed Overview
 
-To complete the assignment, we need to add the following functionalities to the existing CRUD project:
-1. **Store API key in the database**: Ensure we have a table to store the API key.
-2. **Verify requests**: Filter to check for the "api-key" header in incoming requests.
-3. **Include header in all responses**: Filter to add the "source" header to all responses.
+1. **Store Username for Each API Key**: Add a username field to the `ApiKey` entity and include this in the response headers.
+2. **Add Timestamp Header**: Add a `timestamp` header with the current time to all responses.
+3. **Store Last Used Time**: Update the `ApiKey` entity to store the last time it was used.
+4. **Print Username in Controller**: Implement a method in the controller to print the username associated with the API key.
 
-Here’s a step-by-step guide:
+### 🛠️ Modify the `ApiKey` Entity
 
-### 📦 Storing API Key in the Database
-
-**Idea**: Create a table to store the API key. You can have a single record in this table that holds the API key.
-
-**Table Schema**
-See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/resources/data.sql).
-```sql
--- Create `APIKey` table
-CREATE TABLE APIKey (
-    ID BIGINT AUTO_INCREMENT PRIMARY KEY,
-    api_key VARCHAR(255) NOT NULL,
-    description VARCHAR(255),         -- Description or label for the API key
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of creation
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp of last update
-    active BOOLEAN DEFAULT TRUE       -- Status to enable or disable the API key
-);
-```
+**Idea**: Update the `ApiKey` entity to include a username field and a last used time field.
 
 **Java Entity**
-See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/java/com/example/lecture_13/data/model/APIKey.java).
+See the detail [here](/Week%2008/Lecture%2013/Assignment%2003/lecture_13/src/main/java/com/example/lecture_13/data/model/APIKey.java).
 ```java
 @Data
 @NoArgsConstructor
@@ -45,15 +29,21 @@ public class APIKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String apiKey;
+    private String username; // Added username field
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
+    private LocalDateTime lastUsedAt; // Added last used field
 }
 ```
 
+### 🗄️ Update the Repository
+
+**Idea**: Add a method to update the last used time.
+
 **Repository**
-See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/java/com/example/lecture_13/data/repository/APIKeyRepository.java).
+See the detail [here](/Week%2008/Lecture%2013/Assignment%2003/lecture_13/src/main/java/com/example/lecture_13/data/repository/APIKeyRepository.java).
 ```java
 @Repository
 public interface APIKeyRepository extends JpaRepository<APIKey, Long> {
@@ -62,62 +52,135 @@ public interface APIKeyRepository extends JpaRepository<APIKey, Long> {
     Optional<APIKey> findFirstByOrderById();
 
     // Find the first active API key
-    Optional<APIKey> findFirstByActiveTrueOrderById(); 
+    Optional<APIKey> findFirstByActiveTrueOrderById();
+
+    // Find the first active API key with a specific API key
+    Optional<APIKey> findFirstByApiKeyAndActiveTrue(String apiKey); 
 }
 ```
 
-### 🔽 Filter for API Key Verification
+### 🌐 Create Interceptor
 
-**Idea**: Create a filter that intercepts incoming requests, checks for the "api-key" header, and verifies it against the stored API key in the database. Use it also to add the "source" header to all responses.
+**Idea**: Create an interceptor that intercepts incoming requests, checks for the "api-key-username" header, send it to header, and also setup "timestamp" header to all responses.
 
-**Filter Implementation**
-See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/java/com/example/lecture_13/config/filter/APIKeyFilter.java).
+**Interceptor Implementation**
+See the detail [here](/Week%2008/Lecture%2013/Assignment%2003/lecture_13/src/main/java/com/example/lecture_13/config/interceptor/APIKeyInterceptor.java).
 ```java
 @Component
-public class APIKeyFilter extends OncePerRequestFilter {
+public class APIKeyInterceptor implements HandlerInterceptor {
+
+    private final APIKeyRepository apiKeyRepository;
+    private final static Logger logger = LoggerFactory.getLogger(APIKeyInterceptor.class);
 
     @Autowired
-    private APIKeyRepository apiKeyRepository;
+    public APIKeyInterceptor(APIKeyRepository apiKeyRepository) {
+        this.apiKeyRepository = apiKeyRepository;
+        logger.info("APIKeyRepository injected: {}", (this.apiKeyRepository != null));
+    }
 
+    // Request is intercepted by this method before reaching the Controller
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
-            throws ServletException, IOException {
-        String requestApiKey = request.getHeader("api-key");
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // Pre-processing logic here
+        // Apply timestamp
+        response.addHeader("timestamp", LocalDateTime.now().toString());
+        logger.info("[PreHandle] Timestamp applied.");
+        logger.info("[PreHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
+        return true; // Continue with the request
+    }
 
-        Optional<APIKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
-        response.addHeader("source", "fpt-software");
-        if (apiKeyOpt.isPresent()) {
-            String storedApiKey = apiKeyOpt.get().getApiKey();
+    // Response is intercepted by this method before reaching the client
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        // Post-handle logic here
+        logger.info("[PostHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
+    }
 
-            if (storedApiKey.equals(requestApiKey)) {
-                filterChain.doFilter(request, response);
-            } else {
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Invalid API Key\"}");
-            }
-        } else {
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"API Key not configured or inactive\"}");
+    // This method is called after request & response HTTP communication is done.
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        logger.info("[AfterCompletion][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
+
+        String username = request.getHeader("api-key-username");
+        if (username != null) {
+            response.addHeader("username", username);
+            logger.info("[AfterCompletion] Username detected : {}", username);
         }
+
+        // Update lastUsedAt in the database
+        String requestApiKey = request.getHeader("api-key");
+        logger.info("[AfterCompletion] API Key : {}", requestApiKey);
+        Optional<APIKey> apiKeyOpt = apiKeyRepository.findFirstByApiKeyAndActiveTrue(requestApiKey);
+        if (apiKeyOpt.isPresent()) {
+            APIKey apiKey = apiKeyOpt.get();
+            apiKey.setUsername(username);
+            apiKey.setLastUsedAt(LocalDateTime.now());
+            apiKeyRepository.save(apiKey);
+            logger.info("[AfterCompletion] API Key data updated : {}", apiKey);
+        }
+
+        logger.info("[AfterCompletion] Execution done.");
     }
 }
 ```
 
-### ✔️ Register Filters
-**Configuration**
-See the detail [here](/Week%2008/Lecture%2013/Assignment%2002/lecture_13/src/main/java/com/example/lecture_13/config/FilterConfig.java).
+### ✔️ Register Interceptor
+**Interceptor Configuration**
+See the detail [here](/Week%2008/Lecture%2013/Assignment%2003/lecture_13/src/main/java/com/example/lecture_13/config/InterceptorConfig.java).
 ```java
 @Configuration
-public class FilterConfig {
+public class InterceptorConfig implements WebMvcConfigurer { 
+    // Register an interceptor with the registry
+	private final APIKeyInterceptor apiKeyInterceptor;
 
-    @Bean
-    public FilterRegistrationBean<APIKeyFilter> apiKeyFilter(APIKeyFilter apiKeyFilter) {
-        FilterRegistrationBean<APIKeyFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(apiKeyFilter);
-        registrationBean.addUrlPatterns("/api/v1/*"); // All Customer API
-        return registrationBean;
+    @Autowired
+    public InterceptorConfig(APIKeyInterceptor apiKeyInterceptor) {
+        this.apiKeyInterceptor = apiKeyInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(apiKeyInterceptor);
+    }
+}
+```
+
+#### Response Header Filter
+
+Update the response header filter to include the `timestamp` header.
+
+### 🆕 Add a Controller Method to Print Username
+
+**Idea**: Add a method to your controller to print the username associated with the API key.
+
+**Customer Controller**
+See the detail [here](/Week%2008/Lecture%2013/Assignment%2003/lecture_13/src/main/java/com/example/lecture_13/controller/CustomerController.java).
+
+```java
+@RestController
+@RequestMapping("/api/v1/customers")
+@Validated
+public class CustomerController {
+
+    .....
+
+    /**
+     * Retrieves the username of the current API User.
+     *
+     * @param apiKey The API key provided in the request header.
+     * @return The username of the current API User if the provided API key is valid, otherwise returns "Invalid API Key".
+     */
+    @Operation(summary = "Get the username of current API User.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Username retrieved successfully"),
+    })
+    @GetMapping("/username")
+    public String printUsername(@RequestHeader("api-key") String apiKey) {
+        Optional<APIKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
+        if (apiKeyOpt.isPresent() && apiKeyOpt.get().getApiKey().equals(apiKey)) {
+            return "Username: " + apiKeyOpt.get().getUsername();
+        }
+        return "Invalid API Key";
     }
 }
 ```
@@ -134,7 +197,10 @@ lecture_13
 │   │   ├── config/
 │   │   │   ├── filter/
 │   │   │   │   └── APIKeyFilter.java
+│   │   │   ├── interceptor/
+│   │   │   │   └── APIKeyInterceptor.java
 │   │   │   ├── FilterConfig.java
+│   │   │   ├── InterceptorConfig.java
 │   │   │   └── WebConfig.java
 │   │   ├── controller/
 │   │   │   └── CustomerController.java
@@ -201,7 +267,9 @@ CREATE TABLE APIKey (
     description VARCHAR(255),         -- Description or label for the API key
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of creation
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp of last update
-    active BOOLEAN DEFAULT TRUE       -- Status to enable or disable the API key
+    active BOOLEAN DEFAULT TRUE,      -- Status to enable or disable the API key
+    last_used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Last time the API key was used
+    username VARCHAR(255)             -- Username associated with the API key
 );
 ```
 
@@ -259,17 +327,38 @@ If all the instruction is well executed, Open [localhost:8080](http://localhost:
 | /api/v1/customers/active/{id}                                                              | PUT    | Activate the existing customer by their customer ID. Make sure the customer ID exists and is currently inactive. |
 | /api/v1/customers/deactive/{id}                                                            | PUT    | Deactivate the existing customer by their customer ID. Make sure the customer ID exists and is currently active. |
 | /api/v1/customers/{id}                                                            | DELETE    | Delete an existing customer by customer ID. Make sure the customer ID exists. |
+| /api/v1/customers/username                                                            | GET    | Get the current username of Customer API user. |
 
 
 ### 🚀 Demonstration
+#### Screenshots
 ![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo1.png)
 
-Result if API Key not exists or not configured on the header.
+The request headers used and the response headers returned.
 
 ![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo2.png)
 
-Result if API Key well-configured on the header.
+Data stored on APIKey table from database.
 
 ![Screenshots](/Week%2008/Lecture%2013/Assignment%2002/img/demo3.png)
 
-Result header returning source from fpt-software.
+The current Customer API username.
+
+#### Logs
+Here is the log printed from the console (excluding the SQL Hibernate log) when `GET` request to `/api/v1/customers` is called with the defined headers.
+```java
+[Filter][org.apache.catalina.connector.RequestFacade@73cd94a6][GET] /api/v1/customers
+[Filter] doFilter starts.
+[PreHandle][org.apache.catalina.connector.RequestFacade@73cd94a6][GET] /api/v1/customers
+[PreHandle] Timestamp applied.
+[PreHandle] preHandle done.
+[PostHandle][org.apache.catalina.connector.RequestFacade@73cd94a6][GET] /api/v1/customers
+[PostHandle] postHandle done.
+[AfterCompletion][org.apache.catalina.connector.RequestFacade@73cd94a6][GET] /api/v1/customers
+[AfterCompletion] Username detected : Leon
+[AfterCompletion] API Key : 12345-ABCDE
+[AfterCompletion] API Key data updated : APIKey(id=1, apiKey=12345-ABCDE, username=Leon, description=Primary API Key for System Access, createdAt=2024-07-29T15:12:25, updatedAt=2024-07-29T15:12:25, active=true, lastUsedAt=2024-07-30T10:53:09.157716200)
+[AfterCompletion] afterCompletion done.
+[Filter] doFilter done.
+[Filter] Logging Response : 200
+```
