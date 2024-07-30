@@ -16,5 +16,6 @@ public interface APIKeyRepository extends JpaRepository<APIKey, Long> {
     // Find the first active API key
     Optional<APIKey> findFirstByActiveTrueOrderById();
 
+    // Find the first active API key with a specific API key
     Optional<APIKey> findFirstByApiKeyAndActiveTrue(String apiKey); 
 }

@@ -22,7 +22,9 @@ CREATE TABLE APIKey (
     description VARCHAR(255),         -- Description or label for the API key
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of creation
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp of last update
-    active BOOLEAN DEFAULT TRUE       -- Status to enable or disable the API key
+    active BOOLEAN DEFAULT TRUE,      -- Status to enable or disable the API key
+    last_used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Last time the API key was used
+    username VARCHAR(255)             -- Username associated with the API key
 );
 
 -- Initialize data on table with DML

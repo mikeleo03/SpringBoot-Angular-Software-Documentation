@@ -32,10 +32,11 @@ public class APIKeyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Pre-processing logic here
+        logger.info("[PreHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
         // Apply timestamp
         response.addHeader("timestamp", LocalDateTime.now().toString());
         logger.info("[PreHandle] Timestamp applied.");
-        logger.info("[PreHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
+        logger.info("[PreHandle] preHandle done.");
         return true; // Continue with the request
     }
 
@@ -44,6 +45,7 @@ public class APIKeyInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // Post-handle logic here
         logger.info("[PostHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
+        logger.info("[PostHandle] postHandle done.");
     }
 
     // This method is called after request & response HTTP communication is done.
@@ -69,6 +71,6 @@ public class APIKeyInterceptor implements HandlerInterceptor {
             logger.info("[AfterCompletion] API Key data updated : {}", apiKey);
         }
 
-        logger.info("[AfterCompletion] Execution done.");
+        logger.info("[AfterCompletion] afterCompletion done.");
     }
 }
