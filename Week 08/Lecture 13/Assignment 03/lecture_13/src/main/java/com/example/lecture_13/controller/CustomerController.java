@@ -159,6 +159,12 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    /**
+     * Retrieves the username of the current API User.
+     *
+     * @param apiKey The API key provided in the request header.
+     * @return The username of the current API User if the provided API key is valid, otherwise returns "Invalid API Key".
+     */
     @Operation(summary = "Get the username of current API User.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Username retrieved successfully"),

@@ -35,7 +35,7 @@ public class APIKeyInterceptor implements HandlerInterceptor {
         // Apply timestamp
         response.addHeader("timestamp", LocalDateTime.now().toString());
         logger.info("[PreHandle] Timestamp applied.");
-        logger.info("[PreHandle][" + request + "]" + "[" + request.getMethod()+ "]" + request.getRequestURI());
+        logger.info("[PreHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
         return true; // Continue with the request
     }
 
@@ -43,13 +43,13 @@ public class APIKeyInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // Post-handle logic here
-        logger.info("[PostHandle][" + request + "]" + "[" + request.getMethod()+ "]" + request.getRequestURI());
+        logger.info("[PostHandle][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
     }
 
     // This method is called after request & response HTTP communication is done.
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        logger.info("[AfterCompletion][" + request + "]" + "[" + request.getMethod()+ "]" + request.getRequestURI());
+        logger.info("[AfterCompletion][" + request + "]" + "[" + request.getMethod()+ "] " + request.getRequestURI());
 
         String username = request.getHeader("api-key-username");
         if (username != null) {
