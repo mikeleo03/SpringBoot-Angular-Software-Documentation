@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableAutoConfiguration
-@ComponentScan("com.baeldung.sampleapp")
+@ComponentScan("com.example.restTemplateDemo.sampleapp")
 public class MainApplication implements WebMvcConfigurer {
 
     public static void main(final String[] args) {

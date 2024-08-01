@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("com.baeldung")
+@ComponentScan("com.example.restTemplateDemo")
 public class SpringTestConfig {
 }

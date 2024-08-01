@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static com.example.restTemplateDemo.client.Consts.APPLICATION_PORT;
 import com.example.restTemplateDemo.resttemplate.web.dto.Foo;
-import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateResponseErrorHandler;
+import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateRespErrorHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
@@ -41,7 +41,7 @@ public class RestTemplateBasicLiveTest {
     @BeforeEach
     public void beforeTest() {
         restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+        restTemplate.setErrorHandler(new RestTemplateRespErrorHandler());
         // restTemplate.setMessageConverters(Arrays.asList(new MappingJackson2HttpMessageConverter()));
     }
 

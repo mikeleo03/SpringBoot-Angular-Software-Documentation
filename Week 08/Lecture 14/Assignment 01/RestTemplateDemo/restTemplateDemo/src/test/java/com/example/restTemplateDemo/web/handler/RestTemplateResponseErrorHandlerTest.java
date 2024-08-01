@@ -18,7 +18,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import org.springframework.web.client.RestTemplate;
 
 import com.example.restTemplateDemo.resttemplate.web.exception.NotFoundException;
-import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateResponseErrorHandler;
+import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateRespErrorHandler;
 import com.example.restTemplateDemo.resttemplate.web.model.Bar;
 
 @ExtendWith(SpringExtension.class)
@@ -35,7 +35,7 @@ public class RestTemplateResponseErrorHandlerTest {
         Assertions.assertNotNull(this.server);
 
         RestTemplate restTemplate = this.builder
-          .errorHandler(new RestTemplateResponseErrorHandler())
+          .errorHandler(new RestTemplateRespErrorHandler())
           .build();
 
         this.server

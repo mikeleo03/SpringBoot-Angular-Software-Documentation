@@ -9,7 +9,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.restTemplateDemo.sampleapp.interceptor.RestTemplateHeaderModifierInterceptor;
+import com.example.restTemplateDemo.sampleapp.interceptor.RestTemplateHeaderInterceptor;
 
 @Configuration
 public class RestClientConfig {
@@ -22,7 +22,7 @@ public class RestClientConfig {
         if (CollectionUtils.isEmpty(interceptors)) {
             interceptors = new ArrayList<>();
         }
-        interceptors.add(new RestTemplateHeaderModifierInterceptor());
+        interceptors.add(new RestTemplateHeaderInterceptor());
         restTemplate.setInterceptors(interceptors);
         return restTemplate;
     }

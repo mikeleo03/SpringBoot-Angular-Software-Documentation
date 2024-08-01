@@ -5,7 +5,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateResponseErrorHandler;
+import com.example.restTemplateDemo.resttemplate.web.handler.RestTemplateRespErrorHandler;
 import com.example.restTemplateDemo.resttemplate.web.model.Bar;
 
 @Service
@@ -16,7 +16,7 @@ public class BarConsumerService {
     @Autowired
     public BarConsumerService(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder
-          .errorHandler(new RestTemplateResponseErrorHandler())
+          .errorHandler(new RestTemplateRespErrorHandler())
           .build();
     }
 
