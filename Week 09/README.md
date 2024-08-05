@@ -109,13 +109,13 @@ fpt_midterm_pos
 ## 🔎 Class Diagram
 Here is our Class Diagram. You can see it detail [here](https://lucid.app/lucidchart/b66fa0c2-f3c7-49e4-9873-633c505bda5c/edit?beaconFlowId=96FD403F7522998F&invitationId=inv_c0d2a63e-ac6d-4693-b6bd-b15393c9d14e&page=0_0#).
 
-![Class](/img/class.png)
+![Class](/Week%2009/img/class.png)
 
 
 ## 🧩 Entity Relationship Diagram (ERD) and SQL Query Data
 Here is our ERD. You can see it detail [here](https://lucid.app/lucidchart/b66fa0c2-f3c7-49e4-9873-633c505bda5c/edit?beaconFlowId=96FD403F7522998F&invitationId=inv_c0d2a63e-ac6d-4693-b6bd-b15393c9d14e&page=0_0#).
 
-![ERD](/img/erd.png)
+![ERD](/Week%2009/img/erd.png)
 
 And here is the SQL query to create the database, table, and instantiate some data.
 ```sql
