@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.fpt_midterm_pos.data.model.Customer;
 import com.example.fpt_midterm_pos.data.model.Invoice;
@@ -35,9 +36,13 @@ import com.example.fpt_midterm_pos.exception.ResourceNotFoundException;
 import com.example.fpt_midterm_pos.mapper.InvoiceMapper;
 import com.example.fpt_midterm_pos.service.InvoiceService;
 import com.example.fpt_midterm_pos.utils.PDFGenerator;
+
+import jakarta.validation.Valid;
+
 import com.example.fpt_midterm_pos.utils.DateUtils;
 
 @Service
+@Validated
 public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
@@ -96,7 +101,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     @Transactional
-    public InvoiceDTO createInvoice(InvoiceSaveDTO invoiceSaveDTO) {
+    public InvoiceDTO createInvoice(@Valid InvoiceSaveDTO invoiceSaveDTO) {
         // 1. Select the customer
         // The main idea is by looking the invoice customer ID and browse on customer repo
         Customer customer = customerRepository.findById(invoiceSaveDTO.getCustomerId())
@@ -183,7 +188,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     @Transactional
-    public InvoiceDTO updateInvoice(UUID id, InvoiceSaveDTO invoiceSaveDTO) throws BadRequestException {
+    public InvoiceDTO updateInvoice(UUID id, @Valid InvoiceSaveDTO invoiceSaveDTO) throws BadRequestException {
         // Check if the invoice actually exists
         Invoice existingInvoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Invoice not found"));

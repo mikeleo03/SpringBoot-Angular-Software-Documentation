@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.fpt_midterm_pos.dto.*;
+
+import jakarta.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,10 +19,10 @@ public interface ProductService {
     Page<ProductShowDTO> findByCriteria(ProductSearchCriteriaDTO criteria, Pageable pageable);
 
     // Creating a new product.
-    ProductDTO createProduct(ProductSaveDTO productSaveDTO);
+    ProductDTO createProduct(@Valid ProductSaveDTO productSaveDTO);
 
     // Updates an existing product with the provided product details.
-    ProductDTO updateProduct(UUID id, ProductSaveDTO productSaveDTO);
+    ProductDTO updateProduct(UUID id, @Valid ProductSaveDTO productSaveDTO);
 
     // Updates the status of an existing product.
     ProductDTO updateProductStatus(UUID id, Status status);

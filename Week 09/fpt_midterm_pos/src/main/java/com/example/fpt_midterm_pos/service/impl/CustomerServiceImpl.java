@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.fpt_midterm_pos.data.model.Customer;
 import com.example.fpt_midterm_pos.data.model.Status;
@@ -19,7 +20,10 @@ import com.example.fpt_midterm_pos.exception.ResourceNotFoundException;
 import com.example.fpt_midterm_pos.mapper.CustomerMapper;
 import com.example.fpt_midterm_pos.service.CustomerService;
 
+import jakarta.validation.Valid;
+
 @Service
+@Validated
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -58,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return A {@link CustomerDTO} object representing the newly created customer.
      */
     @Override
-    public CustomerDTO createCustomer(CustomerSaveDTO customerSaveDTO) {
+    public CustomerDTO createCustomer(@Valid CustomerSaveDTO customerSaveDTO) {
         Customer customer = customerMapper.toCustomer(customerSaveDTO);
         customer.setCreatedAt(new Date());
         customer.setUpdatedAt(new Date());
@@ -75,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @throws ResourceNotFoundException if the customer with the given ID is not found.
      */
     @Override
-    public CustomerDTO updateCustomer(UUID id, CustomerSaveDTO customerSaveDTO) {
+    public CustomerDTO updateCustomer(UUID id, @Valid CustomerSaveDTO customerSaveDTO) {
         Customer custCheck = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
         Customer customer = customerMapper.toCustomer(customerSaveDTO);

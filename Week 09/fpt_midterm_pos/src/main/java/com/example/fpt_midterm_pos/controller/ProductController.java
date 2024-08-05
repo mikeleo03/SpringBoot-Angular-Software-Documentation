@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +30,11 @@ import com.example.fpt_midterm_pos.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Validated
 public class ProductController {
 
     @Autowired
@@ -74,7 +77,7 @@ public class ProductController {
         @ApiResponse(responseCode = "201", description = "Product created successfully")
     })
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductSaveDTO productSaveDTO) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductSaveDTO productSaveDTO) {
         ProductDTO productDTO = productService.createProduct(productSaveDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
@@ -93,7 +96,7 @@ public class ProductController {
         @ApiResponse(responseCode = "204", description = "Product not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody ProductSaveDTO productSaveDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductSaveDTO productSaveDTO) {
         ProductDTO productDTO = productService.updateProduct(id, productSaveDTO);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.fpt_midterm_pos.data.model.Product;
@@ -27,7 +28,10 @@ import com.example.fpt_midterm_pos.mapper.ProductMapper;
 import com.example.fpt_midterm_pos.service.ProductService;
 import com.example.fpt_midterm_pos.utils.FileUtils;
 
+import jakarta.validation.Valid;
+
 @Service
+@Validated
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -92,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws BadRequestException If the provided CSV file is not in the correct format.
      */
     @Override
-    public ProductDTO createProduct(ProductSaveDTO productSaveDTO) {
+    public ProductDTO createProduct(@Valid ProductSaveDTO productSaveDTO) {
         Product product = productMapper.toProduct(productSaveDTO);
         product.setStatus(Status.Active); // Ensure the product is set to active when saving
         product.setCreatedAt(new Date());
@@ -110,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ResourceNotFoundException If the product with the given ID is not found in the database.
      */
     @Override
-    public ProductDTO updateProduct(UUID id, ProductSaveDTO productSaveDTO) {
+    public ProductDTO updateProduct(UUID id, @Valid ProductSaveDTO productSaveDTO) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         product.setName(productSaveDTO.getName());
