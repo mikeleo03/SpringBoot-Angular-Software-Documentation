@@ -184,7 +184,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void testUpdateProductStatuDeactive() throws Exception {
+    void testUpdateProductStatusDeactive() throws Exception {
         UUID productId = UUID.randomUUID();
         ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.Deactive, 10);
 
