@@ -93,7 +93,7 @@ public class ProductController {
     @Operation(summary = "Update existing Product.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product updated successfully"),
-        @ApiResponse(responseCode = "204", description = "Product not found")
+        @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductSaveDTO productSaveDTO) {
@@ -111,7 +111,7 @@ public class ProductController {
     @Operation(summary = "Update existing Product status from Deactive to Active.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product successfully activated"),
-        @ApiResponse(responseCode = "204", description = "Product not found")
+        @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/active/{id}")
     public ResponseEntity<ProductDTO> updateProductStatusActive(@PathVariable UUID id) {
@@ -129,7 +129,7 @@ public class ProductController {
     @Operation(summary = "Update existing Product status from Active to Deactive.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product successfully deactivated"),
-        @ApiResponse(responseCode = "204", description = "Product not found")
+        @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/deactive/{id}")
     public ResponseEntity<ProductDTO> updateProductStatusDeactive(@PathVariable UUID id) {
@@ -149,8 +149,8 @@ public class ProductController {
         @ApiResponse(responseCode = "200", description = "Product imported successfully")
     })
     @PostMapping("/upload")
-    public ResponseEntity<List<ProductDTO>> uploadCSV(@RequestParam("file") MultipartFile file) {
-        List<ProductDTO> products = productService.saveProductsFromCSV(file);
+    public ResponseEntity<List<ProductDTO>> uploadExcel(@RequestParam("file") MultipartFile file) {
+        List<ProductDTO> products = productService.saveProductsFromExcel(file);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 }

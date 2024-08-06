@@ -27,6 +27,6 @@ public interface ProductService {
     // Updates the status of an existing product.
     ProductDTO updateProductStatus(UUID id, Status status);
 
-    // Saves a list of products from a CSV file to the database.
-    List<ProductDTO> saveProductsFromCSV(MultipartFile file);
+    // Saves a list of products from a Excel file to the database.
+    List<ProductDTO> saveProductsFromExcel(MultipartFile file);
 }

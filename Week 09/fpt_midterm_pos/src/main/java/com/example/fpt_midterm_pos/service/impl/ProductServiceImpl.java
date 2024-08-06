@@ -87,13 +87,12 @@ public class ProductServiceImpl implements ProductService {
         return products.map(productMapper::toShowDTO);
     }
 
-
     /**
      * Creates a new product based on the provided {@link ProductSaveDTO} and saves it to the database.
      *
      * @param productSaveDTO The data transfer object containing the details of the new product to be created.
      * @return A {@link ProductDTO} representing the newly created product with its ID and other relevant details.
-     * @throws BadRequestException If the provided CSV file is not in the correct format.
+     * @throws BadRequestException If the provided Excel file is not in the correct format.
      */
     @Override
     public ProductDTO createProduct(@Valid ProductSaveDTO productSaveDTO) {
@@ -152,21 +151,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * Saves a list of products from a CSV file to the database.
+     * Saves a list of products from a Excel file to the database.
      *
-     * @param file The MultipartFile object containing the CSV file with product data.
+     * @param file The MultipartFile object containing the Excel file with product data.
      * @return A list of {@link ProductDTO} objects representing the saved products with their IDs and other relevant details.
-     * @throws IllegalArgumentException If the provided file is not in the correct CSV format.
-     * @throws BadRequestException If an error occurs while reading the CSV file.
+     * @throws IllegalArgumentException If the provided file is not in the correct Excel format.
+     * @throws BadRequestException If an error occurs while reading the Excel file.
      */
     @Override
-    public List<ProductDTO> saveProductsFromCSV(MultipartFile file) {
-        if (!FileUtils.hasCSVFormat(file)) {
-            throw new IllegalArgumentException("Invalid file format. Only CSV files are accepted.");
-        }
-
+    public List<ProductDTO> saveProductsFromExcel(MultipartFile file) {
         try {
-            List<ProductSaveDTO> productSaveDTOs = FileUtils.readProductsFromCSV(file);
+            List<ProductSaveDTO> productSaveDTOs = FileUtils.readProductsFromExcel(file);
             List<Product> products = productMapper.toProductList(productSaveDTOs);
 
             products.forEach(product -> {
@@ -182,7 +177,9 @@ public class ProductServiceImpl implements ProductService {
             List<Product> savedProducts = productRepository.saveAll(products);
             return productMapper.toProductDTOList(savedProducts);
         } catch (IOException e) {
-            throw new BadRequestException("Error reading CSV file: " + e.getMessage());
+            throw new BadRequestException("Error reading Excel file: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid file format. Only Excel files are accepted.");
         }
     }
 }
