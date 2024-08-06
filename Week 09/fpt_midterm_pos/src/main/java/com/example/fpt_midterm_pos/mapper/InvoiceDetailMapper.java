@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.example.fpt_midterm_pos.data.model.InvoiceDetail;
+import com.example.fpt_midterm_pos.data.model.InvoiceDetailKey;
 import com.example.fpt_midterm_pos.dto.InvoiceDetailDTO;
 import com.example.fpt_midterm_pos.dto.InvoiceDetailSaveDTO;
 
@@ -37,4 +38,20 @@ public interface InvoiceDetailMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     InvoiceDetail toInvoiceDetail(InvoiceDetailSaveDTO invoiceDetailSaveDTO);
+
+    // DTO to InvoiceDetailKey
+    @Mapping(target = "invoiceId", ignore = true)
+    InvoiceDetailKey toInvoiceDetailKey(InvoiceDetailDTO invoiceDetailDTO);
+
+    @Mapping(target = "productName", ignore = true)
+    @Mapping(target = "quantity", ignore = true)
+    @Mapping(target = "amount", ignore = true)
+    @Mapping(target = "price", ignore = true)
+    InvoiceDetailDTO toInvoiceDetailDTO(InvoiceDetailKey invoiceDetailKey);
+
+    @Mapping(target = "invoiceId", ignore = true)
+    InvoiceDetailKey toInvoiceDetailKey(InvoiceDetailSaveDTO invoiceDetailSaveDTO);
+
+    @Mapping(target = "quantity", ignore = true)
+    InvoiceDetailSaveDTO toInvoiceDetailSaveDTO(InvoiceDetailKey invoiceDetailKey);
 }
