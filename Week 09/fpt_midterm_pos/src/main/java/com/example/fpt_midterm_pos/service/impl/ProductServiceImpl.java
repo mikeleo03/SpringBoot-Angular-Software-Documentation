@@ -163,17 +163,15 @@ public class ProductServiceImpl implements ProductService {
         try {
             List<ProductSaveDTO> productSaveDTOs = FileUtils.readProductsFromExcel(file);
             List<Product> products = productMapper.toProductList(productSaveDTOs);
-
-            products.forEach(product -> {
+    
+            for (Product product : products) {
                 if (product.getQuantity() == 0) {
                     product.setStatus(Status.Deactive);
                 } else {
                     product.setStatus(Status.Active);
                 }
-                product.setCreatedAt(new Date());
-                product.setUpdatedAt(new Date());
-            });
-
+            }
+    
             List<Product> savedProducts = productRepository.saveAll(products);
             return productMapper.toProductDTOList(savedProducts);
         } catch (IOException e) {
@@ -181,5 +179,5 @@ public class ProductServiceImpl implements ProductService {
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid file format. Only Excel files are accepted.");
         }
-    }
+    }    
 }

@@ -18,7 +18,7 @@ public class FileUtils {
     private static final String[] HEADERS = { "name", "price", "quantity" };
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
-    public static boolean hasExcelFormat(MultipartFile file) {
+    private static boolean hasExcelFormat(MultipartFile file) {
         System.out.println("Debugging Content Type in hasExcelFormat: " + file.getContentType()); // Debugging
         return TYPE.equals(file.getContentType());
     }            

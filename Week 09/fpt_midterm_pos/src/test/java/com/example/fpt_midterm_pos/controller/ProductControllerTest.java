@@ -10,9 +10,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -24,9 +31,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.example.fpt_midterm_pos.data.model.Status;
 import com.example.fpt_midterm_pos.dto.ProductDTO;
 import com.example.fpt_midterm_pos.dto.ProductSaveDTO;
+import com.example.fpt_midterm_pos.dto.ProductSearchCriteriaDTO;
+import com.example.fpt_midterm_pos.dto.ProductShowDTO;
 import com.example.fpt_midterm_pos.exception.GlobalExceptionHandler;
 import com.example.fpt_midterm_pos.exception.ResourceNotFoundException;
 import com.example.fpt_midterm_pos.service.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableWebMvc
 public class ProductControllerTest {
@@ -48,7 +58,49 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldCreateProduct() throws Exception {
+    void testGetProductsByCriteria_withProducts() throws Exception {
+        // Prepare test data
+        Pageable pageable = PageRequest.of(0, 20);
+        ProductShowDTO productShowDTO = new ProductShowDTO(UUID.randomUUID(), "Product", 100.0, 10);
+        Page<ProductShowDTO> productPage = new PageImpl<>(List.of(productShowDTO), pageable, 1);
+
+        // Mock the service call
+        when(productService.findByCriteria(any(ProductSearchCriteriaDTO.class), any(Pageable.class)))
+            .thenReturn(productPage);
+
+        // Convert the Page<ProductShowDTO> to a JSON string for comparison
+        ObjectMapper objectMapper = new ObjectMapper();
+        String expectedJson = objectMapper.writeValueAsString(productPage);
+
+        // Perform the request and verify the response
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products")
+                .param("page", "0")
+                .param("size", "20")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(expectedJson));
+    }
+
+    @Test
+    void testGetProductsByCriteria_noProducts() throws Exception {
+        // Prepare test data
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<ProductShowDTO> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+
+        // Mock the service call
+        when(productService.findByCriteria(any(ProductSearchCriteriaDTO.class), any(Pageable.class)))
+            .thenReturn(emptyPage);
+
+        // Perform the request and verify the response
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products")
+                .param("page", "0")
+                .param("size", "20")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testCreateProduct_withValidFormat() throws Exception {
         ProductDTO productDTO = new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.Active, 10);
 
         String requestBody = "{ \"name\": \"Product\", \"price\": 100.0, \"quantity\": 10 }";
@@ -63,7 +115,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldFailCreateProductReturnValidationErrors() throws Exception {
+    void testCreateProduct_withInvalidFormat() throws Exception {
         String requestBody = "{ \"name\": \"\", \"price\": -10.0, \"quantity\": -5 }";
 
         mockMvc.perform(post("/api/v1/products")
@@ -74,7 +126,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldUpdateProduct() throws Exception {
+    void testUpdateProduct() throws Exception {
         UUID productId = UUID.randomUUID();
         ProductDTO productDTO = new ProductDTO(productId, "Updated Product", 120.0, Status.Active, 15);
 
@@ -90,7 +142,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldFailUpdateProductDueToNotFound() throws Exception {
+    void testUpdateProduct_withProductNotExist() throws Exception {
         UUID productId = UUID.randomUUID();
 
         // Convert validProductSaveDTO to JSON string for request body
@@ -108,7 +160,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldUpdateProductStatusActive() throws Exception {
+    void testUpdateProductStatusActive() throws Exception {
         UUID productId = UUID.randomUUID();
         ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.Active, 10);
 
@@ -120,7 +172,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldFailUpdateProductStatusDueToNotFound() throws Exception {
+    void testUpdateProductStatusActive_withProductNotExist() throws Exception {
         UUID productId = UUID.randomUUID();
 
         when(productService.updateProductStatus(any(UUID.class), any(Status.class)))
@@ -132,7 +184,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldUpdateProductStatusDeactive() throws Exception {
+    void testUpdateProductStatuDeactive() throws Exception {
         UUID productId = UUID.randomUUID();
         ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.Deactive, 10);
 
@@ -144,7 +196,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldFailUpdateProductStatusDeactiveDueToNotFound() throws Exception {
+    void testUpdateProductStatuDeactive_withProductNotExist() throws Exception {
         UUID productId = UUID.randomUUID();
 
         when(productService.updateProductStatus(any(UUID.class), any(Status.class)))
@@ -156,7 +208,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldFailUploadExcelDueToInvalidFormat() throws Exception {
+    void testUploadExcel_withInvalidFormat() throws Exception {
         MockMultipartFile fileText = new MockMultipartFile("file", "file.txt", "text/plain", "Invalid content".getBytes());
 
         when(productService.saveProductsFromExcel(fileText))
@@ -169,7 +221,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void shouldUploadExcel() throws Exception {
+    void testUploadExcel_withValidFormat() throws Exception {
         List<ProductDTO> productDTOs = List.of(new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.Active, 10));
         MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
 
