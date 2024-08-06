@@ -58,7 +58,7 @@ public class ProductServiceImplTest {
     private Page<Product> productPage;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 

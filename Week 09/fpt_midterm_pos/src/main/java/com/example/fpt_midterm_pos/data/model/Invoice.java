@@ -51,4 +51,9 @@ public class Invoice {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<InvoiceDetail> invoiceDetails;
+
+    @Override
+    public String toString() {
+        return "Invoice{id=" + id + ", ...}";
+    }
 }
