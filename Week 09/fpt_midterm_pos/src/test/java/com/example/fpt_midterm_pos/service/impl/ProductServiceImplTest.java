@@ -1,7 +1,5 @@
 package com.example.fpt_midterm_pos.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,12 +13,11 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.example.fpt_midterm_pos.data.model.Product;
 import com.example.fpt_midterm_pos.data.model.Status;
@@ -42,9 +39,6 @@ public class ProductServiceImplTest {
 
     @Mock
     private ProductMapper productMapper;
-
-    @Mock
-    private MultipartFile file;
 
     @BeforeEach
     void setUp() {
@@ -103,7 +97,7 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    void shouldUpdateProductStatus() {
+    void shouldUpdateProductStatusDeactive() {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
@@ -118,6 +112,62 @@ public class ProductServiceImplTest {
 
         verify(productRepository, times(1)).save(product);
         assertThat(result).isEqualTo(updatedProductDTO);
+    }
+
+    @Test
+    void shouldUpdateProductStatusActive() {
+        UUID id = UUID.randomUUID();
+        Product product = new Product();
+        product.setId(id);
+        product.setStatus(Status.Deactive);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Active, 10);
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+        when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
+
+        ProductDTO result = productService.updateProductStatus(id, Status.Active);
+
+        verify(productRepository, times(1)).save(product);
+        assertThat(result).isEqualTo(updatedProductDTO);
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenUpdatingProductStatusActive() {
+        UUID id = UUID.randomUUID();
+        Product product = new Product();
+        product.setId(id);
+        product.setStatus(Status.Deactive);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Active, 10);
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+        when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            productService.updateProductStatus(id, Status.Active);
+        });
+    
+        assertThat(exception.getMessage()).contains("Product not found");
+    }
+
+    @Test
+    void shouldThrowResourceNotFoundExceptionWhenUpdatingProductStatusDeactive() {
+        UUID id = UUID.randomUUID();
+        Product product = new Product();
+        product.setId(id);
+        product.setStatus(Status.Active);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Deactive, 10);
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+        when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            productService.updateProductStatus(id, Status.Deactive);
+        });
+    
+        assertThat(exception.getMessage()).contains("Product not found");
     }
 
     @Test
@@ -146,28 +196,52 @@ public class ProductServiceImplTest {
         Product product = products.get(0);
         when(product.getQuantity()).thenReturn(10); // Ensure quantity is not null
         when(product.getStatus()).thenReturn(Status.Active);
-
         // Mock the InputStream with Excel file content
-        try (InputStream inputStream = new ByteArrayInputStream("name,price,quantity\nProduct,100.0,10".getBytes())) {
-            // Mock the correct content type for an Excel file
-            when(file.getContentType()).thenReturn("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            doReturn(inputStream).when(file).getInputStream();
+        MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
 
-            // Mock FileUtils.readProductsFromExcel method
-            mockStatic(FileUtils.class);
-            when(FileUtils.readProductsFromExcel(file)).thenReturn(productSaveDTOs);
+        // Mock FileUtils.readProductsFromExcel method
+        mockStatic(FileUtils.class);
+        when(FileUtils.readProductsFromExcel(fileExcel)).thenReturn(productSaveDTOs);
 
-            // Mock the productMapper and productRepository methods
-            when(productMapper.toProductList(productSaveDTOs)).thenReturn(products);
-            when(productRepository.saveAll(products)).thenReturn(products);
-            when(productMapper.toProductDTOList(products)).thenReturn(productDTOs);
+        // Mock the productMapper and productRepository methods
+        when(productMapper.toProductList(productSaveDTOs)).thenReturn(products);
+        when(productRepository.saveAll(products)).thenReturn(products);
+        when(productMapper.toProductDTOList(products)).thenReturn(productDTOs);
 
-            // Call the method under test
-            List<ProductDTO> result = productService.saveProductsFromExcel(file);
+        // Call the method under test
+        List<ProductDTO> result = productService.saveProductsFromExcel(fileExcel);
 
-            // Verify the interactions and assert the results
-            verify(productRepository, times(1)).saveAll(products);
-            assertThat(result).isEqualTo(productDTOs);
-        }
+        // Verify the interactions and assert the results
+        verify(productRepository, times(1)).saveAll(products);
+        assertThat(result).isEqualTo(productDTOs);
+    }
+
+    @Test
+    void shouldSaveProductsFromExcelQuantity0() throws Exception {
+        List<ProductSaveDTO> productSaveDTOs = List.of(new ProductSaveDTO("Product", 100.0, 0));
+        List<Product> products = List.of(mock(Product.class));
+        List<ProductDTO> productDTOs = List.of(new ProductDTO());
+
+        // Mock the Product object
+        Product product = products.get(0);
+        when(product.getQuantity()).thenReturn(0);
+        when(product.getStatus()).thenReturn(Status.Deactive);
+        // Mock the InputStream with Excel file content
+        MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
+
+        // Mock FileUtils.readProductsFromExcel method
+        when(FileUtils.readProductsFromExcel(fileExcel)).thenReturn(productSaveDTOs);
+
+        // Mock the productMapper and productRepository methods
+        when(productMapper.toProductList(productSaveDTOs)).thenReturn(products);
+        when(productRepository.saveAll(products)).thenReturn(products);
+        when(productMapper.toProductDTOList(products)).thenReturn(productDTOs);
+
+        // Call the method under test
+        List<ProductDTO> result = productService.saveProductsFromExcel(fileExcel);
+
+        // Verify the interactions and assert the results
+        verify(productRepository, times(1)).saveAll(products);
+        assertThat(result).isEqualTo(productDTOs);
     }
 }
