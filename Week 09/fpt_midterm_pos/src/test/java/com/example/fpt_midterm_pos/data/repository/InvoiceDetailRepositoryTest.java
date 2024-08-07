@@ -31,7 +31,7 @@ public class InvoiceDetailRepositoryTest {
     private Product product;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         // Create and save product
         product = new Product();
         product.setId(UUID.randomUUID());

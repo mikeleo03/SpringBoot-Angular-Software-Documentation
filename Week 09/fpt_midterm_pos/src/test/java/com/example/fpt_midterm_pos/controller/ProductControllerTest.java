@@ -50,7 +50,7 @@ public class ProductControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(productController)
             .setControllerAdvice(new GlobalExceptionHandler())

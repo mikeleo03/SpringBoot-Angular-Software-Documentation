@@ -23,7 +23,7 @@ public class CustomerRepositoryTest {
     private Customer customer;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         customer = new Customer();
         customer.setId(UUID.randomUUID());
         customer.setName("Test Customer");

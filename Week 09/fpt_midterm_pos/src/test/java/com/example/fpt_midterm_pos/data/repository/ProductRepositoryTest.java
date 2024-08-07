@@ -29,7 +29,7 @@ public class ProductRepositoryTest {
     private Product product;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         product = new Product();
         product.setId(UUID.randomUUID());
         product.setName("Test Product");
