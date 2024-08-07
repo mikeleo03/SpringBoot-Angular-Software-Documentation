@@ -2,6 +2,8 @@ package com.example.fpt_midterm_pos.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
@@ -11,6 +13,37 @@ import org.junit.jupiter.api.Test;
 
 class DateUtilsTest {
 
+    @Test
+    void testPrivateConstructor() {
+        // Access the private constructor
+        Constructor<DateUtils> constructor = getPrivateConstructor();
+
+        // Ensure that invoking the constructor throws IllegalStateException
+        IllegalStateException thrownException = assertThrows(IllegalStateException.class, () -> invokeConstructor(constructor));
+
+        // Verify the exception message
+        assertEquals("Utility class", thrownException.getMessage());
+    }
+
+    private Constructor<DateUtils> getPrivateConstructor() {
+        try {
+            Constructor<DateUtils> constructor = DateUtils.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor;
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new RuntimeException("Reflection exception occurred", e);
+        }
+    }
+
+    private void invokeConstructor(Constructor<DateUtils> constructor) throws Throwable {
+        try {
+            constructor.newInstance();
+        } catch (InvocationTargetException e) {
+            // Unwrap InvocationTargetException to get the actual cause
+            throw e.getCause();
+        }
+    }
+    
     @Test
     void testParseDate_withValidDate() {
         String validDateStr = "15/8/2024";
