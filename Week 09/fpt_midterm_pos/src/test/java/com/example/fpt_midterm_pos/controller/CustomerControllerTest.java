@@ -46,7 +46,7 @@ public class CustomerControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(customerController)
             .setControllerAdvice(new GlobalExceptionHandler())
