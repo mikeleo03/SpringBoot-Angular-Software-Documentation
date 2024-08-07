@@ -54,7 +54,7 @@ import java.util.UUID;
 import com.example.fpt_midterm_pos.data.model.Status;
 
 @SpringBootTest
-public class InvoiceServiceImplTest {
+class InvoiceServiceImplTest {
 
     @Autowired
     private InvoiceService invoiceService;
@@ -110,7 +110,6 @@ public class InvoiceServiceImplTest {
         Invoice invoice = new Invoice();
         InvoiceDTO invoiceDTO = new InvoiceDTO();
         Product product = new Product();
-        // InvoiceDetail invoiceDetail = new InvoiceDetail();
 
         // Initialize invoiceDetails as an empty list
         invoiceSaveDTO.setInvoiceDetails(Collections.emptyList()); // Or set actual invoice details if needed
@@ -511,8 +510,9 @@ public class InvoiceServiceImplTest {
         byte[] result = invoiceService.exportInvoiceToPDF(invoiceId);
 
         // Assert
-        assertThat(result).isNotNull();
-        assertThat(result).isEqualTo(pdfBytes);
+        assertThat(result)
+            .isNotNull()
+            .isEqualTo(pdfBytes);
     }
 
     @Test

@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.fpt_midterm_pos.dto.ProductSaveDTO;
@@ -16,9 +14,12 @@ public class FileUtils {
     
     public static final String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     private static final String[] HEADERS = { "name", "price", "quantity" };
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
-    private static boolean hasExcelFormat(MultipartFile file) {
+    private FileUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static boolean hasExcelFormat(MultipartFile file) {
         return TYPE.equals(file.getContentType());
     }            
 
@@ -40,7 +41,6 @@ public class FileUtils {
                 productSaveDTOs.add(productSaveDTO);
             }
         } catch (IOException e) {
-            logger.error("Error reading Excel file: {}", e.getMessage());
             throw new IOException("Error reading Excel file: " + e.getMessage(), e);
         }
         return productSaveDTOs;
