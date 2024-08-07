@@ -21,7 +21,7 @@ import com.example.fpt_midterm_pos.data.model.Status;
 import javax.validation.ConstraintViolationException;
 
 @DataJpaTest
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
@@ -34,7 +34,7 @@ public class ProductRepositoryTest {
         product.setId(UUID.randomUUID());
         product.setName("Test Product");
         product.setPrice(100.0);
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
         product.setQuantity(10);
         product.setCreatedAt(new java.util.Date());
         product.setUpdatedAt(new java.util.Date());
@@ -43,30 +43,30 @@ public class ProductRepositoryTest {
 
     @Test
     void findProductByNameContainingAndStatus() {
-        List<Product> products = productRepository.findByNameContainingAndStatus("Test", Status.Active);
+        List<Product> products = productRepository.findByNameContainingAndStatus("Test", Status.ACTIVE);
         assertThat(products).isNotEmpty();
     }
 
     @Test
     void findProductByStatus() {
-        Page<Product> products = productRepository.findAllByStatus(Status.Active, PageRequest.of(0, 10));
-        assertThat(products.getTotalElements()).isGreaterThan(0);
+        Page<Product> products = productRepository.findAllByStatus(Status.ACTIVE, PageRequest.of(0, 10));
+        assertThat(products.getTotalElements()).isPositive();
     }
 
     @Test
     void findProductByFilters() {
-        Page<Product> products = productRepository.findByFilters(Status.Active, "Test", 50.0, 150.0, PageRequest.of(0, 10));
-        assertThat(products.getTotalElements()).isGreaterThan(0);
+        Page<Product> products = productRepository.findByFilters(Status.ACTIVE, "Test", 50.0, 150.0, PageRequest.of(0, 10));
+        assertThat(products.getTotalElements()).isPositive();
     }
 
     @Test
     void findByNameContainingEmptyResult() {
-        assertThat(productRepository.findByNameContainingAndStatus("NonExistent", Status.Active)).isEmpty();
+        assertThat(productRepository.findByNameContainingAndStatus("NonExistent", Status.ACTIVE)).isEmpty();
     }
 
     @Test
     void findAllByStatusEmptyResult() {
-        assertThat(productRepository.findAllByStatus(Status.Deactive, Pageable.unpaged())).isEmpty();
+        assertThat(productRepository.findAllByStatus(Status.DEACTIVE, Pageable.unpaged())).isEmpty();
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ProductRepositoryTest {
         Product product1 = new Product();
         product1.setName("Test Product A");
         product1.setPrice(100.0);
-        product1.setStatus(Status.Active);
+        product1.setStatus(Status.ACTIVE);
         product1.setCreatedAt(new java.util.Date());
         product1.setUpdatedAt(new java.util.Date());
         productRepository.save(product1);
@@ -83,14 +83,14 @@ public class ProductRepositoryTest {
         Product product2 = new Product();
         product2.setName("Test Product B");
         product2.setPrice(200.0);
-        product2.setStatus(Status.Active);
+        product2.setStatus(Status.ACTIVE);
         product2.setCreatedAt(new java.util.Date());
         product2.setUpdatedAt(new java.util.Date());
         productRepository.save(product2);
 
         // Test with pagination
         Pageable pageable = PageRequest.of(0, 1, Sort.by("name"));
-        Page<Product> result = productRepository.findByFilters(Status.Active, "Test", null, null, pageable);
+        Page<Product> result = productRepository.findByFilters(Status.ACTIVE, "Test", null, null, pageable);
 
         assertThat(result.getTotalElements()).isEqualTo(3);
         assertThat(result.getNumberOfElements()).isEqualTo(1);
@@ -101,7 +101,7 @@ public class ProductRepositoryTest {
         try {
             Product invalidProduct = new Product();
             invalidProduct.setName("Test Product 2");
-            invalidProduct.setStatus(Status.Active);
+            invalidProduct.setStatus(Status.ACTIVE);
             productRepository.save(invalidProduct);
         } catch (Exception e) {
             // Validate that the exception contains details about constraint violation

@@ -37,8 +37,12 @@ import jakarta.validation.Valid;
 @Validated
 public class ProductController {
 
+    private final ProductService productService;
+
     @Autowired
-    private ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     /**
      * Retrieves all Products based on the provided search criteria.
@@ -77,7 +81,7 @@ public class ProductController {
         @ApiResponse(responseCode = "201", description = "Product created successfully")
     })
     @PostMapping
-    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductSaveDTO productSaveDTO) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductSaveDTO productSaveDTO) {
         ProductDTO productDTO = productService.createProduct(productSaveDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
@@ -102,38 +106,38 @@ public class ProductController {
     }
 
     /**
-     * Updates an existing Product's status from Deactive to Active.
+     * Updates an existing Product's status from DEACTIVE to ACTIVE.
      *
      * @param id The unique identifier of the Product to be updated.
      * @return A ResponseEntity containing the updated ProductDTO object and an HTTP status code of 200 (OK) upon successful update.
      * @apiNote If the Product with the given ID is not found, a ResponseEntity with status code 204 (No Content) is returned.
      */
-    @Operation(summary = "Update existing Product status from Deactive to Active.")
+    @Operation(summary = "Update existing Product status from DEACTIVE to ACTIVE.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product successfully activated"),
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/active/{id}")
     public ResponseEntity<ProductDTO> updateProductStatusActive(@PathVariable UUID id) {
-        ProductDTO productDTO = productService.updateProductStatus(id, Status.Active);
+        ProductDTO productDTO = productService.updateProductStatus(id, Status.ACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
 
     /**
-     * Updates an existing Product's status from Active to Deactive.
+     * Updates an existing Product's status from ACTIVE to DEACTIVE.
      *
      * @param id The unique identifier of the Product to be updated.
      * @return A ResponseEntity containing the updated ProductDTO object and an HTTP status code of 200 (OK) upon successful update.
      * @apiNote If the Product with the given ID is not found, a ResponseEntity with status code 204 (No Content) is returned.
      */
-    @Operation(summary = "Update existing Product status from Active to Deactive.")
+    @Operation(summary = "Update existing Product status from ACTIVE to DEACTIVE.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Product successfully deactivated"),
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/deactive/{id}")
     public ResponseEntity<ProductDTO> updateProductStatusDeactive(@PathVariable UUID id) {
-        ProductDTO productDTO = productService.updateProductStatus(id, Status.Deactive);
+        ProductDTO productDTO = productService.updateProductStatus(id, Status.DEACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
 

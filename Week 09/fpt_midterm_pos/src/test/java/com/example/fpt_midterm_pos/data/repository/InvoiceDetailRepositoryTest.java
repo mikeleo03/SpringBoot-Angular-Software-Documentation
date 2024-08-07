@@ -15,7 +15,7 @@ import com.example.fpt_midterm_pos.data.model.InvoiceDetailKey;
 import com.example.fpt_midterm_pos.data.model.Product;
 
 @DataJpaTest
-public class InvoiceDetailRepositoryTest {
+class InvoiceDetailRepositoryTest {
 
     @Autowired
     private InvoiceDetailRepository invoiceDetailRepository;

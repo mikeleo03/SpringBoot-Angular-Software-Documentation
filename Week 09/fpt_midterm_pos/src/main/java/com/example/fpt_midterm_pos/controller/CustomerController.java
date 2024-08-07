@@ -34,8 +34,12 @@ import jakarta.validation.Valid;
 @Validated
 public class CustomerController {
 
+    private final CustomerService customerService;
+
     @Autowired
-    private CustomerService customerService;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     /**
      * Retrieves all customers from the database.
@@ -45,7 +49,7 @@ public class CustomerController {
      * @return A {@link ResponseEntity} containing a {@link Page} of {@link CustomerShowDTO} objects representing the customers on the specified page.
      * @apiNote If no customers are found, a {@link ResponseEntity} with status status code 204 (No Content) is returned.
      */
-    @Operation(summary = "Retrieve all Active Customers.")
+    @Operation(summary = "Retrieve all ACTIVE Customers.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Customers retrieved successfully"),
         @ApiResponse(responseCode = "204", description = "Customers not found")
@@ -98,38 +102,38 @@ public class CustomerController {
     }
 
     /**
-     * Updates an existing Customer's status from Deactive to Active.
+     * Updates an existing Customer's status from DEACTIVE to ACTIVE.
      *
      * @param id The unique identifier of the Customer to be updated.
      * @return A ResponseEntity containing the updated CustomerDTO object and an HTTP status code of 200 (OK) upon successful update.
      * @apiNote If the Customer with the given ID is not found, a ResponseEntity with status code 204 (No Content) is returned.
      */
-    @Operation(summary = "Update existing Customer status from Deactive to Active.")
+    @Operation(summary = "Update existing Customer status from DEACTIVE to ACTIVE.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Customer successfully activated"),
         @ApiResponse(responseCode = "204", description = "Customer not found")
     })
     @PutMapping(value = "/active/{id}")
     public ResponseEntity<CustomerDTO> updateCustomerStatusActive(@PathVariable("id") UUID id) {
-        CustomerDTO customer = customerService.updateCustomerStatus(id, Status.Active);
+        CustomerDTO customer = customerService.updateCustomerStatus(id, Status.ACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(customer);
     }
 
     /**
-     * Updates an existing Customer's status from Active to Deactive.
+     * Updates an existing Customer's status from ACTIVE to DEACTIVE.
      *
      * @param id The unique identifier of the Customer to be updated.
      * @return A ResponseEntity containing the updated CustomerDTO object and an HTTP status code of 200 (OK) upon successful update.
      * @apiNote If the Customer with the given ID is not found, a ResponseEntity with status code 204 (No Content) is returned.
      */
-    @Operation(summary = "Update existing Customer status from Active to Deactive.")
+    @Operation(summary = "Update existing Customer status from ACTIVE to DEACTIVE.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Customer successfully deactivated"),
         @ApiResponse(responseCode = "204", description = "Customer not found")
     })
     @PutMapping(value = "/deactive/{id}")
     public ResponseEntity<CustomerDTO> updateCustomerStatusDeactive(@PathVariable("id") UUID id) {
-        CustomerDTO customer = customerService.updateCustomerStatus(id, Status.Deactive);
+        CustomerDTO customer = customerService.updateCustomerStatus(id, Status.DEACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(customer);
     }
 }

@@ -31,7 +31,7 @@ class CustomerMapperTest {
         customer.setId(UUID.randomUUID());
         customer.setName("John Doe");
         customer.setPhoneNumber("+621234567890");
-        customer.setStatus(Status.Active);
+        customer.setStatus(Status.ACTIVE);
         customer.setCreatedAt(new Date());
         customer.setUpdatedAt(new Date());
         return customer;
@@ -42,7 +42,7 @@ class CustomerMapperTest {
             UUID.randomUUID(), 
             "John Doe", 
             "+621234567890", 
-            Status.Active
+            Status.ACTIVE
         );
     }
 
@@ -76,7 +76,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerDTO() {
+    void testToCustomerDTO() {
         // Arrange
         Customer customer = createCustomer();
         
@@ -88,7 +88,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerDTO_NullInput() {
+    void testToCustomerDTO_NullInput() {
         // Act
         CustomerDTO customerDTO = customerMapper.toCustomerDTO(null);
 
@@ -97,7 +97,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerFromCustomerDTO() {
+    void testToCustomerFromCustomerDTO() {
         // Arrange
         CustomerDTO customerDTO = createCustomerDTO();
         
@@ -113,7 +113,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerFromCustomerDTO_NullInput() {
+    void testToCustomerFromCustomerDTO_NullInput() {
         // Act
         Customer customer = customerMapper.toCustomer((CustomerDTO) null);
 
@@ -122,7 +122,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerShowDTO() {
+    void testToCustomerShowDTO() {
         // Arrange
         Customer customer = createCustomer();
         
@@ -136,7 +136,7 @@ class CustomerMapperTest {
     }
 
     @Test
-    public void testToCustomerShowDTO_NullInput() {
+    void testToCustomerShowDTO_NullInput() {
         // Act
         CustomerShowDTO customerShowDTO = customerMapper.toCustomerShowDTO(null);
 

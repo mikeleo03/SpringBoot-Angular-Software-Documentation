@@ -26,11 +26,16 @@ import jakarta.validation.Valid;
 @Validated
 public class CustomerServiceImpl implements CustomerService {
 
-    @Autowired
-    private CustomerMapper customerMapper;
+    private final CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
+        this.customerMapper = customerMapper;
+        this.customerRepository = customerRepository;
+    }
+
+    private static final String CUSTOMER_NOT_FOUND = "Customer not found";
 
     /**
      * Retrieves a paginated list of all customers from the repository.
@@ -40,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Page<CustomerShowDTO> findAllActiveCustomer(Pageable pageable) {
-        return customerRepository.findByStatus(Status.Active, pageable).map(customerMapper::toCustomerShowDTO);
+        return customerRepository.findByStatus(Status.ACTIVE, pageable).map(customerMapper::toCustomerShowDTO);
     }
 
     /**
@@ -52,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Customer findById(UUID customerId) {
-        return customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        return customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
     }
     
     /**
@@ -80,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerDTO updateCustomer(UUID id, @Valid CustomerSaveDTO customerSaveDTO) {
-        Customer custCheck = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        Customer custCheck = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
 
         Customer customer = customerMapper.toCustomer(customerSaveDTO);
         custCheck.setName(customer.getName());
@@ -100,16 +105,16 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerDTO updateCustomerStatus(UUID id, Status status) {
-        Customer custCheck = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        Customer custCheck = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
 
         if(status == custCheck.getStatus()) {
             throw new DuplicateStatusException("Customer status is already " + status);
         }
 
-        if (custCheck.getStatus() == Status.Active) {
-            custCheck.setStatus(Status.Deactive);
-        } else if (custCheck.getStatus() == Status.Deactive) {
-            custCheck.setStatus(Status.Active);
+        if (custCheck.getStatus() == Status.ACTIVE) {
+            custCheck.setStatus(Status.DEACTIVE);
+        } else if (custCheck.getStatus() == Status.DEACTIVE) {
+            custCheck.setStatus(Status.ACTIVE);
         }
         custCheck.setUpdatedAt(new Date());
         Customer updatedCustomer = customerRepository.save(custCheck);

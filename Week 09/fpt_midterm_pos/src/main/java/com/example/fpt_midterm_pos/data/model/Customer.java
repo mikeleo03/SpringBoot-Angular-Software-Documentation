@@ -45,7 +45,7 @@ public class Customer {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.Active;
+    private Status status = Status.ACTIVE;
 
     @Column(name = "createdAt", nullable = false)
     private Date createdAt;

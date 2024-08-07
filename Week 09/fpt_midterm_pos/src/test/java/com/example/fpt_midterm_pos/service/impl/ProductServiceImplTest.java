@@ -42,7 +42,7 @@ import com.example.fpt_midterm_pos.exception.ResourceNotFoundException;
 import com.example.fpt_midterm_pos.mapper.ProductMapper;
 import com.example.fpt_midterm_pos.utils.FileUtils;
 
-public class ProductServiceImplTest {
+class ProductServiceImplTest {
 
     @InjectMocks
     private ProductServiceImpl productService;
@@ -70,7 +70,7 @@ public class ProductServiceImplTest {
         product.setName("Test Product");
         product.setPrice(100.0);
         product.setQuantity(10);
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
 
         criteria = new ProductSearchCriteriaDTO();
         criteria.setName("Test");
@@ -99,7 +99,7 @@ public class ProductServiceImplTest {
         product.setName("Test Product");
         product.setPrice(100.0);
         product.setQuantity(10);
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
 
         criteria = new ProductSearchCriteriaDTO();
         criteria.setName("Test");
@@ -125,7 +125,7 @@ public class ProductServiceImplTest {
         ProductSaveDTO dto = new ProductSaveDTO("Product", 100.0, 10);
         Product product = new Product();
         product.setId(UUID.randomUUID());
-        ProductDTO productDTO = new ProductDTO(product.getId(), "Product", 100.0, Status.Active, 10);
+        ProductDTO productDTO = new ProductDTO(product.getId(), "Product", 100.0, Status.ACTIVE, 10);
 
         when(productMapper.toProduct(dto)).thenReturn(product);
         when(productRepository.save(product)).thenReturn(product);
@@ -144,7 +144,7 @@ public class ProductServiceImplTest {
         Product product = new Product();
         product.setId(id);
         product.setName("Old Product");
-        ProductDTO updatedProductDTO = new ProductDTO(id, "Updated Product", 150.0, Status.Active, 20);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Updated Product", 150.0, Status.ACTIVE, 20);
 
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
         when(productMapper.toProduct(dto)).thenReturn(product);
@@ -176,14 +176,14 @@ public class ProductServiceImplTest {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
-        product.setStatus(Status.Active);
-        ProductDTO updatedProductDTO = new ProductDTO(id, "Product", 100.0, Status.Deactive, 10);
+        product.setStatus(Status.ACTIVE);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product", 100.0, Status.DEACTIVE, 10);
 
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
         when(productRepository.save(product)).thenReturn(product);
         when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
 
-        ProductDTO result = productService.updateProductStatus(id, Status.Deactive);
+        ProductDTO result = productService.updateProductStatus(id, Status.DEACTIVE);
 
         verify(productRepository, times(1)).save(product);
         assertThat(result).isEqualTo(updatedProductDTO);
@@ -194,14 +194,14 @@ public class ProductServiceImplTest {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
-        product.setStatus(Status.Deactive);
-        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Active, 10);
+        product.setStatus(Status.DEACTIVE);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.ACTIVE, 10);
 
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
         when(productRepository.save(product)).thenReturn(product);
         when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
 
-        ProductDTO result = productService.updateProductStatus(id, Status.Active);
+        ProductDTO result = productService.updateProductStatus(id, Status.ACTIVE);
 
         verify(productRepository, times(1)).save(product);
         assertThat(result).isEqualTo(updatedProductDTO);
@@ -212,15 +212,15 @@ public class ProductServiceImplTest {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
-        product.setStatus(Status.Deactive);
-        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Active, 10);
+        product.setStatus(Status.DEACTIVE);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.ACTIVE, 10);
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
         when(productRepository.save(product)).thenReturn(product);
         when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            productService.updateProductStatus(id, Status.Active);
+            productService.updateProductStatus(id, Status.ACTIVE);
         });
     
         assertThat(exception.getMessage()).contains("Product not found");
@@ -231,15 +231,15 @@ public class ProductServiceImplTest {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
-        product.setStatus(Status.Active);
-        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.Deactive, 10);
+        product.setStatus(Status.ACTIVE);
+        ProductDTO updatedProductDTO = new ProductDTO(id, "Product B", 100.0, Status.DEACTIVE, 10);
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
         when(productRepository.save(product)).thenReturn(product);
         when(productMapper.toProductDTO(product)).thenReturn(updatedProductDTO);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            productService.updateProductStatus(id, Status.Deactive);
+            productService.updateProductStatus(id, Status.DEACTIVE);
         });
     
         assertThat(exception.getMessage()).contains("Product not found");
@@ -250,15 +250,15 @@ public class ProductServiceImplTest {
         UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setId(id);
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
 
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
 
         DuplicateStatusException exception = assertThrows(DuplicateStatusException.class, () -> {
-            productService.updateProductStatus(id, Status.Active);
+            productService.updateProductStatus(id, Status.ACTIVE);
         });
     
-        assertThat(exception.getMessage()).contains("Product status is already Active");
+        assertThat(exception.getMessage()).contains("Product status is already ACTIVE");
     }
 
     @Test
@@ -270,7 +270,7 @@ public class ProductServiceImplTest {
         // Mock the Product object
         Product product = products.get(0);
         when(product.getQuantity()).thenReturn(10); // Ensure quantity is not null
-        when(product.getStatus()).thenReturn(Status.Active);
+        when(product.getStatus()).thenReturn(Status.ACTIVE);
         // Mock the InputStream with Excel file content
         MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
 
@@ -292,7 +292,7 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    void testSaveProductsFromExcel_withQuantity0() throws Exception {
+    void testSaveProductsFromExcel_withQuantity0() {
         List<ProductSaveDTO> productSaveDTOs = List.of(new ProductSaveDTO("Product", 100.0, 0));
         List<Product> products = List.of(mock(Product.class));
         List<ProductDTO> productDTOs = List.of(new ProductDTO());
@@ -300,7 +300,7 @@ public class ProductServiceImplTest {
         // Mock the Product object
         Product product = products.get(0);
         when(product.getQuantity()).thenReturn(0);
-        when(product.getStatus()).thenReturn(Status.Deactive);
+        when(product.getStatus()).thenReturn(Status.DEACTIVE);
 
         // Mock the InputStream with Excel file content
         MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
@@ -324,7 +324,7 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    void testSaveProductsFromExcel_withIllegalArgumentException() throws Exception {
+    void testSaveProductsFromExcel_withIllegalArgumentException() {
         MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
 
         try (MockedStatic<FileUtils> mockedStatic = mockStatic(FileUtils.class)) {

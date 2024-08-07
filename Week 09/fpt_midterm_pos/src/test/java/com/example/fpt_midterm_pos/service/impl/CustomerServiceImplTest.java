@@ -33,7 +33,7 @@ import com.example.fpt_midterm_pos.exception.DuplicateStatusException;
 import com.example.fpt_midterm_pos.exception.ResourceNotFoundException;
 import com.example.fpt_midterm_pos.mapper.CustomerMapper;
 
-public class CustomerServiceImplTest {
+class CustomerServiceImplTest {
 
     @InjectMocks
     private CustomerServiceImpl customerService;
@@ -47,6 +47,8 @@ public class CustomerServiceImplTest {
     private Pageable pageable;
     private Page<Customer> customerPage;
 
+    private static final String CUSTOMER_NOT_FOUND = "Customer not found";
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -58,7 +60,7 @@ public class CustomerServiceImplTest {
         Customer customer = new Customer();
         customer.setId(customerId);
         customer.setName("Test Customer");
-        customer.setStatus(Status.Active);
+        customer.setStatus(Status.ACTIVE);
         customer.setPhoneNumber("+62123456789");
         customer.setCreatedAt(new java.util.Date());
         customer.setUpdatedAt(new java.util.Date());
@@ -68,7 +70,7 @@ public class CustomerServiceImplTest {
         pageable = PageRequest.of(0, 10);
         customerPage = new PageImpl<>(Collections.singletonList(customer));
 
-        when(customerRepository.findByStatus(Status.Active, pageable)).thenReturn(customerPage);
+        when(customerRepository.findByStatus(Status.ACTIVE, pageable)).thenReturn(customerPage);
         when(customerMapper.toCustomerShowDTO(customer)).thenReturn(customerShowDTO);
 
         Page<CustomerShowDTO> result = customerService.findAllActiveCustomer(pageable);
@@ -84,7 +86,7 @@ public class CustomerServiceImplTest {
         Customer customer = new Customer();
         customer.setId(customerId);
         customer.setName("Test Customer");
-        customer.setStatus(Status.Active);
+        customer.setStatus(Status.ACTIVE);
         customer.setPhoneNumber("+62123456789");
         customer.setCreatedAt(new java.util.Date());
         customer.setUpdatedAt(new java.util.Date());
@@ -108,7 +110,7 @@ public class CustomerServiceImplTest {
             customerService.findById(customerId);
         });
 
-        assertEquals("Customer not found", exception.getMessage());
+        assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -116,7 +118,7 @@ public class CustomerServiceImplTest {
         CustomerSaveDTO dto = new CustomerSaveDTO("Test Customer", "+62123456789");
         Customer customer = new Customer();
         customer.setId(UUID.randomUUID());
-        CustomerDTO customerDTO = new CustomerDTO(customer.getId(), customer.getName(), customer.getPhoneNumber(), Status.Active);
+        CustomerDTO customerDTO = new CustomerDTO(customer.getId(), customer.getName(), customer.getPhoneNumber(), Status.ACTIVE);
 
         when(customerMapper.toCustomer(dto)).thenReturn(customer);
         when(customerRepository.save(customer)).thenReturn(customer);
@@ -135,7 +137,7 @@ public class CustomerServiceImplTest {
         Customer customer = new Customer();
         customer.setId(id);
         customer.setName("Old Customer");
-        CustomerDTO updatedCustomerDTO = new CustomerDTO(customer.getId(), customer.getName(), customer.getPhoneNumber(), Status.Active);
+        CustomerDTO updatedCustomerDTO = new CustomerDTO(customer.getId(), customer.getName(), customer.getPhoneNumber(), Status.ACTIVE);
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
         when(customerMapper.toCustomer(dto)).thenReturn(customer);
@@ -159,7 +161,7 @@ public class CustomerServiceImplTest {
             customerService.updateCustomer(id, dto);
         });
     
-        assertThat(exception.getMessage()).contains("Customer not found");
+        assertThat(exception.getMessage()).contains(CUSTOMER_NOT_FOUND);
     }
 
     @Test
@@ -167,14 +169,14 @@ public class CustomerServiceImplTest {
         UUID id = UUID.randomUUID();
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setStatus(Status.Active);
-        CustomerDTO updatedCustomerDTO = new CustomerDTO(id, "Customer", "+62123456789", Status.Deactive);
+        customer.setStatus(Status.ACTIVE);
+        CustomerDTO updatedCustomerDTO = new CustomerDTO(id, "Customer", "+62123456789", Status.DEACTIVE);
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerMapper.toCustomerDTO(customer)).thenReturn(updatedCustomerDTO);
 
-        CustomerDTO result = customerService.updateCustomerStatus(id, Status.Deactive);
+        CustomerDTO result = customerService.updateCustomerStatus(id, Status.DEACTIVE);
 
         verify(customerRepository, times(1)).save(customer);
         assertThat(result).isEqualTo(updatedCustomerDTO);
@@ -185,14 +187,14 @@ public class CustomerServiceImplTest {
         UUID id = UUID.randomUUID();
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setStatus(Status.Deactive);  // Customer starts as Deactive
-        CustomerDTO updatedCustomerDTO = new CustomerDTO(id, "Customer", "+62123456789", Status.Active);
+        customer.setStatus(Status.DEACTIVE);  // Customer starts as DEACTIVE
+        CustomerDTO updatedCustomerDTO = new CustomerDTO(id, "Customer", "+62123456789", Status.ACTIVE);
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerMapper.toCustomerDTO(customer)).thenReturn(updatedCustomerDTO);
 
-        CustomerDTO result = customerService.updateCustomerStatus(id, Status.Active);
+        CustomerDTO result = customerService.updateCustomerStatus(id, Status.ACTIVE);
 
         verify(customerRepository, times(1)).save(customer);
         assertThat(result).isEqualTo(updatedCustomerDTO);
@@ -203,15 +205,15 @@ public class CustomerServiceImplTest {
         UUID id = UUID.randomUUID();
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setStatus(Status.Active);
+        customer.setStatus(Status.ACTIVE);
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
 
         DuplicateStatusException exception = assertThrows(DuplicateStatusException.class, () -> {
-            customerService.updateCustomerStatus(id, Status.Active);
+            customerService.updateCustomerStatus(id, Status.ACTIVE);
         });
     
-        assertThat(exception.getMessage()).contains("Customer status is already Active");
+        assertThat(exception.getMessage()).contains("Customer status is already ACTIVE");
     }
 
     @Test
@@ -219,15 +221,15 @@ public class CustomerServiceImplTest {
         UUID id = UUID.randomUUID();
         Customer customer = new Customer();
         customer.setId(id);
-        customer.setStatus(Status.Deactive);
+        customer.setStatus(Status.DEACTIVE);
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
 
         DuplicateStatusException exception = assertThrows(DuplicateStatusException.class, () -> {
-            customerService.updateCustomerStatus(id, Status.Deactive);
+            customerService.updateCustomerStatus(id, Status.DEACTIVE);
         });
     
-        assertThat(exception.getMessage()).contains("Customer status is already Deactive");
+        assertThat(exception.getMessage()).contains("Customer status is already DEACTIVE");
     }
 
     @Test
@@ -239,10 +241,10 @@ public class CustomerServiceImplTest {
 
         // Expecting ResourceNotFoundException
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            customerService.updateCustomerStatus(id, Status.Active);
+            customerService.updateCustomerStatus(id, Status.ACTIVE);
         });
 
-        assertThat(exception.getMessage()).contains("Customer not found");
+        assertThat(exception.getMessage()).contains(CUSTOMER_NOT_FOUND);
     }
 
     @Test
@@ -254,9 +256,9 @@ public class CustomerServiceImplTest {
 
         // Expecting ResourceNotFoundException
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            customerService.updateCustomerStatus(id, Status.Deactive);
+            customerService.updateCustomerStatus(id, Status.DEACTIVE);
         });
 
-        assertThat(exception.getMessage()).contains("Customer not found");
+        assertThat(exception.getMessage()).contains(CUSTOMER_NOT_FOUND);
     }
 }

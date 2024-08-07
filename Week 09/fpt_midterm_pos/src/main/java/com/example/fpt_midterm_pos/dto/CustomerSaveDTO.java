@@ -21,7 +21,7 @@ public class CustomerSaveDTO {
     
     @NotBlank(message = "Phone is mandatory")
     @NotNull(message = "Phone can't be NULL")
-    @Pattern(regexp = "^\\+62[0-9]{9,13}$", message = "Phone number must start with +62 and contain 9 to 13 digits")
+    @Pattern(regexp = "^\\+62\\d{9,13}$", message = "Phone number must start with +62 and contain 9 to 13 digits")
     @Schema(example = "+62xxxxxxxxxxxxx")
     private String phoneNumber;
 }

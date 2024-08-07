@@ -39,7 +39,7 @@ import com.example.fpt_midterm_pos.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableWebMvc
-public class ProductControllerTest {
+class ProductControllerTest {
 
     @InjectMocks
     private ProductController productController;
@@ -101,7 +101,7 @@ public class ProductControllerTest {
 
     @Test
     void testCreateProduct_withValidFormat() throws Exception {
-        ProductDTO productDTO = new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.Active, 10);
+        ProductDTO productDTO = new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.ACTIVE, 10);
 
         String requestBody = "{ \"name\": \"Product\", \"price\": 100.0, \"quantity\": 10 }";
 
@@ -111,7 +111,7 @@ public class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"Active\",\"quantity\":10}"));
+                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"ACTIVE\",\"quantity\":10}"));
     }
 
     @Test
@@ -128,7 +128,7 @@ public class ProductControllerTest {
     @Test
     void testUpdateProduct() throws Exception {
         UUID productId = UUID.randomUUID();
-        ProductDTO productDTO = new ProductDTO(productId, "Updated Product", 120.0, Status.Active, 15);
+        ProductDTO productDTO = new ProductDTO(productId, "Updated Product", 120.0, Status.ACTIVE, 15);
 
         String requestBody = "{ \"name\": \"Updated Product\", \"price\": 120.0, \"quantity\": 15 }";
 
@@ -138,7 +138,7 @@ public class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Updated Product\",\"price\":120.0,\"status\":\"Active\",\"quantity\":15}"));
+                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Updated Product\",\"price\":120.0,\"status\":\"ACTIVE\",\"quantity\":15}"));
     }
 
     @Test
@@ -162,13 +162,13 @@ public class ProductControllerTest {
     @Test
     void testUpdateProductStatusActive() throws Exception {
         UUID productId = UUID.randomUUID();
-        ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.Active, 10);
+        ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.ACTIVE, 10);
 
         when(productService.updateProductStatus(any(UUID.class), any(Status.class))).thenReturn(productDTO);
 
         mockMvc.perform(put("/api/v1/products/active/" + productId))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"Active\",\"quantity\":10}"));
+                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"ACTIVE\",\"quantity\":10}"));
     }
 
     @Test
@@ -186,13 +186,13 @@ public class ProductControllerTest {
     @Test
     void testUpdateProductStatusDeactive() throws Exception {
         UUID productId = UUID.randomUUID();
-        ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.Deactive, 10);
+        ProductDTO productDTO = new ProductDTO(productId, "Product", 100.0, Status.DEACTIVE, 10);
 
         when(productService.updateProductStatus(any(UUID.class), any(Status.class))).thenReturn(productDTO);
 
         mockMvc.perform(put("/api/v1/products/deactive/" + productId))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"Deactive\",\"quantity\":10}"));
+                .andExpect(content().json("{\"id\":\"" + productDTO.getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"DEACTIVE\",\"quantity\":10}"));
     }
 
     @Test
@@ -222,7 +222,7 @@ public class ProductControllerTest {
 
     @Test
     void testUploadExcel_withValidFormat() throws Exception {
-        List<ProductDTO> productDTOs = List.of(new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.Active, 10));
+        List<ProductDTO> productDTOs = List.of(new ProductDTO(UUID.randomUUID(), "Product", 100.0, Status.ACTIVE, 10));
         MockMultipartFile fileExcel = new MockMultipartFile("file", "products.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "name,price,quantity\nProduct,100.0,10".getBytes());
 
         when(productService.saveProductsFromExcel(fileExcel)).thenReturn(productDTOs);
@@ -230,6 +230,6 @@ public class ProductControllerTest {
         mockMvc.perform(multipart("/api/v1/products/upload")
                 .file(fileExcel))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":\"" + productDTOs.get(0).getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"Active\",\"quantity\":10}]"));
+                .andExpect(content().json("[{\"id\":\"" + productDTOs.get(0).getId() + "\",\"name\":\"Product\",\"price\":100.0,\"status\":\"ACTIVE\",\"quantity\":10}]"));
     }
 }

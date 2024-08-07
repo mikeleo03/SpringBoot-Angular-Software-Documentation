@@ -11,6 +11,10 @@ public class DateUtils {
     
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
 
+    private DateUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Parses the given date string using the specified format and returns the corresponding LocalDate object.
      *
@@ -18,13 +22,8 @@ public class DateUtils {
      * @return the parsed LocalDate object
      * @throws DateTimeParseException if the date string cannot be parsed according to the specified format
      */
-    public static LocalDate parseDate(String dateStr) {
-        try {
-            return LocalDate.parse(dateStr, DATE_FORMATTER);
-        } catch (DateTimeParseException e) {
-            System.out.println("Error parsing date: " + dateStr);
-            throw e;
-        }
+    public static LocalDate parseDate(String dateStr) throws DateTimeParseException {
+        return LocalDate.parse(dateStr, DATE_FORMATTER);
     }
     
     /**

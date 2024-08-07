@@ -74,6 +74,8 @@ class InvoiceServiceImplTest {
     @MockBean
     private PDFGenerator pdfGenerator;
 
+    private static final String INSUFFICIENT_PRODUCT_STOCK = "Insufficient product stock";
+
     @BeforeEach
     public void setUp() {
         // No need for manual instantiation
@@ -88,7 +90,7 @@ class InvoiceServiceImplTest {
         InvoiceDTO invoiceDTO = new InvoiceDTO();
         Page<Invoice> invoicesPage = new PageImpl<>(Collections.singletonList(invoice));
         
-        when(invoiceRepository.findByFilters(any(), any(), any(), any(), any(), any(), any(), any()))
+        when(invoiceRepository.findByFilters(any(InvoiceSearchCriteriaDTO.class), any(Pageable.class)))
                 .thenReturn(invoicesPage);
         when(invoiceMapper.toInvoiceDTO(any(Invoice.class))).thenReturn(invoiceDTO);
 
@@ -144,7 +146,7 @@ class InvoiceServiceImplTest {
         Customer customer = new Customer();
         Invoice savedInvoice = new Invoice();
         Product product = new Product();
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
         product.setQuantity(10);
         product.setPrice(100.0);
         InvoiceDTO invoiceDTO = new InvoiceDTO();
@@ -199,7 +201,7 @@ class InvoiceServiceImplTest {
 
         Customer customer = new Customer();
         Product product = new Product();
-        product.setStatus(Status.Deactive);
+        product.setStatus(Status.DEACTIVE);
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer)); // Mock customer repository
         when(productRepository.findById(any(UUID.class))).thenReturn(Optional.of(product));
@@ -224,7 +226,7 @@ class InvoiceServiceImplTest {
 
         Customer customer = new Customer();
         Product product = new Product();
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
         product.setQuantity(10);
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer)); // Mock customer repository
@@ -233,7 +235,7 @@ class InvoiceServiceImplTest {
         // Act & Assert
         assertThatThrownBy(() -> invoiceService.createInvoice(invoiceSaveDTO))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Insufficient product stock");
+                .hasMessageContaining(INSUFFICIENT_PRODUCT_STOCK);
     }
 
     @Test
@@ -250,7 +252,7 @@ class InvoiceServiceImplTest {
 
         Customer customer = new Customer();
         Product product = new Product();
-        product.setStatus(Status.Active);
+        product.setStatus(Status.ACTIVE);
         product.setQuantity(-8); // Negative stock to trigger the exception
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer)); // Mock customer repository
@@ -259,7 +261,7 @@ class InvoiceServiceImplTest {
         // Act & Assert
         assertThatThrownBy(() -> invoiceService.createInvoice(invoiceSaveDTO))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Insufficient product stock");
+                .hasMessageContaining(INSUFFICIENT_PRODUCT_STOCK);
     }
 
     @Test
@@ -304,7 +306,7 @@ class InvoiceServiceImplTest {
 
         Product availableProduct = new Product();
         availableProduct.setQuantity(10);
-        availableProduct.setStatus(Status.Active);
+        availableProduct.setStatus(Status.ACTIVE);
         availableProduct.setPrice(100.0); // Ensure price is initialized
 
         // Mock repository responses
@@ -335,7 +337,7 @@ class InvoiceServiceImplTest {
         Product availableProduct = new Product();
         availableProduct.setId(productId);
         availableProduct.setQuantity(10);
-        availableProduct.setStatus(Status.Active);
+        availableProduct.setStatus(Status.ACTIVE);
         availableProduct.setPrice(100.0);
 
         Customer customer = new Customer();
@@ -456,7 +458,7 @@ class InvoiceServiceImplTest {
         Invoice existingInvoice = new Invoice();
         existingInvoice.setCreatedAt(new Date()); // Ensure this is initialized
         Product inactiveProduct = new Product();
-        inactiveProduct.setStatus(Status.Deactive);
+        inactiveProduct.setStatus(Status.DEACTIVE);
 
         when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(existingInvoice));
         when(productRepository.findById(productId)).thenReturn(Optional.of(inactiveProduct)); // Mock inactive product
@@ -485,15 +487,15 @@ class InvoiceServiceImplTest {
         existingInvoice.setInvoiceDetails(new ArrayList<>()); // Initialize to avoid null pointer
         Product productWithInsufficientStock = new Product();
         productWithInsufficientStock.setQuantity(10);
-        productWithInsufficientStock.setStatus(Status.Active);
+        productWithInsufficientStock.setStatus(Status.ACTIVE);
 
         when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(existingInvoice));
-        when(productRepository.findById(productId)).thenReturn(Optional.of(productWithInsufficientStock)); // Mock insufficient stock
+        when(productRepository.findById(productId)).thenReturn(Optional.of(productWithInsufficientStock));
 
         // Act & Assert
         assertThatThrownBy(() -> invoiceService.updateInvoice(invoiceId, invoiceSaveDTO))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Insufficient product stock");
+                .hasMessageContaining(INSUFFICIENT_PRODUCT_STOCK);
     }
 
     @Test

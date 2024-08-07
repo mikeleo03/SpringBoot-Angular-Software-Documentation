@@ -20,7 +20,7 @@ import com.example.fpt_midterm_pos.data.model.Customer;
 import com.example.fpt_midterm_pos.data.model.Invoice;
 import com.example.fpt_midterm_pos.data.model.InvoiceDetail;
 
-public class PDFGeneratorTest {
+class PDFGeneratorTest {
 
     @Mock
     private SpringTemplateEngine templateEngine;
@@ -34,7 +34,7 @@ public class PDFGeneratorTest {
     }
 
     @Test
-    public void testGenerateInvoicePDF_withValidInvoice() throws IOException {
+    void testGenerateInvoicePDF_withValidInvoice() throws IOException {
         // Setup
         InvoiceDetail detail = new InvoiceDetail();
         detail.setPrice(100.0);
@@ -61,7 +61,7 @@ public class PDFGeneratorTest {
     }
 
     @Test
-    public void testGenerateInvoicePDF_withEmptyInvoiceDetails() throws IOException {
+    void testGenerateInvoicePDF_withEmptyInvoiceDetails() throws IOException {
         // Setup
         Customer customer = new Customer();
         customer.setName("John Doe");

@@ -34,11 +34,14 @@ import jakarta.validation.Valid;
 @Validated
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @Autowired
-    private ProductMapper productMapper;
+    public ProductServiceImpl(ProductMapper productMapper, ProductRepository productRepository) {
+        this.productMapper = productMapper;
+        this.productRepository = productRepository;
+    }
 
     /**
      * Finds products based on the given criteria and sorts them according to the provided sort rules.
@@ -83,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
         // Get the product data from the repo
-        Page<Product> products = productRepository.findByFilters(Status.Active, productName, minPrice, maxPrice, sortedPageable);
+        Page<Product> products = productRepository.findByFilters(Status.ACTIVE, productName, minPrice, maxPrice, sortedPageable);
         return products.map(productMapper::toShowDTO);
     }
 
@@ -97,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(@Valid ProductSaveDTO productSaveDTO) {
         Product product = productMapper.toProduct(productSaveDTO);
-        product.setStatus(Status.Active); // Ensure the product is set to active when saving
+        product.setStatus(Status.ACTIVE); // Ensure the product is set to active when saving
         product.setCreatedAt(new Date());
         product.setUpdatedAt(new Date());
         Product savedProduct = productRepository.save(product);
@@ -140,10 +143,10 @@ public class ProductServiceImpl implements ProductService {
             throw new DuplicateStatusException("Product status is already " + status);
         }
 
-        if (prodCheck.getStatus() == Status.Active) {
-            prodCheck.setStatus(Status.Deactive);
-        } else if (prodCheck.getStatus() == Status.Deactive) {
-            prodCheck.setStatus(Status.Active);
+        if (prodCheck.getStatus() == Status.ACTIVE) {
+            prodCheck.setStatus(Status.DEACTIVE);
+        } else if (prodCheck.getStatus() == Status.DEACTIVE) {
+            prodCheck.setStatus(Status.ACTIVE);
         }
         prodCheck.setUpdatedAt(new Date());
         Product updatedProduct = productRepository.save(prodCheck);
@@ -166,9 +169,9 @@ public class ProductServiceImpl implements ProductService {
     
             for (Product product : products) {
                 if (product.getQuantity() == 0) {
-                    product.setStatus(Status.Deactive);
+                    product.setStatus(Status.DEACTIVE);
                 } else {
-                    product.setStatus(Status.Active);
+                    product.setStatus(Status.ACTIVE);
                 }
             }
     

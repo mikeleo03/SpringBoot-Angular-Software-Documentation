@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
 @SpringBootTest
-public class FptMidtermPosApplicationTests {
+class FptMidtermPosApplicationTests {
 
     @Test
     void contextLoads() {

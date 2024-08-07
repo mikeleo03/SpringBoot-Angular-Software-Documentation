@@ -34,6 +34,11 @@
         <jetty-client.version>12.0.10</jetty-client.version>
 		<jetty-reactive-httpclient.version>4.0.3</jetty-reactive-httpclient.version>
 		<kotlin-stdlib.version>2.0.0-Beta4</kotlin-stdlib.version>
+		<sonar.token>${env.SONAR_TOKEN}</sonar.token>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.jacoco.reportPath>fpt_midterm_pos/target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.language>java</sonar.language>
 	</properties>
 	<dependencies>
 		<!-- SpringBoot Starter Web, Test, and Devtools -->	
@@ -231,7 +236,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.0.2155</version>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>

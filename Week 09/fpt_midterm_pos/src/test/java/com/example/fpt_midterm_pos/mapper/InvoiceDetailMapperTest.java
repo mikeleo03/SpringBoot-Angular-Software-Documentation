@@ -65,7 +65,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailDTO() {
+    void testToInvoiceDetailDTO() {
         // Arrange
         InvoiceDetail invoiceDetail = createInvoiceDetail();
         
@@ -77,7 +77,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailDTO_NullInput() {
+    void testToInvoiceDetailDTO_NullInput() {
         // Act
         InvoiceDetailDTO invoiceDetailDTO = invoiceDetailMapper.toInvoiceDetailDTO((InvoiceDetail) null);
 
@@ -86,7 +86,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailFromInvoiceDetailDTO() {
+    void testToInvoiceDetailFromInvoiceDetailDTO() {
         // Arrange
         InvoiceDetailDTO invoiceDetailDTO = createInvoiceDetailDTO();
         
@@ -103,7 +103,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailFromInvoiceDetailDTO_NullInput() {
+    void testToInvoiceDetailFromInvoiceDetailDTO_NullInput() {
         // Act
         InvoiceDetail invoiceDetail = invoiceDetailMapper.toInvoiceDetail((InvoiceDetailDTO) null);
 
@@ -112,7 +112,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailSaveDTO() {
+    void testToInvoiceDetailSaveDTO() {
         // Arrange
         InvoiceDetail invoiceDetail = createInvoiceDetail();
         
@@ -125,7 +125,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailSaveDTO_NullInput() {
+    void testToInvoiceDetailSaveDTO_NullInput() {
         // Act
         InvoiceDetailSaveDTO invoiceDetailSaveDTO = invoiceDetailMapper.toInvoiceDetailSaveDTO((InvoiceDetail) null);
 
@@ -134,7 +134,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailFromInvoiceDetailSaveDTO() {
+    void testToInvoiceDetailFromInvoiceDetailSaveDTO() {
         // Arrange
         InvoiceDetailSaveDTO invoiceDetailSaveDTO = createInvoiceDetailSaveDTO();
         
@@ -148,7 +148,7 @@ class InvoiceDetailMapperTest {
     }
 
     @Test
-    public void testToInvoiceDetailFromInvoiceDetailSaveDTO_NullInput() {
+    void testToInvoiceDetailFromInvoiceDetailSaveDTO_NullInput() {
         // Act
         InvoiceDetail invoiceDetail = invoiceDetailMapper.toInvoiceDetail((InvoiceDetailSaveDTO) null);
 

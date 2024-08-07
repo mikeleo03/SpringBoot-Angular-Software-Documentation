@@ -35,7 +35,7 @@ import com.example.fpt_midterm_pos.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableWebMvc
-public class CustomerControllerTest {
+class CustomerControllerTest {
 
     @InjectMocks
     private CustomerController customerController;
@@ -97,7 +97,7 @@ public class CustomerControllerTest {
 
     @Test
     void testCreateCustomer_withValidFormat() throws Exception {
-        CustomerDTO customerDTO = new CustomerDTO(UUID.randomUUID(), "Customer", "+62123456789", Status.Active);
+        CustomerDTO customerDTO = new CustomerDTO(UUID.randomUUID(), "Customer", "+62123456789", Status.ACTIVE);
 
         String requestBody = "{ \"name\": \"Customer\", \"phoneNumber\": \"+62123456789\" }";
 
@@ -107,7 +107,7 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"Active\"}"));
+                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"ACTIVE\"}"));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         UUID customerId = UUID.randomUUID();
-        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.Active);
+        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.ACTIVE);
 
         String requestBody = "{ \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\" }";
 
@@ -134,7 +134,7 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"Active\"}"));
+                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"ACTIVE\"}"));
     }
 
     @Test
@@ -158,13 +158,13 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomerStatusActive() throws Exception {
         UUID customerId = UUID.randomUUID();
-        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.Active);
+        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.ACTIVE);
 
         when(customerService.updateCustomerStatus(any(UUID.class), any(Status.class))).thenReturn(customerDTO);
 
         mockMvc.perform(put("/api/v1/customers/active/" + customerId))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"Active\"}"));
+                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"ACTIVE\"}"));
     }
 
     @Test
@@ -182,13 +182,13 @@ public class CustomerControllerTest {
     @Test
     void testUpdateCustomerStatusDeactive() throws Exception {
         UUID customerId = UUID.randomUUID();
-        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.Deactive);
+        CustomerDTO customerDTO = new CustomerDTO(customerId, "Updated Customer", "+62123456789", Status.DEACTIVE);
 
         when(customerService.updateCustomerStatus(any(UUID.class), any(Status.class))).thenReturn(customerDTO);
 
         mockMvc.perform(put("/api/v1/customers/deactive/" + customerId))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"Deactive\"}"));
+                .andExpect(content().json("{\"id\": \"" + customerDTO.getId() + "\", \"name\": \"Updated Customer\", \"phoneNumber\": \"+62123456789\", \"status\": \"DEACTIVE\"}"));
     }
 
     @Test

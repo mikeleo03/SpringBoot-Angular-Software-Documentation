@@ -15,7 +15,7 @@ import com.example.fpt_midterm_pos.data.model.Customer;
 import com.example.fpt_midterm_pos.data.model.Status;
 
 @DataJpaTest
-public class CustomerRepositoryTest {
+class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -27,7 +27,7 @@ public class CustomerRepositoryTest {
         customer = new Customer();
         customer.setId(UUID.randomUUID());
         customer.setName("Test Customer");
-        customer.setStatus(Status.Active);
+        customer.setStatus(Status.ACTIVE);
         customer.setPhoneNumber("+62123456789");
         customer.setCreatedAt(new java.util.Date());
         customer.setUpdatedAt(new java.util.Date());
@@ -36,13 +36,13 @@ public class CustomerRepositoryTest {
 
     @Test
     void findByStatus() {
-        Page<Customer> customers = customerRepository.findByStatus(Status.Active, PageRequest.of(0, 10));
-        assertThat(customers.getTotalElements()).isGreaterThan(0);
+        Page<Customer> customers = customerRepository.findByStatus(Status.ACTIVE, PageRequest.of(0, 10));
+        assertThat(customers.getTotalElements()).isPositive();
     }
 
     @Test
     void findByStatusEmptyResult() {
-        Page<Customer> customers = customerRepository.findByStatus(Status.Deactive, PageRequest.of(0, 10));
-        assertThat(customers.getTotalElements()).isEqualTo(0);
+        Page<Customer> customers = customerRepository.findByStatus(Status.DEACTIVE, PageRequest.of(0, 10));
+        assertThat(customers.getTotalElements()).isZero();
     }
 }

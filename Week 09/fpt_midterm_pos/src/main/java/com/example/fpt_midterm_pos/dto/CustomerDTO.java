@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDTO {
-    private UUID Id;
+    private UUID id;
     private String name;
     private String phoneNumber;
     private Status status;

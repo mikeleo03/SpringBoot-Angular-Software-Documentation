@@ -30,8 +30,12 @@ public class FileUtils {
     
         List<ProductSaveDTO> productSaveDTOs = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            String header = br.readLine(); // Skip header
+            if (header == null) {
+                throw new IOException("File is empty or has an invalid format");
+            }
+    
             String line;
-            br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
                 String[] attributes = line.split(",");
                 if (attributes.length < HEADERS.length) {
@@ -44,7 +48,7 @@ public class FileUtils {
             throw new IOException("Error reading Excel file: " + e.getMessage(), e);
         }
         return productSaveDTOs;
-    }
+    }    
 
     public static ProductSaveDTO fromExcel(String[] attributes) {
         if (attributes.length < HEADERS.length) {

@@ -10,6 +10,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.List;
 
 public class ExcelGenerator {
+
+    private ExcelGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
     
     /**
      * Generates an Excel workbook containing invoice data.

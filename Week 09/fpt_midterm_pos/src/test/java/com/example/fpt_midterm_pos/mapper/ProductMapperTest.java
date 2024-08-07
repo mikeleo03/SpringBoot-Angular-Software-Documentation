@@ -19,7 +19,7 @@ import com.example.fpt_midterm_pos.dto.ProductDTO;
 import com.example.fpt_midterm_pos.dto.ProductSaveDTO;
 import com.example.fpt_midterm_pos.dto.ProductShowDTO;
 
-public class ProductMapperTest {
+class ProductMapperTest {
 
     private ProductMapper productMapper;
 
@@ -33,7 +33,7 @@ public class ProductMapperTest {
             UUID.randomUUID(),
             "Test Product",
             100.0,
-            Status.Active,
+            Status.ACTIVE,
             10,
             new Date(),
             new Date()
@@ -45,7 +45,7 @@ public class ProductMapperTest {
             UUID.randomUUID(),
             "Test Product",
             100.0,
-            Status.Active,
+            Status.ACTIVE,
             10
         );
     }
@@ -76,7 +76,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductDTO() {
+    void testToProductDTO() {
         // Arrange
         Product product = createProduct();
 
@@ -88,7 +88,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductDTO_NullInput() {
+    void testToProductDTO_NullInput() {
         // Act
         ProductDTO productDTO = productMapper.toProductDTO(null);
 
@@ -97,7 +97,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductDTO() {
+    void testToProductFromProductDTO() {
         // Arrange
         ProductDTO productDTO = createProductDTO();
 
@@ -113,7 +113,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductDTO_NullInput() {
+    void testToProductFromProductDTO_NullInput() {
         // Act
         Product product = productMapper.toProduct((ProductDTO) null);
 
@@ -122,7 +122,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToShowDTO() {
+    void testToShowDTO() {
         // Arrange
         Product product = createProduct();
 
@@ -137,7 +137,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToShowDTO_NullInput() {
+    void testToShowDTO_NullInput() {
         // Act
         ProductShowDTO productShowDTO = productMapper.toShowDTO(null);
 
@@ -146,7 +146,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductShowDTO() {
+    void testToProductFromProductShowDTO() {
         // Arrange
         ProductShowDTO productShowDTO = createProductShowDTO();
 
@@ -162,7 +162,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductShowDTO_NullInput() {
+    void testToProductFromProductShowDTO_NullInput() {
         // Act
         Product product = productMapper.toProduct((ProductShowDTO) null);
 
@@ -171,7 +171,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductSaveDTO() {
+    void testToProductSaveDTO() {
         // Arrange
         Product product = createProduct();
 
@@ -185,7 +185,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductSaveDTO_NullInput() {
+    void testToProductSaveDTO_NullInput() {
         // Act
         ProductSaveDTO productSaveDTO = productMapper.toProductSaveDTO(null);
 
@@ -194,7 +194,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductSaveDTO() {
+    void testToProductFromProductSaveDTO() {
         // Arrange
         ProductSaveDTO productSaveDTO = createProductSaveDTO();
 
@@ -209,7 +209,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductFromProductSaveDTO_NullInput() {
+    void testToProductFromProductSaveDTO_NullInput() {
         // Act
         Product product = productMapper.toProduct((ProductSaveDTO) null);
 
@@ -218,7 +218,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductDTOList() {
+    void testToProductDTOList() {
         // Arrange
         List<Product> products = Arrays.asList(createProduct(), createProduct());
 
@@ -233,7 +233,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductDTOList_EmptyList() {
+    void testToProductDTOList_EmptyList() {
         // Act
         List<ProductDTO> productDTOs = productMapper.toProductDTOList(Collections.emptyList());
 
@@ -242,7 +242,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductDTOList_NullInput() {
+    void testToProductDTOList_NullInput() {
         // Act
         List<ProductDTO> productDTOs = productMapper.toProductDTOList(null);
 
@@ -251,7 +251,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductList() {
+    void testToProductList() {
         // Arrange
         List<ProductSaveDTO> productSaveDTOs = Arrays.asList(createProductSaveDTO(), createProductSaveDTO());
 
@@ -269,7 +269,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductList_EmptyList() {
+    void testToProductList_EmptyList() {
         // Act
         List<Product> products = productMapper.toProductList(Collections.emptyList());
 
@@ -278,7 +278,7 @@ public class ProductMapperTest {
     }
 
     @Test
-    public void testToProductList_NullInput() {
+    void testToProductList_NullInput() {
         // Act
         List<Product> products = productMapper.toProductList(null);
 

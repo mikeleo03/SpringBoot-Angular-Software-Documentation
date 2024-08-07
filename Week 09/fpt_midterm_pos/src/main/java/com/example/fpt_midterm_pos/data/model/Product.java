@@ -41,7 +41,7 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.Active;
+    private Status status = Status.ACTIVE;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
