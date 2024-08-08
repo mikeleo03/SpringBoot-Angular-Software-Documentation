@@ -100,6 +100,8 @@ Unit testing involves testing individual components or functions of an applicati
 - Use meaningful names for the test methods to describe what they are testing.
 - Aim for high coverage, but remember quality over quantity.
 
+#### All the created unit test cases for the project is exist on [this folder](/Week%2009/fpt_midterm_pos/src/test).
+
 ## ⚡ Assignment 02 - SonarLint and SonarQube for Code Quality Testing
 
 ### 🔎 What is SonarLint and SonarQube?
@@ -178,6 +180,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
 
 ### 💡 How to Set Up All the Requirements
 1. **Install SonarQube**:
+   
    Download the Community Edition from [this link](https://www.sonarsource.com/products/sonarqube/downloads/).
 2. **Start SonarQube**:
    - Run `StartSonar.bat`.
@@ -186,6 +189,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
    - Access http://localhost:9000/ with System Administrator credentials (login=`admin`, password=`admin`) or your credential if you already set it up.
    - For more details, refer to the [installation documentation](https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/introduction/).
 4. **Set Up SonarQube Token**:
+   
    Add the SonarQube token to your environment variables. For PowerShell, use the following commands:
      ```powershell
      # Set the environment variable
@@ -195,6 +199,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
      $env:SONAR_TOKEN
      ```
 5. **Install JaCoCo Plugins**:
+   
    Add the necessary JaCoCo plugins to your project’s `pom.xml` and configure any required environment variables. You can use what i already do on my [`pom.xml`](/Week%2009/fpt_midterm_pos/pom.xml).
 
 ### ⚙️ How to Run All the Tests and Code Quality Analysis
@@ -203,6 +208,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
    $ cd fpt_midterm_pos
    ```
 2. **Check Maven Installation**:
+   
    Ensure Maven is installed by running `mvn -v` to check the version.
 3. **Run Tests, Check Coverage, and Get Report**:
    ```bash
