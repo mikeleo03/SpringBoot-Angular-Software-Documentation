@@ -102,8 +102,9 @@ Unit testing involves testing individual components or functions of an applicati
     - Add the SonarQube properties to the `sonar-project.properties` file:
         ```properties
         sonar.projectKey=my-project
+        sonar.projectName=my-project
+        sonar.projectVersion=1.0
         sonar.host.url=http://localhost:9000
-        sonar.login=<login-token>
         ```
 3. **Run SonarQube Analysis**:
     ```bash
@@ -159,8 +160,6 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
 - Use JaCoCo reports to identify untested parts of the code and write additional tests for them.
 - Integrate JaCoCo with the CI/CD pipeline to ensure code coverage is continuously monitored.
 
-Certainly! Here's the refined section with enhanced clarity and formatting:
-
 ---
 
 ## ✅ Assignment Documentations and Results
@@ -184,7 +183,7 @@ Certainly! Here's the refined section with enhanced clarity and formatting:
      $env:SONAR_TOKEN
      ```
 5. **Install JaCoCo Plugins**:
-   Add the necessary JaCoCo plugins to your project’s `pom.xml` and configure any required environment variables.
+   Add the necessary JaCoCo plugins to your project’s `pom.xml` and configure any required environment variables. You can use what i already do on my [`pom.xml`](/Week%2009/fpt_midterm_pos/pom.xml).
 
 ### ⚙️ How to Run All the Tests and Code Quality Analysis
 1. **Navigate to Project Directory**:
@@ -219,7 +218,7 @@ Certainly! Here's the refined section with enhanced clarity and formatting:
 
    ![Screenshot](/Week%2009/img/sonar1.png)
    
-   Grade "A" with **0 issues in all aspects**, with **82.8% test coverage**.
+   Grade "A" with **0 issues in every single aspects**, with **82.8% test coverage**.
 
    ![Screenshot](/Week%2009/img/sonar2.png)
    
