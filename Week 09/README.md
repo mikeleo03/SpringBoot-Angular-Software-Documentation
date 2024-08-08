@@ -215,7 +215,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
 1. **Unit Tests Created**
 
     <blockquote align='center'>
-    <h3>162 unit tests created</h3>
+    <h1>162 unit tests created</h1>
     </blockquote>
 
    ![Screenshot](/Week%2009/img/unit.png)
@@ -225,7 +225,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
 2. **Unit Tests Code Coverage**
 
     <blockquote align='center'>
-    <h3>Achieved 88% overall code coverage via JaCoCo</h3>
+    <h1>Achieved 88% overall code coverage via JaCoCo</h1>
     </blockquote>
 
    ![Screenshot](/Week%2009/img/jacoco.png)
@@ -233,7 +233,7 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
 3. **Code Quality Tests**
 
     <blockquote align='center'>
-    <h3>Achieved Grade "A" and 0 issue across all aspects as per SonarQube analysis</h3>
+    <h1>Achieved Grade "A" and 0 issue across all aspects as per SonarQube analysis</h1>
     </blockquote>
 
    ![Screenshot](/Week%2009/img/sonar1.png)
