@@ -1,5 +1,234 @@
-# 🛒 Midterm Exam Project - Point of Sales
-> This repository is created as a part of Midterm Exam Project by Group 3
+# 👩🏻‍🏫 Lecture 15 & 16 - Unit Test and Code Quality Measurement
+> This repository is created as a part of assignment for Lecture 15 & 16 - Unit Test and Code Quality Measurement
+
+## 🚀 Assignment 01 - Write Unit Test with Coverage More Than 75%
+
+### 🔎 What is Unit Test?
+Unit testing involves testing individual components or functions of an application in isolation to ensure they work as expected. Unit tests are written to validate the behavior of a small, specific part of the code, usually a single method or function. By doing so, they help identify bugs early in the development cycle.
+
+### 👣 How to Do Unit Test in Java SpringBoot
+1. **Set Up The Project**: Ensure that we have a Spring Boot project set up. We can use tools like Spring Initializr to generate the project.
+2. **Add Testing Dependencies**: Include dependencies for testing frameworks such as JUnit and Mockito in the `pom.xml` or `build.gradle` file.
+3. **Create Test Classes**: For each class we want to test, create a corresponding test class in the `src/test/java` directory.
+4. **Write Test Methods**: Use the `@Test` annotation to create test methods within the test classes.
+5. **Mock Dependencies**: Use Mockito to mock dependencies and isolate the unit being tested.
+6. **Run Tests**: Use the IDE or command line to run the tests and ensure they pass.
+
+### 👣 Step-by-Step Explanation
+1. **Create a Spring Boot Project**:
+    ```bash
+    spring init -dweb,data-jpa,h2,devtools --groupId=com.example --artifactId=demo --name=demo
+    ```
+2. **Add Dependencies in `pom.xml`**:
+    ```xml
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    ```
+3. **Write a Unit Test**:
+    Here is the example on how Unit Test is written.
+    ```java
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
+    public class UserServiceTest {
+        
+        @Mock
+        private UserRepository userRepository;
+
+        @InjectMocks
+        private UserService userService;
+
+        @Test
+        public void whenValidUser_thenUserShouldBeFound() {
+            User user = new User("John", "Doe");
+            when(userRepository.findByName("John")).thenReturn(Optional.of(user));
+            
+            Optional<User> found = userService.findByName("John");
+            assertTrue(found.isPresent());
+            assertEquals(found.get().getName(), "John");
+        }
+    }
+    ```
+
+### 👨🏻‍💻 Implementation:
+1. **Define The Service**:
+    ```java
+    @Service
+    public class UserService {
+        @Autowired
+        private UserRepository userRepository;
+
+        public Optional<User> findByName(String name) {
+            return userRepository.findByName(name);
+        }
+    }
+    ```
+2. **Define The Repository**:
+    ```java
+    public interface UserRepository extends JpaRepository<User, Long> {
+        Optional<User> findByName(String name);
+    }
+    ```
+3. **Run The Tests** using the IDE or:
+    ```bash
+    mvn test
+    ```
+
+### 📝 Some Notable Mentions
+- Ensure that tests are isolated and do not rely on each other.
+- Use meaningful names for the test methods to describe what they are testing.
+- Aim for high coverage, but remember quality over quantity.
+
+## ⚡ Assignment 02 - SonarLint and SonarQube for Code Quality Testing
+
+### 🔎 What is SonarLint and SonarQube?
+- **SonarLint**: An IDE extension that provides on-the-fly feedback to developers on new bugs and quality issues injected into their code.
+- **SonarQube**: A web-based platform for continuous inspection of code quality. It performs automatic reviews with static analysis of code to detect bugs, code smells, and security vulnerabilities.
+
+### 👣 Step-by-Step Explanation
+1. **Install SonarLint** in the IDE (e.g., IntelliJ, Eclipse, VSCode).
+2. **Configure SonarQube**:
+    - Install SonarQube on the local machine or use a hosted version.
+    - Set up a project in SonarQube and generate a token.
+    - Add the SonarQube properties to the `sonar-project.properties` file:
+        ```properties
+        sonar.projectKey=my-project
+        sonar.host.url=http://localhost:9000
+        sonar.login=<login-token>
+        ```
+3. **Run SonarQube Analysis**:
+    ```bash
+    mvn sonar:sonar
+    ```
+
+### 📝 Some Notable Mentions
+- Regularly analyze the code with SonarQube to maintain high code quality.
+- Use SonarLint in the IDE to catch issues early in the development process.
+- Address the issues reported by SonarQube to improve the maintainability and reliability of code.
+
+## 🔥 Assignment 03 - JaCoCo for Determining Unit Test Coverage
+
+### 🔎 What is JaCoCo?
+JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provides detailed information about code coverage, showing which parts of the code have been executed by tests and which parts have not.
+
+### 👣 Step-by-Step Explanation
+1. **Add JaCoCo Plugin to `pom.xml`**:
+    ```xml
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    ```
+2. **Run Tests with JaCoCo**:
+    ```bash
+    mvn clean test
+    mvn jacoco:report
+    ```
+3. **View Coverage Report**: The report will be generated in the `target/site/jacoco/index.html` file. Open this file in a browser to view detailed coverage information.
+
+### 📝 Some Notable Mentions
+- Aim for high code coverage but focus on testing critical and complex parts of the application.
+- Use JaCoCo reports to identify untested parts of the code and write additional tests for them.
+- Integrate JaCoCo with the CI/CD pipeline to ensure code coverage is continuously monitored.
+
+Certainly! Here's the refined section with enhanced clarity and formatting:
+
+---
+
+## ✅ Assignment Documentations and Results
+
+### 💡 How to Set Up All the Requirements
+1. **Install SonarQube**:
+   Download the Community Edition from [this link](https://www.sonarsource.com/products/sonarqube/downloads/).
+2. **Start SonarQube**:
+   - Run `StartSonar.bat`.
+   - If the instance fails to start, check the logs to find the cause.
+3. **Log In to SonarQube**:
+   - Access http://localhost:9000/ with System Administrator credentials (login=`admin`, password=`admin`) or your credential if you already set it up.
+   - For more details, refer to the [installation documentation](https://docs.sonarsource.com/sonarqube/latest/setup-and-upgrade/install-the-server/introduction/).
+4. **Set Up SonarQube Token**:
+   Add the SonarQube token to your environment variables. For PowerShell, use the following commands:
+     ```powershell
+     # Set the environment variable
+     $env:SONAR_TOKEN = "<your-sonar-token>"
+
+     # Verify the environment variable
+     $env:SONAR_TOKEN
+     ```
+5. **Install JaCoCo Plugins**:
+   Add the necessary JaCoCo plugins to your project’s `pom.xml` and configure any required environment variables.
+
+### ⚙️ How to Run All the Tests and Code Quality Analysis
+1. **Navigate to Project Directory**:
+   ```bash
+   $ cd fpt_midterm_pos
+   ```
+2. **Check Maven Installation**:
+   Ensure Maven is installed by running `mvn -v` to check the version.
+3. **Run Tests, Check Coverage, and Get Report**:
+   ```bash
+   $ ./mvnw clean verify jacoco:report sonar:sonar
+   ```
+
+   If all instructions are correctly executed, open [localhost:9000](http://localhost:9000) to view the project report.
+
+### 📸 Result Documentation
+1. **Unit Tests Created**:
+
+   #### 162 unit tests created.
+
+   ![Screenshot](/Week%2009/img/unit.png)
+   All tests run successfully.
+
+2. **Unit Tests Code Coverage**:
+
+   #### Achieved 88% overall code coverage via JaCoCo.
+
+   ![Screenshot](/Week%2009/img/jacoco.png)
+
+3. **Code Quality Tests**:
+   #### Achieved Grade "A" across all aspects as per SonarQube analysis.
+
+   ![Screenshot](/Week%2009/img/sonar1.png)
+   
+   Grade "A" with **0 issues in all aspects**, with **82.8% test coverage**.
+
+   ![Screenshot](/Week%2009/img/sonar2.png)
+   
+   Full overall code result analysis.
+
+----
+
+# 🛒 [Revisit] Midterm Exam Project - Point of Sales
+> This repository is created as a part of Midterm Exam Project by Group 3.
 
 ## ⚡ Requirements
 1. All APIs Have Pagination
@@ -96,7 +325,8 @@ fpt_midterm_pos
 │       │   └── invoice-template.html
 │       ├── application.properties
 │       ├── data.sql
-│       └── productSample.csv
+│       ├── productSample.xlsx
+│       └── sonar-project.properties
 ├── .gitignore
 ├── env.properties
 ├── mvnw
@@ -128,49 +358,49 @@ USE fpt_midterm_pos;
 -- Initialize table with DDL
 -- Create `Customer` table
 CREATE TABLE Customer (
-    ID BINARY(16) PRIMARY KEY,
+    ID VARCHAR(36) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     phoneNumber VARCHAR(255),
-    status ENUM('Active', 'Deactivate') NOT NULL,
-    createdAt DATETIME,
-    updatedAt DATETIME
+    status VARCHAR(50) NOT NULL,
+    createdAt TIMESTAMP,
+    updatedAt TIMESTAMP
 );
 
 -- Create `Product` table
 CREATE TABLE Product (
-    ID BINARY(16) PRIMARY KEY,
+    ID VARCHAR(36) PRIMARY KEY,    -- Use VARCHAR for UUIDs
     name VARCHAR(255) NOT NULL,
     price INT NOT NULL,
-    status ENUM('Active', 'Deactivate') NOT NULL,
-    quantity INT(10),
-    createdAt DATETIME,
-    updatedAt DATETIME
+    status VARCHAR(50) NOT NULL,   -- Use VARCHAR instead of ENUM
+    quantity INT,
+    createdAt TIMESTAMP,
+    updatedAt TIMESTAMP
 );
 
 -- Create `Invoice` table
 CREATE TABLE Invoice (
-    ID BINARY(16) PRIMARY KEY,
-    amount INT(10) NOT NULL,
+    ID VARCHAR(36) PRIMARY KEY,
+    amount INT NOT NULL,    -- Remove length specifier from INT
     date DATE NOT NULL,
-    createdAt DATETIME,
-    updatedAt DATETIME,
-    customerId BINARY(16),
+    createdAt TIMESTAMP,
+    updatedAt TIMESTAMP,
+    customerId VARCHAR(36),
     FOREIGN KEY (customerId) REFERENCES Customer(ID)
 );
 
 -- Create `InvoiceDetails` table
 CREATE TABLE InvoiceDetails (
-    invoiceID BINARY(16),
-    productID BINARY(16),
-    quantity INT(10),
-    productPrice INT(10),
+    invoiceID VARCHAR(36),
+    productID VARCHAR(36),
+    quantity INT,
+    productPrice INT,
     productName VARCHAR(255),
-    amount INT(10),
-    createdAt DATETIME,
-    updatedAt DATETIME,
+    amount INT,
+    createdAt TIMESTAMP,
+    updatedAt TIMESTAMP,
     PRIMARY KEY (invoiceID, productID),
-    FOREIGN KEY (invoiceID) REFERENCES invoice(ID),
-    FOREIGN KEY (productID) REFERENCES product(ID)
+    FOREIGN KEY (invoiceID) REFERENCES Invoice(ID),
+    FOREIGN KEY (productID) REFERENCES Product(ID)
 );
 ```
 
