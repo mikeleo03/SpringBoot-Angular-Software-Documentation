@@ -6,13 +6,25 @@
 ### 🔎 What is Unit Test?
 Unit testing involves testing individual components or functions of an application in isolation to ensure they work as expected. Unit tests are written to validate the behavior of a small, specific part of the code, usually a single method or function. By doing so, they help identify bugs early in the development cycle.
 
-### 👣 How to Do Unit Test in Java SpringBoot
-1. **Set Up The Project**: Ensure that we have a Spring Boot project set up. We can use tools like Spring Initializr to generate the project.
-2. **Add Testing Dependencies**: Include dependencies for testing frameworks such as JUnit and Mockito in the `pom.xml` or `build.gradle` file.
-3. **Create Test Classes**: For each class we want to test, create a corresponding test class in the `src/test/java` directory.
-4. **Write Test Methods**: Use the `@Test` annotation to create test methods within the test classes.
-5. **Mock Dependencies**: Use Mockito to mock dependencies and isolate the unit being tested.
-6. **Run Tests**: Use the IDE or command line to run the tests and ensure they pass.
+### 🤔 How to Do Unit Test in Java SpringBoot
+1. **Set Up The Project** 
+    
+    Ensure that we have a Spring Boot project set up. We can use tools like Spring Initializr to generate the project.
+2. **Add Testing Dependencies**
+    
+    Include dependencies for testing frameworks such as JUnit and Mockito in the `pom.xml` or `build.gradle` file.
+3. **Create Test Classes**
+    
+    For each class we want to test, create a corresponding test class in the `src/test/java` directory.
+4. **Write Test Methods**
+    
+    Use the `@Test` annotation to create test methods within the test classes.
+5. **Mock Dependencies**
+    
+    Use Mockito to mock dependencies and isolate the unit being tested.
+6. **Run Tests**
+    
+    Use the IDE or command line to run the tests and ensure they pass.
 
 ### 👣 Step-by-Step Explanation
 1. **Create a Spring Boot Project**:
@@ -200,21 +212,29 @@ JaCoCo (Java Code Coverage) is a free code coverage library for Java. It provide
    If all instructions are correctly executed, open [localhost:9000](http://localhost:9000) to view the project report.
 
 ### 📸 Result Documentation
-1. **Unit Tests Created**:
+1. **Unit Tests Created**
 
-   #### 162 unit tests created.
+    <blockquote align='center'>
+    <h3>162 unit tests created</h3>
+    </blockquote>
 
    ![Screenshot](/Week%2009/img/unit.png)
+   
    All tests run successfully.
 
-2. **Unit Tests Code Coverage**:
+2. **Unit Tests Code Coverage**
 
-   #### Achieved 88% overall code coverage via JaCoCo.
+    <blockquote align='center'>
+    <h3>Achieved 88% overall code coverage via JaCoCo</h3>
+    </blockquote>
 
    ![Screenshot](/Week%2009/img/jacoco.png)
 
-3. **Code Quality Tests**:
-   #### Achieved Grade "A" across all aspects as per SonarQube analysis.
+3. **Code Quality Tests**
+
+    <blockquote align='center'>
+    <h3>Achieved Grade "A" and 0 issue across all aspects as per SonarQube analysis</h3>
+    </blockquote>
 
    ![Screenshot](/Week%2009/img/sonar1.png)
    
