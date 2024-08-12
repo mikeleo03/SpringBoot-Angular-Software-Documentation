@@ -1,7 +1,10 @@
 package com.example.product.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Collections;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,10 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.example.product.data.model.Product;
 import com.example.product.data.model.Status;
+import com.example.product.data.repository.CustomerProductRepository;
 import com.example.product.data.repository.ProductRepository;
 import com.example.product.dto.ProductDTO;
 import com.example.product.dto.ProductSaveDTO;
@@ -20,6 +25,7 @@ import com.example.product.dto.ProductSearchCriteriaDTO;
 import com.example.product.dto.ProductShowDTO;
 import com.example.product.exception.BadRequestException;
 import com.example.product.exception.DuplicateStatusException;
+import com.example.product.exception.InsufficientProductQuantityException;
 import com.example.product.exception.ResourceNotFoundException;
 import com.example.product.mapper.ProductMapper;
 import com.example.product.service.ProductService;
@@ -32,11 +38,14 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CustomerProductRepository customerProductRepository;
+    private static final String PRODUCT_NOT_FOUND = "Product not found";
 
     @Autowired
-    public ProductServiceImpl(ProductMapper productMapper, ProductRepository productRepository) {
+    public ProductServiceImpl(ProductMapper productMapper, ProductRepository productRepository, CustomerProductRepository customerProductRepository) {
         this.productMapper = productMapper;
         this.productRepository = productRepository;
+        this.customerProductRepository = customerProductRepository;
     }
 
     /**
@@ -113,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductDTO updateProduct(UUID id, @Valid ProductSaveDTO productSaveDTO) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
         product.setName(productSaveDTO.getName());
         product.setPrice(productSaveDTO.getPrice());
@@ -133,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public ProductDTO updateProductStatus(UUID id, Status status) {
-        Product prodCheck = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        Product prodCheck = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
         if(status == prodCheck.getStatus()) {
             throw new DuplicateStatusException("Product status is already " + status);
@@ -147,5 +156,34 @@ public class ProductServiceImpl implements ProductService {
         prodCheck.setUpdatedAt(new Date());
         Product updatedProduct = productRepository.save(prodCheck);
         return productMapper.toProductDTO(updatedProduct);
-    }    
+    }
+    
+    @Override
+    @Transactional
+    public void reduceProductQuantity(UUID productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
+
+        if (product.getQuantity() < quantity) {
+            throw new InsufficientProductQuantityException("Insufficient quantity for product: " + product.getName());
+        }
+
+        product.setQuantity(product.getQuantity() - quantity);
+        productRepository.save(product);
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCustomerId(UUID customerId) {
+        // Fetch the product IDs associated with the customer from a repository or database
+        List<UUID> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);
+
+        if (productIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Fetch the product details for these product IDs
+        return productRepository.findAllById(productIds).stream()
+                .map(productMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
 }

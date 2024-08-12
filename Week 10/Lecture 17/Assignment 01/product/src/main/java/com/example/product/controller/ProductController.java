@@ -1,6 +1,7 @@
 package com.example.product.controller;
 
 import java.util.UUID;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -137,5 +138,48 @@ public class ProductController {
     public ResponseEntity<ProductDTO> updateProductStatusDeactive(@PathVariable UUID id) {
         ProductDTO productDTO = productService.updateProductStatus(id, Status.DEACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+    }
+
+    /**
+     * Reduces the quantity of a product by a specified amount.
+     *
+     * @param productId The unique identifier of the product to reduce the quantity of.
+     * @param quantity The quantity to reduce.
+     * @return A {@link ResponseEntity} with status code 200 (OK) upon successful reduction.
+     * @apiNote If the product with the given ID is not found, a {@link ResponseEntity} with status code 404 (Not Found) is returned.
+     */
+    @Operation(summary = "Reduce the quantity of a product.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Product quantity reduced successfully"),
+        @ApiResponse(responseCode = "404", description = "Product not found"),
+        @ApiResponse(responseCode = "400", description = "Insufficient product quantity")
+    })
+    @PostMapping("/reduce-quantity")
+    public ResponseEntity<Void> reduceProductQuantity(@RequestParam UUID productId, @RequestParam int quantity) {
+        productService.reduceProductQuantity(productId, quantity);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * Retrieves products purchased by a specific customer.
+     *
+     * @param customerId The unique identifier of the customer.
+     * @return A {@link ResponseEntity} containing a list of {@link ProductDTO} objects representing the purchased products.
+     * @apiNote If no products are found for the given customer, a {@link ResponseEntity} with status code 204 (No Content) is returned.
+     */
+    @Operation(summary = "Retrieve products purchased by a customer.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
+        @ApiResponse(responseCode = "204", description = "No products found for the customer")
+    })
+    @GetMapping("/by-customer")
+    public ResponseEntity<List<ProductDTO>> getProductsByCustomerId(@RequestParam UUID customerId) {
+        List<ProductDTO> products = productService.getProductsByCustomerId(customerId);
+
+        if (products.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 }

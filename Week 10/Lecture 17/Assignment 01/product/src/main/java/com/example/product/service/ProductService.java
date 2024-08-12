@@ -1,6 +1,7 @@
 package com.example.product.service;
 
 import java.util.UUID;
+import java.util.List;
 
 import com.example.product.dto.*;
 
@@ -24,4 +25,10 @@ public interface ProductService {
 
     // Updates the status of an existing product.
     ProductDTO updateProductStatus(UUID id, Status status);
+
+    // Reduce the product quantity.
+    void reduceProductQuantity(UUID productId, int quantity);
+
+    // Get list of products based on customer ID
+    List<ProductDTO> getProductsByCustomerId(UUID customerId);
 }

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Product {
     
     @Id
-    @Column(name = "ID", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
+    @Column(name = "ID", columnDefinition = "VARCHAR(36)", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

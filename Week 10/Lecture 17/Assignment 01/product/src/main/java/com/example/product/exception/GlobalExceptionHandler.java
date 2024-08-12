@@ -109,5 +109,19 @@ public class GlobalExceptionHandler {
         errorResponse.put(ERROR, e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * Handles {@link InsufficientProductQuantityException} by creating a response entity containing an error message.
+     *
+     * @param e the {@link InsufficientProductQuantityException} to handle
+     * @return a {@link ResponseEntity} containing a map with an error message
+     */
+    @ExceptionHandler(InsufficientProductQuantityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, String>> handleInsufficientProductQuantityException(InsufficientProductQuantityException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put(ERROR, e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
 
