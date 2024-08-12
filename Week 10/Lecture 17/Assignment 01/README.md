@@ -47,24 +47,24 @@
    
     ```yaml
     server:
-    port: 8080  # Gateway server port
+        port: 8080  # Gateway server port
 
     spring:
-    application:
-        name: gateway-service
+        application:
+            name: gateway-service
 
     cloud:
         gateway:
-        routes:
-            - id: product-service
-            uri: http://localhost:8081
-            predicates:
-                - Path=/api/v1/products/**
+            routes:
+                -  id: product-service
+                   uri: http://localhost:8081
+                   predicates:
+                       - Path=/api/v1/products/**
 
-            - id: customer-service
-            uri: http://localhost:8082
-            predicates:
-                - Path=/api/v1/customers/**
+                -  id: customer-service
+                   uri: http://localhost:8082
+                   predicates:
+                       - Path=/api/v1/customers/**
     ```
 
    - **`product-service` Route:** Maps all requests with `/api/v1/products/**` to the Product service running on port `8081`.
@@ -80,13 +80,13 @@
 
    You can also expose gateway metrics by enabling Actuator:
    
-   ```yaml
-   management:
-     endpoints:
-       web:
-         exposure:
-           include: "*"
-   ```
+    ```yaml
+    management:
+        endpoints:
+            web:
+                exposure:
+                include: "*"
+    ```
 
    This provides insights into gateway performance, routing, and more.
 
@@ -106,7 +106,7 @@ public class ApiGatewayApplication {
 }
 ```
 
-- **`ApiGatewayApplication`:** The main class to start the Spring Boot application for the gateway.
+**`ApiGatewayApplication`:** The main class to start the Spring Boot application for the gateway.
 
 ### 📚 Summary
 
@@ -313,6 +313,7 @@ There are also query to insert some generated dummy data. All the MySQL queries 
 DROP DATABASE IF EXISTS week10_customer;
 ```
 
+#### 3. Application Properties
 Don't forget to add this to re-update the SQL DDL queries.
 ```java
 spring.jpa.hibernate.ddl-auto=update
@@ -376,7 +377,7 @@ The request is directed from API Gateway into the Product Service and then retur
 
 The request is directed from API Gateway into the Customer Service and then return the result back to the API Gateway.
 
-#### 2. Request to Customer then Product Service (`GET /v1/customers/{customerId}/products`)
+#### 3. Request to Customer then Product Service (`GET /v1/customers/{customerId}/products`)
 ![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/customer-product.png)
 
 The request is directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway.
