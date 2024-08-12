@@ -1,7 +1,6 @@
 package com.example.product.data.repository;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.example.product.data.model.Product;
 import com.example.product.data.model.Status;
 
-public interface ProductRepository extends JpaRepository<Product, UUID> {
+public interface ProductRepository extends JpaRepository<Product, String> {
         
         // Find all the product that containing name with active status
         List<Product> findByNameContainingAndStatus(String name, Status status);

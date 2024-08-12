@@ -1,7 +1,5 @@
 package com.example.customer.dto;
 
-import java.util.UUID;
-
 import com.example.customer.data.model.Status;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
-    private UUID id;
+    private String id;
     private String name;
     private Double price;
     private Status status;

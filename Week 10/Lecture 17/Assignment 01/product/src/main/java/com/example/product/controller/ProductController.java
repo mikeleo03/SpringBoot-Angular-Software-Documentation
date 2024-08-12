@@ -1,6 +1,5 @@
 package com.example.product.controller;
 
-import java.util.UUID;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.product.data.model.CustomerProduct;
 import com.example.product.data.model.Status;
 import com.example.product.dto.ProductDTO;
 import com.example.product.dto.ProductSaveDTO;
@@ -69,6 +69,17 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
+    @Operation(summary = "Retrieve Products based on its ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Product retrieved successfully"),
+        @ApiResponse(responseCode = "204", description = "Product not found")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable String id) {
+        ProductDTO productDTO = productService.getProductById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+    }
+
     /**
      * Creates a new Product.
      *
@@ -99,7 +110,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductSaveDTO productSaveDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable String id, @Valid @RequestBody ProductSaveDTO productSaveDTO) {
         ProductDTO productDTO = productService.updateProduct(id, productSaveDTO);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
@@ -117,7 +128,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/active/{id}")
-    public ResponseEntity<ProductDTO> updateProductStatusActive(@PathVariable UUID id) {
+    public ResponseEntity<ProductDTO> updateProductStatusActive(@PathVariable String id) {
         ProductDTO productDTO = productService.updateProductStatus(id, Status.ACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
@@ -135,7 +146,7 @@ public class ProductController {
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/deactive/{id}")
-    public ResponseEntity<ProductDTO> updateProductStatusDeactive(@PathVariable UUID id) {
+    public ResponseEntity<ProductDTO> updateProductStatusDeactive(@PathVariable String id) {
         ProductDTO productDTO = productService.updateProductStatus(id, Status.DEACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(productDTO);
     }
@@ -155,7 +166,7 @@ public class ProductController {
         @ApiResponse(responseCode = "400", description = "Insufficient product quantity")
     })
     @PostMapping("/reduce-quantity")
-    public ResponseEntity<Void> reduceProductQuantity(@RequestParam UUID productId, @RequestParam int quantity) {
+    public ResponseEntity<Void> reduceProductQuantity(@RequestParam String productId, @RequestParam int quantity) {
         productService.reduceProductQuantity(productId, quantity);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -173,7 +184,7 @@ public class ProductController {
         @ApiResponse(responseCode = "204", description = "No products found for the customer")
     })
     @GetMapping("/by-customer")
-    public ResponseEntity<List<ProductDTO>> getProductsByCustomerId(@RequestParam UUID customerId) {
+    public ResponseEntity<List<ProductDTO>> getProductsByCustomerId(@RequestParam String customerId) {
         List<ProductDTO> products = productService.getProductsByCustomerId(customerId);
 
         if (products.isEmpty()) {
@@ -181,5 +192,23 @@ public class ProductController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
+
+    /**
+    ​ * Propagates the update of a {@link CustomerProduct} to the database.
+    ​ *
+    ​ * @param customerProduct The {@link CustomerProduct} object to be saved. This object should contain the updated details of the customer-product relationship.
+    ​ * @return A {@link ResponseEntity} with a status code of 201 (Created) upon successful propagation.
+    ​ * @apiNote This method is responsible for saving the updated {@link CustomerProduct} object to the database.
+    ​ *          It does not return any data in the response body.
+    ​ */
+    @Operation(summary = "Propagate update of CustomerProduct.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "CustomerProduct propagated successfully")
+    })
+    @PostMapping("/customer-products")
+    public ResponseEntity<Void> saveCustomerProduct(@RequestBody CustomerProduct customerProduct) {
+        productService.saveCustomerProduct(customerProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

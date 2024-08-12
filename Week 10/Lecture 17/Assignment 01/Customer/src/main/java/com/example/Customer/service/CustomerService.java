@@ -4,9 +4,9 @@ import com.example.customer.dto.CustomerDTO;
 import com.example.customer.dto.CustomerSaveDTO;
 import com.example.customer.dto.ProductDTO;
 import com.example.customer.dto.CustomerProductDTO;
+import com.example.customer.dto.CustomerProductSaveDTO;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,17 +17,17 @@ public interface CustomerService {
     Page<CustomerDTO> getAllCustomers(Pageable pageable);
 
     // Get customer by ID
-    CustomerDTO getCustomerById(UUID id);
+    CustomerDTO getCustomerById(String id);
 
     // Create a new customer
     CustomerDTO createCustomer(CustomerSaveDTO customerSaveDTO);
 
     // Update existing customer
-    CustomerDTO updateCustomer(UUID id, CustomerSaveDTO customerSaveDTO);
+    CustomerDTO updateCustomer(String id, CustomerSaveDTO customerSaveDTO);
 
     // Add a purchased product for a customer
-    CustomerProductDTO addProductToCustomer(UUID customerId, UUID productId);
+    CustomerProductDTO addProductToCustomer(CustomerProductSaveDTO customerProductSaveDTO);
 
     // Get all products bought by a customer
-    List<ProductDTO> getProductsByCustomer(UUID customerId);
+    List<ProductDTO> getProductsByCustomer(String customerId);
 }

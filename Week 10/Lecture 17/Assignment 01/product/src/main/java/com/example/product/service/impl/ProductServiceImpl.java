@@ -2,8 +2,8 @@ package com.example.product.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Collections;
 import java.util.UUID;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import com.example.product.data.model.CustomerProduct;
 import com.example.product.data.model.Product;
 import com.example.product.data.model.Status;
 import com.example.product.data.repository.CustomerProductRepository;
@@ -95,6 +96,12 @@ public class ProductServiceImpl implements ProductService {
         return products.map(productMapper::toShowDTO);
     }
 
+    @Override
+    public ProductDTO getProductById(String id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
+        return productMapper.toProductDTO(product);
+    }
+
     /**
      * Creates a new product based on the provided {@link ProductSaveDTO} and saves it to the database.
      *
@@ -108,6 +115,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStatus(Status.ACTIVE); // Ensure the product is set to active when saving
         product.setCreatedAt(new Date());
         product.setUpdatedAt(new Date());
+        product.setId(UUID.randomUUID().toString());
         Product savedProduct = productRepository.save(product);
         return productMapper.toProductDTO(savedProduct);
     }
@@ -121,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ResourceNotFoundException If the product with the given ID is not found in the database.
      */
     @Override
-    public ProductDTO updateProduct(UUID id, @Valid ProductSaveDTO productSaveDTO) {
+    public ProductDTO updateProduct(String id, @Valid ProductSaveDTO productSaveDTO) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
         product.setName(productSaveDTO.getName());
@@ -141,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ResourceNotFoundException If the product with the given ID is not found in the database.
      */
     @Override
-    public ProductDTO updateProductStatus(UUID id, Status status) {
+    public ProductDTO updateProductStatus(String id, Status status) {
         Product prodCheck = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
         if(status == prodCheck.getStatus()) {
@@ -160,7 +168,7 @@ public class ProductServiceImpl implements ProductService {
     
     @Override
     @Transactional
-    public void reduceProductQuantity(UUID productId, int quantity) {
+    public void reduceProductQuantity(String productId, int quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
@@ -173,9 +181,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductsByCustomerId(UUID customerId) {
+    public List<ProductDTO> getProductsByCustomerId(String customerId) {
         // Fetch the product IDs associated with the customer from a repository or database
-        List<UUID> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);
+        List<String> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);
 
         if (productIds.isEmpty()) {
             return Collections.emptyList();
@@ -185,5 +193,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllById(productIds).stream()
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveCustomerProduct(CustomerProduct customerProduct) {
+        customerProductRepository.save(customerProduct);
     }
 }

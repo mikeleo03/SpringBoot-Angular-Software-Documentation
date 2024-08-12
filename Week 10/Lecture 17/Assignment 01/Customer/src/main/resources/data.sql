@@ -1,7 +1,7 @@
 -- Initialize table with DDLs
 -- Create `Customer` table
 CREATE TABLE Customer (
-    ID VARCHAR(36) PRIMARY KEY,    -- Use VARCHAR for UUIDs
+    ID VARCHAR(36) PRIMARY KEY,    -- Use VARCHAR for Strings
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,

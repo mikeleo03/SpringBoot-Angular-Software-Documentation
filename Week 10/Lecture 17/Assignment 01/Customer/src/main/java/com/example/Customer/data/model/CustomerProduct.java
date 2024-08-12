@@ -1,12 +1,9 @@
 package com.example.customer.data.model;
 
 import java.util.Date;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,15 +18,14 @@ import lombok.NoArgsConstructor;
 public class CustomerProduct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID", columnDefinition = "VARCHAR(36)", updatable = false, nullable = false)
-    private UUID id;
+    private String id;
 
     @Column(name = "customerId", columnDefinition = "VARCHAR(36)", nullable = false)
-    private UUID customerId;
+    private String customerId;
 
     @Column(name = "productId", columnDefinition = "VARCHAR(36)", nullable = false)
-    private UUID productId;
+    private String productId;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;

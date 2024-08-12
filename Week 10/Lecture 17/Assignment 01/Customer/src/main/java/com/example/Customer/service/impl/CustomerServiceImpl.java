@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerById(UUID id) {
+    public CustomerDTO getCustomerById(String id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
         return customerMapper.toCustomerDTO(customer);
     }
@@ -54,12 +54,13 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(customerSaveDTO.getEmail());
         customer.setCreatedAt(new Date());
         customer.setUpdatedAt(new Date());
+        customer.setId(UUID.randomUUID().toString());
         Customer savedCustomer = customerRepository.save(customer);
         return customerMapper.toCustomerDTO(savedCustomer);
     }
 
     @Override
-    public CustomerDTO updateCustomer(UUID id, CustomerSaveDTO customerSaveDTO) {
+    public CustomerDTO updateCustomer(String id, CustomerSaveDTO customerSaveDTO) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
 
         customer.setFirstName(customerSaveDTO.getFirstName());
@@ -72,7 +73,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerProductDTO addProductToCustomer(UUID customerId, UUID productId) {
+    public CustomerProductDTO addProductToCustomer(CustomerProductSaveDTO customerProductSaveDTO) {
+        // Get IDs
+        String customerId = customerProductSaveDTO.getCustomerId();
+        String productId = customerProductSaveDTO.getProductId();
+        int quantity = customerProductSaveDTO.getQuantity();
+
         // Validate and retrieve the customer
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
@@ -86,16 +92,20 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         // Update the product quantity in Product service
-        productClient.reduceProductQuantity(productId, 1);
+        productClient.reduceProductQuantity(productId, quantity);
 
         // Save the customer-product relation
         CustomerProduct customerProduct = new CustomerProduct();
         customerProduct.setCustomerId(customerId);
         customerProduct.setProductId(productId);
-        customerProduct.setQuantity(1);  // 1 product is bought at a time
+        customerProduct.setQuantity(quantity);
         customerProduct.setPurchaseDate(new Date());
+        customerProduct.setId(UUID.randomUUID().toString());
 
         customerProductRepository.save(customerProduct);
+
+        // Send request to Product service to update CustomerProduct data
+        productClient.saveCustomerProduct(customerProduct);
 
         // Prepare the DTO to return
         CustomerProductDTO customerProductDTO = new CustomerProductDTO();
@@ -103,15 +113,15 @@ public class CustomerServiceImpl implements CustomerService {
         customerProductDTO.setCustomerName(customer.getFirstName() + " " + customer.getLastName());
         customerProductDTO.setProductId(productId);
         customerProductDTO.setProductName(product.getName());
-        customerProductDTO.setQuantity(1);
+        customerProductDTO.setQuantity(quantity);
         customerProductDTO.setPurchaseDate(new Date());
 
         return customerProductDTO;
     }
 
     @Override
-    public List<ProductDTO> getProductsByCustomer(UUID customerId) {
-        List<UUID> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);
+    public List<ProductDTO> getProductsByCustomer(String customerId) {
+        List<String> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);
 
         if (productIds.isEmpty()) {
             return Collections.emptyList();

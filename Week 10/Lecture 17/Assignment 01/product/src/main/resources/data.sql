@@ -1,7 +1,7 @@
 -- Initialize table with DDLs
 -- Create `Product` table
 CREATE TABLE Product (
-    ID VARCHAR(36) PRIMARY KEY,    -- Use VARCHAR for UUIDs
+    ID VARCHAR(36) PRIMARY KEY,    -- Use VARCHAR for Strings
     name VARCHAR(255) NOT NULL,
     price INT NOT NULL,
     status VARCHAR(50) NOT NULL,   -- Use VARCHAR instead of ENUM
