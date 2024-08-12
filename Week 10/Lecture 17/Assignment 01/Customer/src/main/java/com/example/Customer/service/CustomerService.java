@@ -13,10 +13,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
 
-    // Get all customers
+    // Retrieves a paginated list of all Customers
     Page<CustomerDTO> getAllCustomers(Pageable pageable);
 
-    // Get customer by ID
+    // Retrieves a Customer by its unique identifier
     CustomerDTO getCustomerById(String id);
 
     // Create a new customer
@@ -25,9 +25,9 @@ public interface CustomerService {
     // Update existing customer
     CustomerDTO updateCustomer(String id, CustomerSaveDTO customerSaveDTO);
 
-    // Add a purchased product for a customer
+    // Adds a product to a customer's list of products
     CustomerProductDTO addProductToCustomer(CustomerProductSaveDTO customerProductSaveDTO);
 
-    // Get all products bought by a customer
+    // Retrieves a list of products bought by a customer
     List<ProductDTO> getProductsByCustomer(String customerId);
 }

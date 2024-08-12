@@ -13,7 +13,7 @@ import com.example.customer.data.model.CustomerProduct;
 import com.example.customer.data.repository.CustomerProductRepository;
 import com.example.customer.data.repository.CustomerRepository;
 import com.example.customer.dto.*;
-import com.example.customer.exception.InsufficientProductQuantityException;
+import com.example.customer.exception.InsufficientQuantityException;
 import com.example.customer.exception.ResourceNotFoundException;
 import com.example.customer.mapper.CustomerMapper;
 import com.example.customer.service.CustomerService;
@@ -35,17 +35,36 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerProductRepository = customerProductRepository;
     }
 
+    /**
+     * Retrieves a paginated list of all Customers.
+     *
+     * @param pageable The pagination information, including the page number and size.
+     * @return A page of {@link CustomerDTO} objects representing the retrieved customers.
+     */
     @Override
     public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable).map(customerMapper::toCustomerDTO);
     }
 
+    /**
+     * Retrieves a Customer by its unique identifier.
+     *
+     * @param id The unique identifier of the customer to retrieve.
+     * @return A {@link CustomerDTO} representing the retrieved customer.
+     * @throws ResourceNotFoundException If the customer with the given ID is not found.
+     */
     @Override
     public CustomerDTO getCustomerById(String id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
         return customerMapper.toCustomerDTO(customer);
     }
 
+    /**
+     * Creates a new Customer.
+     *
+     * @param customerSaveDTO The {@link CustomerSaveDTO} object containing the details of the new customer to be created.
+     * @return A {@link CustomerDTO} representing the newly created customer.
+     */
     @Override
     public CustomerDTO createCustomer(CustomerSaveDTO customerSaveDTO) {
         Customer customer = new Customer();
@@ -59,6 +78,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toCustomerDTO(savedCustomer);
     }
 
+    /**
+     * Updates an existing Customer.
+     *
+     * @param id The unique identifier of the customer to update.
+     * @param customerSaveDTO The {@link CustomerSaveDTO} object containing the updated customer details.
+     * @return A {@link CustomerDTO} representing the updated customer.
+     * @throws ResourceNotFoundException If the customer with the given ID is not found.
+     */
     @Override
     public CustomerDTO updateCustomer(String id, CustomerSaveDTO customerSaveDTO) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND));
@@ -71,6 +98,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.toCustomerDTO(updatedCustomer);
     }
 
+    /**
+     * Adds a product to a customer's list of products.
+     *
+     * @param customerProductSaveDTO The {@link CustomerProductSaveDTO} object containing the customer and product information.
+     * @return A {@link CustomerProductDTO} representing the newly created customer-product relationship.
+     * @throws InsufficientQuantityException If the product's quantity is insufficient.
+     * @throws ResourceNotFoundException If the customer or product is not found.
+     */
     @Override
     @Transactional
     public CustomerProductDTO addProductToCustomer(CustomerProductSaveDTO customerProductSaveDTO) {
@@ -88,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         // Check if product is available in sufficient quantity
         if (product.getQuantity() <= 0) {
-            throw new InsufficientProductQuantityException("Insufficient quantity for product: " + product.getName());
+            throw new InsufficientQuantityException("Insufficient quantity for product: " + product.getName());
         }
 
         // Update the product quantity in Product service
@@ -119,6 +154,12 @@ public class CustomerServiceImpl implements CustomerService {
         return customerProductDTO;
     }
 
+    /**
+     * Retrieves a list of products bought by a customer.
+     *
+     * @param id The ID of the customer.
+     * @return A list of {@link ProductDTO} objects representing the customer's products.
+     */
     @Override
     public List<ProductDTO> getProductsByCustomer(String customerId) {
         List<String> productIds = customerProductRepository.findProductIdsByCustomerId(customerId);

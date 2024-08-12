@@ -1,9 +1,9 @@
 package com.example.product.service.impl;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,8 @@ import com.example.product.dto.ProductDTO;
 import com.example.product.dto.ProductSaveDTO;
 import com.example.product.dto.ProductSearchCriteriaDTO;
 import com.example.product.dto.ProductShowDTO;
-import com.example.product.exception.BadRequestException;
 import com.example.product.exception.DuplicateStatusException;
-import com.example.product.exception.InsufficientProductQuantityException;
+import com.example.product.exception.InsufficientQuantityException;
 import com.example.product.exception.ResourceNotFoundException;
 import com.example.product.mapper.ProductMapper;
 import com.example.product.service.ProductService;
@@ -96,6 +95,13 @@ public class ProductServiceImpl implements ProductService {
         return products.map(productMapper::toShowDTO);
     }
 
+    /**
+     * Retrieves a product by its unique identifier.
+     *
+     * @param id The unique identifier of the product to retrieve.
+     * @return A {@link ProductDTO} representing the product with its ID and other relevant details.
+     * @throws ResourceNotFoundException If the product with the given ID is not found.
+     */
     @Override
     public ProductDTO getProductById(String id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
@@ -107,7 +113,6 @@ public class ProductServiceImpl implements ProductService {
      *
      * @param productSaveDTO The data transfer object containing the details of the new product to be created.
      * @return A {@link ProductDTO} representing the newly created product with its ID and other relevant details.
-     * @throws BadRequestException If the provided Excel file is not in the correct format.
      */
     @Override
     public ProductDTO createProduct(@Valid ProductSaveDTO productSaveDTO) {
@@ -147,6 +152,7 @@ public class ProductServiceImpl implements ProductService {
      * @param status The new status of the product.
      * @return A {@link ProductDTO} representing the updated product with its ID and other relevant details.
      * @throws ResourceNotFoundException If the product with the given ID is not found in the database.
+     * @throws DuplicateStatusException If the product's status is already the same as the provided status.
      */
     @Override
     public ProductDTO updateProductStatus(String id, Status status) {
@@ -166,6 +172,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductDTO(updatedProduct);
     }
     
+    /**
+     * Reduces the quantity of a product in the database by the specified amount.
+     *
+     * @param productId The unique identifier of the product to reduce the quantity for.
+     * @param quantity The amount by which to reduce the product's quantity.
+     * @throws ResourceNotFoundException If the product with the given ID is not found in the database.
+     * @throws InsufficientQuantityException If the product's quantity is less than the specified amount.
+     */
     @Override
     @Transactional
     public void reduceProductQuantity(String productId, int quantity) {
@@ -173,13 +187,19 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
         if (product.getQuantity() < quantity) {
-            throw new InsufficientProductQuantityException("Insufficient quantity for product: " + product.getName());
+            throw new InsufficientQuantityException("Insufficient quantity for product: " + product.getName());
         }
 
         product.setQuantity(product.getQuantity() - quantity);
         productRepository.save(product);
     }
 
+    /**
+     * Retrieves a list of products associated with a specific customer.
+     *
+     * @param customerId The unique identifier of the customer whose products are to be retrieved.
+     * @return A list of {@link ProductDTO} representing the products associated with the customer.
+     */
     @Override
     public List<ProductDTO> getProductsByCustomerId(String customerId) {
         // Fetch the product IDs associated with the customer from a repository or database
@@ -195,8 +215,17 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Saves a new customer-product association to the database.
+     *
+     * @param customerProduct The {@link CustomerProduct} object containing the details of the new association to be saved.
+     * @throws IllegalArgumentException If the provided {@link CustomerProduct} object is null.
+     */
     @Override
     public void saveCustomerProduct(CustomerProduct customerProduct) {
+        if (customerProduct == null) {
+            throw new IllegalArgumentException("CustomerProduct object cannot be null.");
+        }
         customerProductRepository.save(customerProduct);
     }
 }
