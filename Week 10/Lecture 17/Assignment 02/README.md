@@ -259,6 +259,14 @@ This implementation provides a secure way to control access to my microservices 
 
 ---
 
+### 🏛️ Project Architecture
+<a href="https://raw.githubusercontent.com//affandyfandy/java-leon/tree/Week_10/Week%2010/Lecture%2017/Assignment%2002/img/architecture.png">
+    <img src="/Week 10/Lecture 17/Assignment 02/img/architecture.png" target="_blank" />
+    </a>
+<br />
+
+> Click image to enlarge.
+
 ### 🌳 Project Structure
 #### 1. Product Service
 ```bash
@@ -572,7 +580,13 @@ Access the swagger [here](http://localhost:8082/swagger-ui/index.html)
 
 
 ### 🚀 Demonstration
-This demonstration will demo request which directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway. All the demo will use (`GET /v1/customers/{customerId}/products`) to the Gateway [localhost:8080](http://localhost:8080).
+This demonstration will demo request which directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway. All the demo will use (`GET /v1/customers/{customerId}/products`) to the Gateway [localhost:8080](http://localhost:8080). 
+
+Here is the sequence diagram of the flow.
+<a href="https://raw.githubusercontent.com//affandyfandy/java-leon/tree/Week_10/Week%2010/Lecture%2017/Assignment%2002/img/sequence.png">
+    <img src="/Week 10/Lecture 17/Assignment 02/img/sequence.png" target="_blank" />
+</a>
+> Click image to enlarge.
 
 #### 1. Without "api-key"
 ![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/without.png)
