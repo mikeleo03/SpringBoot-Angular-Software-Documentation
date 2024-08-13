@@ -1,50 +1,226 @@
 # 👨🏻‍🏫 Lecture 17 - Microservices: Spring Cloud Gateway
 > This repository is created as a part of the assignment for Lecture 17 - Microservices: Spring Cloud Gateway
 
-## 💭 Assignment 01 - Spring Cloud Gateway
+## 🔐 Assignment 02 - Gateway Authentication Filter
 
 ### 🧐 Detailed Overview
 
-**Spring Cloud Gateway** is an API Gateway built on top of Spring WebFlux, providing a simple yet powerful way to route and manage traffic to your microservices. It offers features like path rewriting, load balancing, request rate limiting, and more. As a reactive gateway, it efficiently handles concurrent requests, making it an excellent choice for microservices architectures.
-
-### 🔎 Why Use Spring Cloud Gateway?
-
-- **Routing and Load Balancing:** Automatically route requests to appropriate services and distribute load evenly across instances.
-- **Security:** Implement security features like OAuth2 authentication at the gateway level.
-- **Monitoring and Logging:** Easily monitor and log requests passing through the gateway.
-- **Transformation:** Modify incoming and outgoing requests or responses on the fly.
+In this task, i'm adding an authentication layer to my microservices architecture using Spring Cloud Gateway. The goal is to ensure that each request passing through the gateway includes a valid "api-key" in the header. This involves:
+1. **Adding a filter to the Gateway**: This filter will intercept incoming requests and verify if they contain the "api-key" header. If the header is present, it will forward the request to an authentication service to validate the key.
+2. **Creating an Authentication Service**: This service will store the valid "api-key(s)" in a database and handle the validation logic when the Gateway calls it.
+3. **Configuring the "api-key" in a Database**: I store the valid "api-key(s)" in a database table, which the authentication service will query to validate incoming requests.
 
 ### 🛠️ Implementation Details
 
-1. **Setting Up the Spring Cloud Gateway Project**
+1. **Setting Up the Authentication Service Project**
 
-   First, create a new Spring Boot project for the gateway service. Add the necessary dependencies in your `pom.xml`:
+    First, create a new Spring Boot project for the auth service. Add the necessary dependencies in the `pom.xml`:
    
-   ```xml
-   <dependencies>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-webflux</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.cloud</groupId>
-           <artifactId>spring-cloud-starter-gateway</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.cloud</groupId>
-           <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-actuator</artifactId>
-       </dependency>
-   </dependencies>
-   ```
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    ```
 
-2. **Configuring the `application.yml`**
+2. **Create the Authentication Service**
 
-   Place the `application.yml` in the `src/main/resources` directory. This file defines the gateway routes and configurations. Here’s an example configuration:
-   
+    This service will manage and validate the "api-key" stored in the database.
+
+    **a. Create the API Key Entity and Repository:**
+
+    Here is the detail of [API Key Entity](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/data/model/ApiKey.java)
+    
+    ```java
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Entity
+    @Table(name = "ApiKey")
+    public class ApiKey {
+
+        @Id
+        @Column(name = "ID", columnDefinition = "BIGINT", updatable = false, nullable = false)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        private String apiKey;
+        private String description;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private boolean active;
+    }
+    ```
+
+    Here is the detail of [API Key Repository](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/data/repository/ApiKeyRepository.java)
+
+    ```java
+    @Repository
+    public interface ApiKeyRepository extends JpaRepository<ApiKey, Long> {
+        
+        // Get the first API key, order by ID 
+        Optional<ApiKey> findFirstByOrderById();
+
+        // Find the first active API key
+        Optional<ApiKey> findFirstByActiveTrueOrderById(); 
+    }
+    ```
+
+    **b. Create the Authentication Service:**
+
+    Here is the detail of [API Key Service](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/service/ApiKeyService.java)
+
+    ```java
+    @Service
+    public class ApiKeyServiceImpl implements ApiKeyService {
+
+        private final ApiKeyRepository apiKeyRepository;
+
+        @Autowired
+        public ApiKeyServiceImpl(ApiKeyRepository apiKeyRepository) {
+            this.apiKeyRepository = apiKeyRepository;
+        }
+
+        @Override
+        public boolean isValidApiKey(String requestApiKey) {
+            // Check from the repo
+            Optional<ApiKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
+            if (apiKeyOpt.isPresent()) {
+                // Check if it's the same
+                String storedApiKey = apiKeyOpt.get().getApiKey();
+                return storedApiKey.equals(requestApiKey);
+            }
+            return false;
+        }
+    }
+    ```
+
+    **c. Create the Controller:**
+
+    Here is the detail of [API Key Controller](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/controller/ApiKeyController.java)
+
+    ```java
+    @RestController
+    @RequestMapping("/api/v1/auth")
+    @Validated
+    public class ApiKeyController {
+
+        private final ApiKeyService apiKeyService;
+
+        @Autowired
+        public ApiKeyController(ApiKeyService apiKeyService) {
+            this.apiKeyService = apiKeyService;
+        }
+
+        @Operation(summary = "Validate API Key.")
+        @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "API Key is valid"),
+            @ApiResponse(responseCode = "401", description = "API Key is invalid")
+        })
+        @GetMapping("/validate")
+        public ResponseEntity<Boolean> validateApiKey(@RequestParam String key) {
+            boolean isValid = apiKeyService.isValidApiKey(key);
+            return ResponseEntity.ok(isValid);
+        }
+    }
+    ```
+
+3. **Configure the Gateway with the Filter**
+
+    **a. Create the Filter:**
+
+    I create a custom filter to intercept requests and validate the "api-key." in my Gateway project.
+
+    Here is the detail of [API Filter](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/java/com/example/gateway/ApiKeyGatewayFilterFactory.java)
+
+    ```java
+    @Component
+    public class ApiKeyGatewayFilterFactory extends AbstractGatewayFilterFactory<ApiKeyGatewayFilterFactory.Config> {
+
+        private static final String API_KEY_HEADER = "api-key";
+        private final AuthClient authClient;
+
+        @Autowired
+        public ApiKeyGatewayFilterFactory(AuthClient authClient) {
+            super(Config.class);
+            this.authClient = authClient;
+        }
+
+        @Override
+        public GatewayFilter apply(Config config) {
+            return (exchange, chain) -> {
+                String apiKey = exchange.getRequest().getHeaders().getFirst(API_KEY_HEADER);
+                if (apiKey == null) {
+                    return Mono.just(exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)).then();
+                }
+
+                return authClient.validateApiKey(apiKey)
+                    .flatMap(isValid -> {
+                        if (!isValid) {
+                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                            return Mono.empty();
+                        } else {
+                            return chain.filter(exchange);
+                        }
+                    });
+            };
+        }
+
+        @Override
+        public Config newConfig() {
+            return new Config();
+        }
+
+        public static class Config {
+            // Configuration properties (if any) can be added here
+        }
+    }
+    ```
+
+    **b. Create the AuthClient:**
+
+    I create an AuthClient to get and validate whether the given API Key is valid or not to the authentication service.
+
+    Here is the detail of [AuthClient](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/java/com/example/gateway/client/AuthClient.java)
+
+    ```java
+    @Service
+    public class AuthClient {
+
+        private final WebClient webClient;
+
+        @Autowired
+        public AuthClient(WebClient.Builder webClientBuilder) {
+            this.webClient = webClientBuilder.baseUrl("http://localhost:8083/api/v1/auth").build();
+        }
+
+        public Mono<Boolean> validateApiKey(String apiKey) {
+            return webClient.get()
+                    .uri("/validate?key=" + apiKey)
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .onErrorResume(WebClientResponseException.class, ex -> {
+                        if (ex.getStatusCode().is4xxClientError()) {
+                            return Mono.just(false);
+                        }
+                        return Mono.error(ex);
+                    });
+        }        
+    }
+    ```
+
+    **c. Register the Filter:**
+
+    In the [`application.yml`](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/resources/application.yml) of the Gateway service, ensure that the custom filter is registered:
+
     ```yaml
     server:
         port: 8080  # Gateway server port
@@ -53,64 +229,33 @@
         application:
             name: gateway-service
 
-    cloud:
-        gateway:
+        cloud:
+            gateway:
             routes:
-                -  id: product-service
-                   uri: http://localhost:8081
-                   predicates:
-                       - Path=/api/v1/products/**
+                - id: product-service
+                uri: http://localhost:8081
+                predicates:
+                    - Path=/api/v1/products/**
+                filters:
+                    - name: ApiKey
 
-                -  id: customer-service
-                   uri: http://localhost:8082
-                   predicates:
-                       - Path=/api/v1/customers/**
-    ```
-
-   - **`product-service` Route:** Maps all requests with `/api/v1/products/**` to the Product service running on port `8081`.
-   - **`customer-service` Route:** Maps all requests with `/api/v1/customers/**` to the Customer service running on port `8082`.
-
-3. **Running the Gateway**
-
-   Ensure that Product service (8081), and Customer service (8082) are running. Then start the API Gateway service. The gateway will automatically route incoming requests to the appropriate service based on the path.
-
-5. **Handling Errors and Monitoring**
-
-   Spring Cloud Gateway allows you to customize error responses and integrate with monitoring tools like Spring Boot Actuator. For instance, you can handle errors like insufficient product quantity in the Product service and propagate these errors back through the gateway.
-
-   You can also expose gateway metrics by enabling Actuator:
-   
-    ```yaml
+                - id: customer-service
+                uri: http://localhost:8082
+                predicates:
+                    - Path=/api/v1/customers/**
+                filters:
+                    - name: ApiKey
+                    
     management:
         endpoints:
             web:
-                exposure:
+            exposure:
                 include: "*"
     ```
 
-   This provides insights into gateway performance, routing, and more.
-
-### 📝 Example Code Implementation
-
-```java
-package com.example.gateway;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class ApiGatewayApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ApiGatewayApplication.class, args);
-    }
-}
-```
-
-**`ApiGatewayApplication`:** The main class to start the Spring Boot application for the gateway.
-
 ### 📚 Summary
 
-Spring Cloud Gateway serves as the entry point to your microservices, handling requests, applying filters, and managing traffic efficiently. By configuring routes and leveraging its robust feature set, you can build a scalable and secure microservices architecture.
+This implementation provides a secure way to control access to my microservices by verifying an "api-key" through the Spring Cloud Gateway. The Authentication service centralizes the management of valid API keys, making it easier to maintain and update keys as needed.
 
 ---
 
@@ -225,11 +370,45 @@ gateway
 │   └── maven-wrapper.properties
 ├── src/main/
 │   ├── java/com/example/gateway/
+│   │   ├── client/
+│   │   │   └── AuthClient.java
+│   │   ├── ApiKeyGatewayFilterFactory.java
 │   │   └── GatewayApplication.java
 │   └── resources/
 │       ├── application.properties
 │       └── application.yml
 ├── .gitignore
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── run.bat
+└── run.sh
+```
+
+#### 4. Authentication Service
+```bash
+authentication
+├── .mvn/wrapper/
+│   └── maven-wrapper.properties
+├── src/main/
+│   ├── java/com/example/authentication/
+│   │   ├── controller/
+│   │   │   └── ApiKeyController.java
+│   │   ├── data/
+│   │   │   ├── model/
+│   │   │   │   └── ApiKey.java
+│   │   │   └── repository/
+│   │   │       └── ApiKeyRepository.java
+│   │   ├── service/
+│   │   │   ├── impl/
+│   │   │   │   └── ApikeyServiceImpl.java
+│   │   │   └── ApiKeyService.java
+│   │   └── AuthenticationApplication.java
+│   └── resources/
+│       ├── application.properties
+│       └── data.sql
+├── .gitignore
+├── env.properties
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
@@ -271,7 +450,7 @@ CREATE TABLE CustomerProduct (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2001/product/src/main/resources/data.sql). Here is the query to drop the database.
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/product/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week10_product;
@@ -307,13 +486,39 @@ CREATE TABLE CustomerProduct (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2001/customer/src/main/resources/data.sql). Here is the query to drop the database.
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/customer/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week10_customer;
 ```
 
-#### 3. Application Properties
+#### 3. Authentication Service
+```sql
+-- Create the database
+CREATE DATABASE week10_auth;
+
+-- Use the database
+USE week10_auth;
+
+-- Initialize table with DDLs
+-- Create `ApiKey` table
+CREATE TABLE ApiKey (
+    ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    api_key VARCHAR(255) NOT NULL,
+    description VARCHAR(255),         -- Description or label for the API key
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp of creation
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Timestamp of last update
+    active BOOLEAN DEFAULT TRUE       -- Status to enable or disable the API key
+);
+```
+
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/resources/data.sql). Here is the query to drop the database.
+```sql
+-- Drop the database
+DROP DATABASE IF EXISTS week10_auth;
+```
+
+#### 4. Application Properties
 Don't forget to add this to re-update the SQL DDL queries.
 ```java
 spring.jpa.hibernate.ddl-auto=update
@@ -333,7 +538,7 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
     $ cd <dir>
     ```
 2. Make sure you have maven installed on my computer, use `mvn -v` to check the version.
-3. Setup your credential. You can configure it by creating file `env.properties` on the **root of the each service project (customer and product)**, aligned with pom.xml, then fill it with this format.
+3. Setup your credential. You can configure it by creating file `env.properties` on the **root of the each service project (customer, product, and authentication)**, aligned with pom.xml, then fill it with this format.
     ```java
     DB_DATABASE=<your database url>
     DB_USER=<your database username>
@@ -350,7 +555,7 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
     $ ./run.sh
     ```
 
-If all the instruction is well executed, The API Gateway will be executed on [localhost:8080](http://localhost:8080), Product Service will be on [localhost:8081](http://localhost:8081), and Customer Service will be on [localhost:8082](http://localhost:8082). Go check them out to see that the Cloud Gateway is now works.
+If all the instruction is well executed, The API Gateway will be executed on [localhost:8080](http://localhost:8080), Product Service will be on [localhost:8081](http://localhost:8081), Customer Service will be on [localhost:8082](http://localhost:8082), and Authentication Service will be on [localhost:8083](http://localhost:8083). Go check them out to see that the Cloud Gateway is now works.
 
 ### 🔑 List of Endpoints
 #### 1. Product Service ([localhost:8081](http://localhost:8081))
@@ -367,17 +572,16 @@ Access the swagger [here](http://localhost:8082/swagger-ui/index.html)
 
 
 ### 🚀 Demonstration
-#### 1. Direct request to Product Service (`GET /v1/products/{productId}`)
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/dir-product.png)
+This demonstration will demo request which directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway. All the demo will use (`GET /v1/customers/{customerId}/products`) to the Gateway [localhost:8080](http://localhost:8080).
 
-The request is directed from API Gateway into the Product Service and then return the result back to the API Gateway.
+#### 1. Without "api-key"
+![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/without.png)
 
-#### 2. Direct request to Customer Service (`GET /v1/customers/{customerId}`)
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/dir-customer.png)
+#### 2. With invalid API-key
+![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/invalid.png)
 
-The request is directed from API Gateway into the Customer Service and then return the result back to the API Gateway.
+#### 3. With valid API-key but inactive
+![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/inactive.png)
 
-#### 3. Request to Customer then Product Service (`GET /v1/customers/{customerId}/products`)
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/customer-product.png)
-
-The request is directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway.
+#### 4. With valid and active API-key
+![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/active.png)
