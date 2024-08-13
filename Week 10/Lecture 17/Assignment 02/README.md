@@ -587,6 +587,7 @@ Here is the sequence diagram of the flow.
 <a href="https://raw.githubusercontent.com/affandyfandy/java-leon/Week_10/Week%2010/Lecture%2017/Assignment%2002/img/sequence.png">
     <img src="/Week 10/Lecture 17/Assignment 02/img/sequence.png" target="_blank" />
 </a>
+
 > Click image to enlarge.
 
 #### 1. Without "api-key"
