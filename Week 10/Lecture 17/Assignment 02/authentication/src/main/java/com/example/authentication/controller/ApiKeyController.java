@@ -1,7 +1,6 @@
 package com.example.authentication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +25,14 @@ public class ApiKeyController {
     public ApiKeyController(ApiKeyService apiKeyService) {
         this.apiKeyService = apiKeyService;
     }
-    
+
     /**
      * Validates the provided API Key.
      *
      * @param key The API Key to be validated.
      *
-     * @return A ResponseEntity containing a 200 status code if the API Key is valid,
-     *         or a 401 status code if the API Key is invalid.
+     * @return A ResponseEntity containing true if the API Key is valid,
+     *         or false if the API Key is invalid.
      */
     @Operation(summary = "Validate API Key.")
     @ApiResponses(value = {
@@ -41,12 +40,9 @@ public class ApiKeyController {
         @ApiResponse(responseCode = "401", description = "API Key is invalid")
     })
     @GetMapping("/validate")
-    public ResponseEntity<Void> validateApiKey(@RequestParam String key) {
-        if (apiKeyService.isValidApiKey(key)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<Boolean> validateApiKey(@RequestParam String key) {
+        boolean isValid = apiKeyService.isValidApiKey(key);
+        return ResponseEntity.ok(isValid);
     }
 }
 
