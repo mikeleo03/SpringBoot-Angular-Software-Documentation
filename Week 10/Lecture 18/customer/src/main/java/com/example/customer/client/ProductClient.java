@@ -13,15 +13,37 @@ import com.example.customer.dto.ProductDTO;
 import com.example.customer.exception.BadRequestException;
 import com.example.customer.exception.InsufficientQuantityException;
 import com.example.customer.exception.ResourceNotFoundException;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 
 @Service
 public class ProductClient {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
+    private final EurekaClient eurekaClient;
+    private static final String SERVICE_NAME = "product-service";
 
     @Autowired
-    public ProductClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081/api/v1/products").build();
+    public ProductClient(EurekaClient eurekaClient, WebClient.Builder webClientBuilder) {
+        this.eurekaClient = eurekaClient;
+        this.webClientBuilder = webClientBuilder;
+    }
+
+    /**
+     * Retrieves the base URL of the Product service from Eureka.
+     *
+     * @return The base URL as a string.
+     */
+    private String getServiceUrl() {
+        InstanceInfo service = eurekaClient
+            .getApplication(SERVICE_NAME)
+            .getInstances()
+            .get(0);
+
+        String hostName = service.getHostName();
+        int port = service.getPort();
+
+        return "http://" + hostName + ":" + port + "/api/v1/products";
     }
 
     /**
@@ -34,7 +56,8 @@ public class ProductClient {
      */
     public ProductDTO getProductById(String productId) {
         try {
-            return this.webClient.get()
+            WebClient webClient = webClientBuilder.baseUrl(getServiceUrl()).build();
+            return webClient.get()
                 .uri("/{id}", productId)
                 .retrieve()
                 .bodyToMono(ProductDTO.class)
@@ -60,7 +83,8 @@ public class ProductClient {
      */
     public List<ProductDTO> getProductsByCustomerId(String customerId) {
         try {
-            return this.webClient.get()
+            WebClient webClient = webClientBuilder.baseUrl(getServiceUrl()).build();
+            return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/by-customer")
                         .queryParam("customerId", customerId)
@@ -90,7 +114,8 @@ public class ProductClient {
      */
     public void reduceProductQuantity(String productId, int quantity) {
         try {
-            this.webClient.post()
+            WebClient webClient = webClientBuilder.baseUrl(getServiceUrl()).build();
+            webClient.post()
                 .uri(uriBuilder -> uriBuilder
                     .path("/reduce-quantity")
                     .queryParam("productId", productId)
@@ -118,7 +143,8 @@ public class ProductClient {
      */
     public void saveCustomerProduct(CustomerProduct customerProduct) {
         try {
-            this.webClient.post()
+            WebClient webClient = webClientBuilder.baseUrl(getServiceUrl()).build();
+            webClient.post()
                 .uri("/customer-products")
                 .bodyValue(customerProduct)
                 .retrieve()
@@ -129,6 +155,12 @@ public class ProductClient {
         }
     }
 
+    /**
+     * Extracts the error message from the response body.
+     *
+     * @param responseBody The response body as a string.
+     * @return The extracted error message.
+     */
     private String extractErrorMessage(String responseBody) {
         if (StringUtils.hasText(responseBody) && responseBody.contains("error")) {
             // Extract the value of the "error" field from the JSON response
