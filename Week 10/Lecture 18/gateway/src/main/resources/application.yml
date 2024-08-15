@@ -2,21 +2,18 @@ server:
   port: 8080  # Gateway server port
 
 spring:
-  application:
-    name: gateway-service
-
   cloud:
     gateway:
       routes:
         - id: product-service
-          uri: http://localhost:8081
+          uri: lb://product-service
           predicates:
             - Path=/api/v1/products/**
           filters:
             - name: ApiKey
 
         - id: customer-service
-          uri: http://localhost:8082
+          uri: lb://customer-service
           predicates:
             - Path=/api/v1/customers/**
           filters:
