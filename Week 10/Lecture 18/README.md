@@ -1,267 +1,196 @@
-# 👨🏻‍🏫 Lecture 17 - Microservices: Spring Cloud Gateway
-> This repository is created as a part of the assignment for Lecture 17 - Microservices: Spring Cloud Gateway
+# 👨🏻‍🏫 Lecture 18 - Microservices: Discovery Service Integration
+> This repository is created as a part of the assignment for Lecture 18 - Microservices: Discovery Service Integration
 
-## 🔐 Assignment 02 - Gateway Authentication Filter
+## 👀 Assignment 01 - Updating Microservices to Use Discovery Service
 
 ### 🧐 Detailed Overview
+In this assignment, i will update the existing microservices architecture to incorporate a discovery service. This will allow the services to register themselves and discover other services dynamically without needing to hard-code their locations.
 
-In this task, i'm adding an authentication layer to my microservices architecture using Spring Cloud Gateway. The goal is to ensure that each request passing through the gateway includes a valid "api-key" in the header. This involves:
-1. **Adding a filter to the Gateway**: This filter will intercept incoming requests and verify if they contain the "api-key" header. If the header is present, it will forward the request to an authentication service to validate the key.
-2. **Creating an Authentication Service**: This service will store the valid "api-key(s)" in a database and handle the validation logic when the Gateway calls it.
-3. **Configuring the "api-key" in a Database**: I store the valid "api-key(s)" in a database table, which the authentication service will query to validate incoming requests.
+The main components i will focus on are:
+1. **Discovery Service (Eureka Server)**
+2. **Service Registration (Eureka Client) with Dynamic Port Allocation**
+3. **Integrating Discovery Service with API Gateway**
 
 ### 🛠️ Implementation Details
 
-1. **Setting Up the Authentication Service Project**
-
-    First, create a new Spring Boot project for the auth service. Add the necessary dependencies in the `pom.xml`:
+1. **Setting Up the Discovery Service (Eureka Server)**
    
-    ```xml
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
+   I will use Spring Cloud Netflix Eureka as the discovery service. This service will act as a registry where all the microservices will register themselves.
 
-2. **Create the Authentication Service**
+    - **Add Eureka Server dependency in `pom.xml`:**
+   
+        ```xml
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        ```
 
-    This service will manage and validate the "api-key" stored in the database.
+   - **Configure Eureka Server in the main application class:**
+   
+        ```java
+        @SpringBootApplication
+        @EnableEurekaServer
+        public class DiscoveryApplication {
 
-    **a. Create the API Key Entity and Repository:**
-
-    Here is the detail of [API Key Entity](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/data/model/ApiKey.java)
-    
-    ```java
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Entity
-    @Table(name = "ApiKey")
-    public class ApiKey {
-
-        @Id
-        @Column(name = "ID", columnDefinition = "BIGINT", updatable = false, nullable = false)
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private String apiKey;
-        private String description;
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
-        private boolean active;
-    }
-    ```
-
-    Here is the detail of [API Key Repository](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/data/repository/ApiKeyRepository.java)
-
-    ```java
-    @Repository
-    public interface ApiKeyRepository extends JpaRepository<ApiKey, Long> {
-        
-        // Get the first API key, order by ID 
-        Optional<ApiKey> findFirstByOrderById();
-
-        // Find the first active API key
-        Optional<ApiKey> findFirstByActiveTrueOrderById(); 
-    }
-    ```
-
-    **b. Create the Authentication Service:**
-
-    Here is the detail of [API Key Service](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/service/ApiKeyService.java)
-
-    ```java
-    @Service
-    public class ApiKeyServiceImpl implements ApiKeyService {
-
-        private final ApiKeyRepository apiKeyRepository;
-
-        @Autowired
-        public ApiKeyServiceImpl(ApiKeyRepository apiKeyRepository) {
-            this.apiKeyRepository = apiKeyRepository;
-        }
-
-        @Override
-        public boolean isValidApiKey(String requestApiKey) {
-            // Check from the repo
-            Optional<ApiKey> apiKeyOpt = apiKeyRepository.findFirstByActiveTrueOrderById();
-            if (apiKeyOpt.isPresent()) {
-                // Check if it's the same
-                String storedApiKey = apiKeyOpt.get().getApiKey();
-                return storedApiKey.equals(requestApiKey);
+            public static void main(String[] args) {
+                SpringApplication.run(DiscoveryApplication.class, args);
             }
-            return false;
         }
-    }
+        ```
+
+   - **Add configuration in `application.properties`:**
+   
+        ```yaml
+        # Port
+        server.port=8761
+
+        # Eureka setup
+        eureka.client.register-with-eureka=false
+        eureka.client.fetch-registry=false
+        ```
+
+   This configuration sets up the Eureka Server on port `8761`.
+
+2. **Registering Microservices with Eureka (Eureka Client)**
+
+   Each microservice needs to register itself with the Eureka Server so that it can be discovered by other services.
+
+   - **Add Eureka Client dependency in `pom.xml`:**
+   
+     ```xml
+     <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+     </dependency>
+     ```
+
+    - **Configure Eureka Client in the microservices' main application class:**
+   
+        For this explanation on Product Service
+        
+        ```java
+        @SpringBootApplication
+        @EnableDiscoveryClient
+        public class ProductApplication {
+            public static void main(String[] args) {
+                SpringApplication.run(ProductApplication.class, args);
+            }
+        }
+        ```
+
+   - **Add configuration in `application.properties` for each microservice:**
+   
+        ```yaml
+        # Port
+        server.port=0
+
+        # Eureka setup
+        eureka.instance.hostname=localhost
+        eureka.instance.instance-id=${spring.application.name}
+        ```
+
+   Repeat similar steps for other microservices (e.g., `customer-service`, etc.), changing the `server.port` to 0 to make it allocated dynamically and `spring.application.name` accordingly to highlight the service.
+
+3. **Using Discovery Client for Service Communication**
+
+   Once the microservices are registered with Eureka, i can use Spring Cloud's `DiscoveryClient` to dynamically discover services.
+
+    - **Example of using `Eureka` in ProductClient for Customer Service:**
+   
+        ```java
+        @Service
+        public class ProductClient {
+
+            private final WebClient.Builder webClientBuilder;
+            private final EurekaClient eurekaClient;
+            private static final String SERVICE_NAME = "product-service";
+
+            @Autowired
+            public ProductClient(EurekaClient eurekaClient, WebClient.Builder webClientBuilder) {
+                this.eurekaClient = eurekaClient;
+                this.webClientBuilder = webClientBuilder;
+            }
+
+            /**
+            * Retrieves the base URL of the Product service from Eureka.
+            *
+            * @return The base URL as a string.
+            */
+            private String getServiceUrl() {
+                InstanceInfo service = eurekaClient
+                    .getApplication(SERVICE_NAME)
+                    .getInstances()
+                    .get(0);
+
+                String hostName = service.getHostName();
+                int port = service.getPort();
+
+                return "http://" + hostName + ":" + port + "/api/v1/products";
+            }
+        }
+        ```
+
+    This allows us to fetch the available instances of a service dynamically.
+
+4. **Integrating the gateway with discover service**
+
+    Here is the setup for `application.properties`:
+    ```xml
+    # Eureka setup
+    eureka.instance.hostname=localhost
+    eureka.instance.instance-id=${spring.application.name}
+
+    spring.cloud.gateway.discovery.locator.enabled=true
+    spring.cloud.gateway.discovery.locator.lower-case-service-id=true
     ```
 
-    **c. Create the Controller:**
-
-    Here is the detail of [API Key Controller](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/java/com/example/authentication/controller/ApiKeyController.java)
-
-    ```java
-    @RestController
-    @RequestMapping("/api/v1/auth")
-    @Validated
-    public class ApiKeyController {
-
-        private final ApiKeyService apiKeyService;
-
-        @Autowired
-        public ApiKeyController(ApiKeyService apiKeyService) {
-            this.apiKeyService = apiKeyService;
-        }
-
-        @Operation(summary = "Validate API Key.")
-        @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "API Key is valid"),
-            @ApiResponse(responseCode = "401", description = "API Key is invalid")
-        })
-        @GetMapping("/validate")
-        public ResponseEntity<Boolean> validateApiKey(@RequestParam String key) {
-            boolean isValid = apiKeyService.isValidApiKey(key);
-            return ResponseEntity.ok(isValid);
-        }
-    }
-    ```
-
-3. **Configure the Gateway with the Filter**
-
-    **a. Create the Filter:**
-
-    I create a custom filter to intercept requests and validate the "api-key." in my Gateway project.
-
-    Here is the detail of [API Filter](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/java/com/example/gateway/ApiKeyGatewayFilterFactory.java)
-
-    ```java
-    @Component
-    public class ApiKeyGatewayFilterFactory extends AbstractGatewayFilterFactory<ApiKeyGatewayFilterFactory.Config> {
-
-        private static final String API_KEY_HEADER = "api-key";
-        private final AuthClient authClient;
-
-        @Autowired
-        public ApiKeyGatewayFilterFactory(AuthClient authClient) {
-            super(Config.class);
-            this.authClient = authClient;
-        }
-
-        @Override
-        public GatewayFilter apply(Config config) {
-            return (exchange, chain) -> {
-                String apiKey = exchange.getRequest().getHeaders().getFirst(API_KEY_HEADER);
-                if (apiKey == null) {
-                    return Mono.just(exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)).then();
-                }
-
-                return authClient.validateApiKey(apiKey)
-                    .flatMap(isValid -> {
-                        if (!isValid) {
-                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                            return Mono.empty();
-                        } else {
-                            return chain.filter(exchange);
-                        }
-                    });
-            };
-        }
-
-        @Override
-        public Config newConfig() {
-            return new Config();
-        }
-
-        public static class Config {
-            // Configuration properties (if any) can be added here
-        }
-    }
-    ```
-
-    **b. Create the AuthClient:**
-
-    I create an AuthClient to get and validate whether the given API Key is valid or not to the authentication service.
-
-    Here is the detail of [AuthClient](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/java/com/example/gateway/client/AuthClient.java)
-
-    ```java
-    @Service
-    public class AuthClient {
-
-        private final WebClient webClient;
-
-        @Autowired
-        public AuthClient(WebClient.Builder webClientBuilder) {
-            this.webClient = webClientBuilder.baseUrl("http://localhost:8083/api/v1/auth").build();
-        }
-
-        public Mono<Boolean> validateApiKey(String apiKey) {
-            return webClient.get()
-                    .uri("/validate?key=" + apiKey)
-                    .retrieve()
-                    .bodyToMono(Boolean.class)
-                    .onErrorResume(WebClientResponseException.class, ex -> {
-                        if (ex.getStatusCode().is4xxClientError()) {
-                            return Mono.just(false);
-                        }
-                        return Mono.error(ex);
-                    });
-        }        
-    }
-    ```
-
-    **c. Register the Filter:**
-
-    In the [`application.yml`](/Week%2010/Lecture%2017/Assignment%2002/gateway/src/main/resources/application.yml) of the Gateway service, ensure that the custom filter is registered:
-
-    ```yaml
+    And this is for `application.yml`:
+    ```xml
     server:
         port: 8080  # Gateway server port
 
     spring:
-        application:
-            name: gateway-service
-
         cloud:
             gateway:
-            routes:
-                - id: product-service
-                uri: http://localhost:8081
-                predicates:
-                    - Path=/api/v1/products/**
-                filters:
-                    - name: ApiKey
+                routes:
+                    - id: product-service
+                    uri: lb://product-service
+                    predicates:
+                        - Path=/api/v1/products/**
+                    filters:
+                        - name: ApiKey
 
-                - id: customer-service
-                uri: http://localhost:8082
-                predicates:
-                    - Path=/api/v1/customers/**
-                filters:
-                    - name: ApiKey
-                    
+                    - id: customer-service
+                    uri: lb://customer-service
+                    predicates:
+                        - Path=/api/v1/customers/**
+                    filters:
+                        - name: ApiKey
+                
     management:
         endpoints:
             web:
-            exposure:
-                include: "*"
+                exposure:
+                    include: "*"
     ```
+
+5. **Testing the Setup**
+
+   Once the above steps are completed:
+   - Start the Eureka Server.
+   - Start all the microservices.
+   - Visit the Eureka Dashboard at `http://localhost:8761` to see all registered services.
 
 ### 📚 Summary
 
-This implementation provides a secure way to control access to my microservices by verifying an "api-key" through the Spring Cloud Gateway. The Authentication service centralizes the management of valid API keys, making it easier to maintain and update keys as needed.
+By integrating a discovery service (Eureka) into the microservices architecture, i've enabled dynamic service discovery, simplified service communication, and introduced client-side load balancing. This setup makes the architecture more scalable and resilient, reducing the need for hardcoded service URLs and allowing for better handling of multiple service instances.
 
 ---
 
 ### 🏛️ Project Architecture
-<a href="https://raw.githubusercontent.com/affandyfandy/java-leon/Week_10/Week%2010/Lecture%2017/Assignment%2002/img/architecture.png">
-    <img src="/Week 10/Lecture 17/Assignment 02/img/architecture.png" target="_blank" />
+<a href="https://raw.githubusercontent.com/affandyfandy/java-leon/Week_10/Week%2010/Lecture%2018/img/architecture.png">
+    <img src="/Week 10/Lecture 18/img/architecture.png" target="_blank" />
     </a>
 <br />
 
@@ -424,6 +353,24 @@ authentication
 └── run.sh
 ```
 
+#### 5. Discovery Service
+```bash
+discovery
+├── .mvn/wrapper/
+│   └── maven-wrapper.properties
+├── src/main/
+│   ├── java/com/example/discovery/
+│   │   └── DiscoveryApplication.java
+│   └── restheces/
+│       └── application.properties
+├── .gitignore
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── run.bat
+└── run.sh
+```
+
 ### 🧩 SQL Query Data
 Here is the SQL query to create the database, table, and instantiate some data.
 
@@ -458,7 +405,7 @@ CREATE TABLE CustomerProduct (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/product/src/main/resources/data.sql). Here is the query to drop the database.
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2018/product/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week10_product;
@@ -494,7 +441,7 @@ CREATE TABLE CustomerProduct (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/customer/src/main/resources/data.sql). Here is the query to drop the database.
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2018/customer/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week10_customer;
@@ -520,7 +467,7 @@ CREATE TABLE ApiKey (
 );
 ```
 
-There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2017/Assignment%2002/authentication/src/main/resources/data.sql). Here is the query to drop the database.
+There are also query to insert some generated dummy data. All the MySQL queries is available on [this file](/Week%2010/Lecture%2018/authentication/src/main/resources/data.sql). Here is the query to drop the database.
 ```sql
 -- Drop the database
 DROP DATABASE IF EXISTS week10_auth;
@@ -541,7 +488,7 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 ```
 
 ### ⚙️ How to run the program
-1. Go to the each directory one by one (customer, product, gateway), by using this command
+1. Go to the each directory one by one (customer, product, gateway, authentication, and discovery), by using this command
     ```bash
     $ cd <dir>
     ```
@@ -563,41 +510,43 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
     $ ./run.sh
     ```
 
-If all the instruction is well executed, The API Gateway will be executed on [localhost:8080](http://localhost:8080), Product Service will be on [localhost:8081](http://localhost:8081), Customer Service will be on [localhost:8082](http://localhost:8082), and Authentication Service will be on [localhost:8083](http://localhost:8083). Go check them out to see that the Cloud Gateway is now works.
+If all the instruction is well executed, The API Gateway will be executed on [localhost:8080](http://localhost:8080), Discovery service will be on [localhost:8761](http://localhost:8761). Product Service, Customer Service, and Authentication Service will be **dynamically allocated**. Go check them out to see that the Cloud Gateway is now works.
 
 ### 🔑 List of Endpoints
-#### 1. Product Service ([localhost:8081](http://localhost:8081))
+#### 1. Product Service
 
-Access the swagger [here](http://localhost:8081/swagger-ui/index.html)
+![Screenshots](/Week%2010/Lecture%2018/img/product.png)
 
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/product.png)
+#### 2. Customer Service
 
-#### 2. Customer Service ([localhost:8082](http://localhost:8082))
-
-Access the swagger [here](http://localhost:8082/swagger-ui/index.html)
-
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2001/img/customer.png)
+![Screenshots](/Week%2010/Lecture%2018/img/customer.png)
 
 
 ### 🚀 Demonstration
+Here is what it looks like from the Eureka Client on [localhost:8761](http://localhost:8761).
+
+![Screenshots](/Week%2010/Lecture%2018/img/eureka-1.png)
+
+![Screenshots](/Week%2010/Lecture%2018/img/eureka-2.png)
+
 This demonstration will demo request which directed from API Gateway into the Customer Service, then Customer Service call Product Service through WebClient, and then return the result back to the API Gateway. All the demo will use (`GET /api/v1/customers/{customerId}/products`) to the Gateway [localhost:8080](http://localhost:8080). 
 
 Here is the sequence diagram of the flow.
 
-<a href="https://raw.githubusercontent.com/affandyfandy/java-leon/Week_10/Week%2010/Lecture%2017/Assignment%2002/img/sequence.png">
-    <img src="/Week 10/Lecture 17/Assignment 02/img/sequence.png" target="_blank" />
+<a href="https://raw.githubusercontent.com/affandyfandy/java-leon/Week_10/Week%2010/Lecture%2018/img/sequence.png">
+    <img src="/Week 10/Lecture 18/img/sequence.png" target="_blank" />
 </a>
 
 > Click image to enlarge.
 
 #### 1. Without "api-key"
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/without.png)
+![Screenshots](/Week%2010/Lecture%2018/img/without.png)
 
 #### 2. With invalid API-key
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/invalid.png)
+![Screenshots](/Week%2010/Lecture%2018/img/invalid.png)
 
 #### 3. With valid API-key but inactive
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/inactive.png)
+![Screenshots](/Week%2010/Lecture%2018/img/inactive.png)
 
 #### 4. With valid and active API-key
-![Screenshots](/Week%2010/Lecture%2017/Assignment%2002/img/active.png)
+![Screenshots](/Week%2010/Lecture%2018/img/active.png)
