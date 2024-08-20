@@ -7,8 +7,12 @@ Angular components have a well-defined lifecycle, from creation to destruction. 
 
 ### 👉 **Lifecycle Sequence**
 
-<div style="text-align: center;">
-    <img src="/Week%2011/img/lifecycle.png" alt="Lifecycle" width="400px">
+<div align=center>
+    <img src="/Week%2011/img/lifecycle.png" width="600">
+    <br>
+      <b>Fig 1.</b> Angular LifeCycle.
+    <br>
+    <br>
 </div>
 
 The lifecycle hooks are called in the following order:
@@ -207,7 +211,13 @@ $ ng serve --port=3000
 
 and here is the result.
 
-![Screenshot](/Week%2011/img/demo-non.png)
+<div align=center>
+    <img src="/Week%2011/img/demo-non.png" width="800">
+    <br>
+      <b>Fig 2.</b> Non-Standalone Demo Result.
+    <br>
+    <br>
+</div>
 
 #### **2. Create the Standalone Angular Project**
 
@@ -287,7 +297,13 @@ $ ng serve --port=3000
 
 and here is the result when accessing `/login`
 
-![Screenshot](/Week%2011/img/demo-standalone.png)
+<div align=center>
+    <img src="/Week%2011/img/demo-standalone.png" width="800">
+    <br>
+      <b>Fig 3.</b> Standalone Demo Result.
+    <br>
+    <br>
+</div>
 
 #### **3. Why Use Standalone Components?**
 
@@ -360,6 +376,10 @@ The goal is to design and implement a standalone "Login" component that:
 
 Here is the preview of "Login" page i already created as a standalone component.
 
-![Screenshots](/Week%2011/img/login.png)
-
-Stunning login page with Tailwind CSS!
+<div align=center>
+    <img src="/Week%2011/img/login.png" width="1000">
+    <br>
+      <b>Fig 4.</b> Stunning login page with Tailwind CSS!
+    <br>
+    <br>
+</div>
