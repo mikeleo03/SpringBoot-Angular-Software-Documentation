@@ -91,7 +91,7 @@ $ npm install -g @angular/cli
 1. Open a terminal or command prompt.
 2. Run the following command to create a new Angular project:
    ```bash
-   $ ng new non-standalone-app
+   $ ng new non-standalone-app --no-standalone --routing --ssr=false
    ```
 3. Angular CLI will ask a few configuration questions:
    - **Would you like to add Angular routing?** Type `Y` (Yes).
@@ -109,6 +109,30 @@ $ npm install -g @angular/cli
 3. Generate a new service:
    ```bash
    $ ng generate service services/auth
+   ```
+
+   and create the service for doing login
+
+   ```typescript
+    import { Injectable } from '@angular/core';
+    import { HttpClient } from '@angular/common/http';
+    import { Observable } from 'rxjs';
+    import { User } from '../models/user.model';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class AuthService {
+
+    private apiUrl = 'https://example.com/api/login';  // Replace with actual API URL
+
+    constructor(private http: HttpClient) { }
+
+    login(user: User): Observable<any> {
+        // Send a POST request to the server with the user's credentials
+        return this.http.post<any>(this.apiUrl, user);
+    }
+    }
    ```
 4. Create a new model file (e.g., `user.model.ts`) inside the `src/app/models` directory:
     ```typescript
@@ -172,13 +196,24 @@ $ npm install -g @angular/cli
     export class AppModule { }
     ```
 
+**Step 5: Run the application**
+Run the application in port 3000 by typing this command.
+
+```bash
+$ ng serve --port=3000
+```
+
+and here is the result.
+
+![Screenshot](/Week%2011/img/demo-non.png)
+
 #### **2. Create the Standalone Angular Project**
 
 **Step 1: Create the Angular Project**
 1. Open another terminal or command prompt.
 2. Run the following command to create a new Angular project:
    ```bash
-   $ ng new standalone-app
+   $ ng new standalone-app --ssr=false
    ```
 3. As with the previous project, Angular CLI will ask some configuration questions:
    - **Would you like to add Angular routing?** Type `Y` (Yes).
@@ -200,6 +235,7 @@ $ npm install -g @angular/cli
    ```bash
    $ ng generate service services/auth
    ```
+   use the same service content with the non-standalone one.
 2. Create the model as before in the `src/app/models` directory:
     ```typescript
     // src/app/models/user.model.ts
@@ -239,6 +275,17 @@ $ npm install -g @angular/cli
     }
     ```
    Notice that we don't need to declare this component in a module because it's standalone. Instead, we can directly use the `standalone` property in the `@Component` decorator.
+
+**Step 5: Run the application**
+Run the application in port 3000 by typing this command.
+
+```bash
+$ ng serve --port=3000
+```
+
+and here is the result when accessing `/login`
+
+![Screenshot](/Week%2011/img/demo-standalone.png)
 
 #### **3. Why Use Standalone Components?**
 
