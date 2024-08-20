@@ -7,7 +7,9 @@ Angular components have a well-defined lifecycle, from creation to destruction. 
 
 ### 👉 **Lifecycle Sequence**
 
-![Screenshot](/Week%2011/img/lifecycle.png)
+<div style="text-align: center;">
+    <img src="/Week%2011/img/lifecycle.png" alt="Lifecycle" width="400px">
+</div>
 
 The lifecycle hooks are called in the following order:
 
