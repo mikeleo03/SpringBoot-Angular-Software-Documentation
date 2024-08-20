@@ -310,3 +310,54 @@ By creating both standalone and non-standalone Angular projects, we can experien
 
 ---
 
+## 👨🏻‍💻 Assignment 03 - Creating a New Standalone "Login" Component
+
+In this assignment, we'll modify the "Login" component as a standalone Angular component from the previous one, building on the concepts learned in Assignment 02. The focus here is on achieving a clean, modular, and efficient design using Tailwind CSS for styling.
+
+### 🚀 **Objective**
+
+The goal is to design and implement a standalone "Login" component that:
+1. **Leverages Tailwind CSS**: Utilize Tailwind CSS to create a modern, responsive design for the login interface.
+2. **Implements Data Binding**: Ensure two-way data binding for the form inputs (username and password).
+3. **Incorporates Service Interaction**: Use the `AuthService` to manage user authentication.
+4. **Ensures Reusability**: The component should be self-contained and easily reusable in other Angular projects.
+
+### 🛠️ **Steps to Create the Standalone Login Component**
+
+#### **1. Setting Up the Standalone Component**
+
+1. **Generate the Component**
+   
+   ```bash
+   $ ng generate component components/login --standalone
+   ```
+   
+   This will create a new standalone component named `LoginComponent`.
+
+2. **Implement the Template**
+   Replace the default HTML in [`login.component.html`](/Week%2011/standalone-app/src/app/components/login/login.component.html) with the following template that uses Tailwind CSS. This template provides a clean, modern login form with Tailwind CSS for styling.
+
+3. **Update the Component Logic**:
+   Modify [`login.component.ts`](/Week%2011/standalone-app/src/app/components/login/login.component.ts) to handle the form submission and authentication.
+
+4. **Integrate Tailwind CSS**
+    Ensure that Tailwind CSS is properly integrated into the Angular project. Update `styles.css` or `tailwind.config.js` as needed.
+    1. Install the TailwindCSS
+        
+        ```bash
+        $ npm install -D tailwindcss postcss autoprefixer
+        $ npx tailwindcss init
+        ```
+    2. Configure [tailwind.config.js](/Week%2011/standalone-app/tailwind.config.js).
+    3. Add tailwind to the global styles, which is [src/style.css](/Week%2011/standalone-app/src/styles.css).
+
+5. **Test the Component**:
+   Run the application and navigate to the `/login` route to test the standalone component.
+
+### 🎉 **Result**
+
+Here is the preview of "Login" page i already created as a standalone component.
+
+![Screenshots](/Week%2011/img/login.png)
+
+Stunning login page with Tailwind CSS!
