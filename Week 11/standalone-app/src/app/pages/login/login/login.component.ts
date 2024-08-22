@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 
@@ -13,15 +14,20 @@ import { User } from '../../../models/user.model';
   imports: [FormsModule, CommonModule] // Import necessary modules directly into the component
 })
 export class LoginComponent {
+  // constants
+  mainbg: string = '../assets/img/background.jpg';
   user: User = { id: 0, username: '', password: '' };
 
-  constructor(private authService: AuthService) {}
-
-  mainbg: string = '../assets/img/background.jpg';
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    this.authService.login(this.user).subscribe(response => {
-      console.log('Login successful', response);
+    this.authService.login(this.user).subscribe(success => {
+      if (success) {
+        console.log('Login successful');
+        this.router.navigate(['/']);
+      } else {
+        console.log('Login failed');
+      }
     });
   }
 }

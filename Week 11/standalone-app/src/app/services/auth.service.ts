@@ -8,7 +8,7 @@ import { User } from '../models/user.model';
 })
 export class AuthService {
 
-  private apiUrl = 'https://example.com/api/login';  // Replace with actual API URL
+  private apiUrl = 'http://localhost:8080/users';  // Replace with actual API URL
 
   constructor(private http: HttpClient) { }
 
