@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user.model';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginComponent {
 
   constructor(private authService: AuthService) {}
 
-  mainbg: string = 'background.jpg';
+  mainbg: string = '../assets/img/background.jpg';
 
   login() {
     this.authService.login(this.user).subscribe(response => {
