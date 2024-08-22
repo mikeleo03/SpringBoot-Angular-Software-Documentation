@@ -10,7 +10,7 @@
         }"
     >
         <!-- Grayish overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
         
         <div class="relative flex items-end justify-start w-full h-full text-white">
             <div class="p-10">
@@ -27,23 +27,23 @@
             <p class="text-center text-lg text-muted-foreground mb-8">Please login by filling the form below</p>
     
             <!-- Login Form -->
-            <form (submit)="login()" class="px-6">
+            <form (submit)="login()" class="md:px-6">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-lg font-bold mb-2" for="username">Username</label>
-                    <input [(ngModel)]="user.username" type="text" id="username" name="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your username">
+                    <input [(ngModel)]="user.username" type="text" id="username" name="username" class="appearance-none border rounded rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your username">
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 text-lg font-bold mb-2" for="password">Password</label>
-                    <input [(ngModel)]="user.password" type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your password">
+                    <input [(ngModel)]="user.password" type="password" id="password" name="password" class="appearance-none border rounded rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your password">
                 </div>
         
                 <!-- Submit Button -->
-                <div class="flex items-center justify-end">
-                    <button type="submit" class="bg-black rounded-lg hover:bg-black/80 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline">Login</button>
+                <div class="flex items-center justify-end w-full">
+                    <button type="submit" class="bg-green-2 w-full rounded-xl hover:bg-black/80 text-white font-semibold py-2 px-6 rounded focus:outline-none focus:shadow-outline">Login</button>
                 </div>
             </form>
-    
-            <p class="text-gray-500 text-sm text-center mt-8">Make sure you fill the form with valid data!</p>
+
+            <p class="text-gray-500 text-sm text-center mt-8">Not registered yet? <a href="#" class="text-green-2 font-semibold">Create an account</a></p>
         </div>
     </div>
 </div>

@@ -15,7 +15,7 @@ import { User } from '../../../models/user.model';
 })
 export class LoginComponent {
   // constants
-  mainbg: string = '../assets/img/background.jpg';
+  mainbg: string = '../assets/img/background2.png';
   user: User = { id: 0, username: '', password: '' };
 
   constructor(private authService: AuthService, private router: Router) {}
