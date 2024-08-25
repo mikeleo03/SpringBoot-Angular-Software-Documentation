@@ -33,6 +33,15 @@
       ],
       "@spartan-ng/ui-label-helm": [
         ".\\src/app/components/ui-label-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-sheet-helm": [
+        ".\\src/app/components/ui-sheet-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-input-helm": [
+        ".\\src/app/components/ui-input-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-icon-helm": [
+        ".\\src/app/components/ui-icon-helm/src/index.ts"
       ]
     }
   },

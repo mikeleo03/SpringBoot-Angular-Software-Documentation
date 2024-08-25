@@ -12,6 +12,17 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  // Method to get all products and determine the last ID
+  getLastProductId(): Observable<number> {
+    return new Observable<number>(observer => {
+      this.http.get<any[]>(this.apiUrl).subscribe(products => {
+        const lastId = products.reduce((maxId, product) => Math.max(maxId, product.id), 0);
+        observer.next(lastId);
+        observer.complete();
+      });
+    });
+  }
+  
   // Get all products
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);

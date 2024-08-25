@@ -1,16 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
-import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent } from 'ag-grid-community';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
+import { ColDef, CellClassParams, GridSizeChangedEvent, FirstDataRenderedEvent } from 'ag-grid-community';
 import { Router } from '@angular/router';
 import { DateFormatPipe } from '../../../core/pipes/date-format.pipe';
-import { ActionCellRendererComponent } from './action-cell-renderer.component';
+import { HlmSheetComponent, HlmSheetContentComponent, HlmSheetHeaderComponent, HlmSheetFooterComponent, HlmSheetTitleDirective, HlmSheetDescriptionDirective } from '@spartan-ng/ui-sheet-helm';
+import { BrnSheetContentDirective, BrnSheetTriggerDirective } from '@spartan-ng/ui-sheet-brain';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductFormComponent } from '../product-form/product-form.component';
 import { StatusCellRendererComponent } from './status-cell-renderer.component';
+import { ActionCellRendererComponent } from './action-cell-renderer.component';
+import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [AgGridAngular, DateFormatPipe, ActionCellRendererComponent, StatusCellRendererComponent],
+  imports: [
+    AgGridAngular, 
+    DateFormatPipe, 
+    CommonModule,
+    ReactiveFormsModule,
+    AgGridModule,
+    ProductFormComponent,
+
+    BrnSheetTriggerDirective,
+    BrnSheetContentDirective,
+    HlmSheetComponent,
+    HlmSheetContentComponent,
+    HlmSheetHeaderComponent,
+    HlmSheetFooterComponent,
+    HlmSheetTitleDirective,
+    HlmSheetDescriptionDirective,
+    HlmLabelDirective,
+
+    ActionCellRendererComponent,
+    StatusCellRendererComponent
+  ],
   templateUrl: './product-list.component.html',
   styleUrls: [],
 })
@@ -29,7 +55,7 @@ export class ProductListComponent implements OnInit {
           ? null
           : { backgroundColor: '#f5f5f5', color: '#aaa' };
       }
-    },           
+    },
     { field: 'createdAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', cellClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
     { field: 'updatedAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', cellClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
     {
@@ -55,8 +81,8 @@ export class ProductListComponent implements OnInit {
     this.productService.getProducts().subscribe((data) => (this.products = data));
   }
 
-  onAddProduct() {
-    this.loadProducts();
+  onAddProduct(product: any) {
+    this.loadProducts(); // Reload products after adding
   }
 
   onProductToggle(event: any) {
@@ -85,13 +111,9 @@ export class ProductListComponent implements OnInit {
   }
 
   onGridSizeChanged(params: GridSizeChangedEvent) {
-    // get the current grids width
     let gridWidth = document.querySelector(".ag-body-viewport")!.clientWidth;
-    // keep track of which columns to hide/show
     let columnsToShow = [];
     let columnsToHide = [];
-    // iterate over all columns (visible or not) and work out
-    // now many columns can fit (based on their minWidth)
     let totalColsWidth = 0;
     let allColumns = params.api.getColumns();
     if (allColumns && allColumns.length > 0) {
@@ -105,11 +127,8 @@ export class ProductListComponent implements OnInit {
         }
       }
     }
-    // show/hide columns based on current grid width
     params.api.setColumnsVisible(columnsToShow, true);
     params.api.setColumnsVisible(columnsToHide, false);
-    // wait until columns stopped moving and fill out
-    // any available space to ensure there are no gaps
     window.setTimeout(() => {
       params.api.sizeColumnsToFit();
     }, 10);
