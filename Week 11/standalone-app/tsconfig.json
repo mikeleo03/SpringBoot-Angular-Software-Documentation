@@ -27,6 +27,12 @@
       ],
       "@spartan-ng/ui-button-helm": [
         ".\\src/app/components/ui-button-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-switch-helm": [
+        ".\\src/app/components/ui-switch-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-label-helm": [
+        ".\\src/app/components/ui-label-helm/src/index.ts"
       ]
     }
   },

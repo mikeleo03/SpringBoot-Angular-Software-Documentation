@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
     FooterComponent
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'] // Changed to styleUrls for correct property
+  styleUrls: []
 })
 export class AppComponent implements OnInit {
   showNavAndFooter = true;

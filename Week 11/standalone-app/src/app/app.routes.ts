@@ -8,10 +8,10 @@ export const routes: Routes = [
             import('./pages/login/login.routes')
                 .then(m => m.loginRoutes)
     },
-    /* {
+    {
         path: RouterConfig.PRODUCT.path,
         loadChildren: () =>
-            import('./pages/products/products.routes')
-                .then(m => m.porductRoutes)
-    } */
+            import('./pages/products/product.routes')
+                .then(m => m.productRoutes)
+    }
 ];
