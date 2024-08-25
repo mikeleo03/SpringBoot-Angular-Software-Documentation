@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.username = 'Michael Leon';
+    this.username = 'Mr. Lorem Ipsum';
   }
 
   handleLogout() {

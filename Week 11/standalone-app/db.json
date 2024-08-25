@@ -4,7 +4,7 @@
       "id": "1",
       "name": "Product A",
       "price": 100,
-      "status": true,
+      "status": false,
       "createdAt": "2024-08-01T10:00:00Z",
       "updatedAt": "2024-08-01T10:00:00Z"
     },
@@ -19,14 +19,9 @@
   ],
   "users": [
     {
-      "id": "0",
+      "id": "1",
       "username": "admin",
       "password": "password123"
-    },
-    {
-      "id": 0,
-      "username": "",
-      "password": ""
     }
   ]
 }

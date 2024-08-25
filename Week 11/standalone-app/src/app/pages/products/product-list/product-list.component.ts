@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { ColDef, CellClassParams, GridSizeChangedEvent, FirstDataRenderedEvent } from 'ag-grid-community';
+import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent } from 'ag-grid-community';
 import { Router } from '@angular/router';
 import { DateFormatPipe } from '../../../core/pipes/date-format.pipe';
 import { HlmSheetComponent, HlmSheetContentComponent, HlmSheetHeaderComponent, HlmSheetFooterComponent, HlmSheetTitleDirective, HlmSheetDescriptionDirective } from '@spartan-ng/ui-sheet-helm';

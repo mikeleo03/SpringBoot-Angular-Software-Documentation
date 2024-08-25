@@ -26,11 +26,12 @@
             <div class="relative" (mouseenter)="showLogout = true" (mouseleave)="showLogout = false">
                 <button class="flex space-x-3 p-3 py-1 rounded-xl text-white items-center">
                     <hlm-avatar>
-                        <img src='/assets/avatar.png' alt='profile' hlmAvatarImage />
+                        <img src='/assets/img/mrlorem.avif' alt='profile' hlmAvatarImage />
                         <span class='text-white bg-destructive' hlmAvatarFallback>{{ username }}</span>
                     </hlm-avatar>
                     <div class="flex flex-col text-start md:block hidden">
-                        <div class="text-white text-base">{{ username }}</div>
+                        <div class="text-white text-base font-semibold">{{ username }}</div>
+                        <div class="text-slate-300 text-xs">Software Engineer</div>
                     </div>
                 </button>
 

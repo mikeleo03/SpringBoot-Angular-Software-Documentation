@@ -7,14 +7,14 @@ import { ICellRendererParams } from 'ag-grid-community';
   standalone: true,
   template: `
     <button 
-      class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded shadow hover:bg-blue-600 mr-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
+      class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-blue-600 mr-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
       (click)="onEditClick()" 
       [disabled]="!params.data.status">
       <i class="fas fa-pencil-alt"></i>&nbsp; Update
     </button>
 
     <button 
-      class="bg-red-500 text-white text-xs px-4 py-1.5 rounded shadow hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed"
+      class="bg-red-500 text-white text-xs px-4 py-1.5 rounded-xl shadow hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed"
       (click)="onDeleteClick()" 
       [disabled]="!params.data.status">
       <i class="fas fa-trash"></i>&nbsp; Delete
