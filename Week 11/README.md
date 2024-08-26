@@ -384,17 +384,12 @@ Here is the preview of "Login" page i already created as a standalone component.
     <br>
 </div>
 
-<div style="display: flex; justify-content: center; align-items: center;">
-    <div style="margin-right: 20px; text-align: center;">
-        <img src="/Week%2011/img/laptop.png" height="500">
-        <br>
-        <b>Fig 5.</b> Laptop-size Mockup.
-    </div>
-    <div style="text-align: center;">
-        <img src="/Week%2011/img/mobile.png" height="500">
-        <br>
-        <b>Fig 6.</b> Mobile device-size Mockup.
-    </div>
+<div align="center">
+    <img src="/Week%2011/img/laptop.png" height="400" style="margin-right: 200px;"> &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="/Week%2011/img/mobile.png" height="400">
+    <br>
+    <b>Fig 5 & 6.</b> Laptop and Mobile device-size Mockup (Responsive!).
+    <br><br>
 </div>
 
 ---
