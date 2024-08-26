@@ -31,8 +31,8 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
           <i class="fas fa-pencil-alt"></i>&nbsp; Update
         </button>
         <hlm-sheet-content *brnSheetContent="let ctx">
-            <hlm-sheet-header>
-                <h1 hlmSheetTitle class="text-2xl font-bold text-green-1">{{ params.data ? 'Edit Product' : 'Add New Product' }}</h1>
+            <hlm-sheet-header class="text-start md:mt-4 mt-6">
+                <h1 hlmSheetTitle class="md:text-2xl text-xl font-bold text-green-1">{{ params.data ? 'Edit Product' : 'Add New Product' }}</h1>
                 <p hlmSheetDescription>{{ params.data ? 'Edit the product details below.' : 'Fill out the form below to add a new product.' }}</p>
             </hlm-sheet-header>
             <app-product-form [product]="params.data" [isEditMode]="true" (productSaved)="onProductSaved($event)" (formClosed)="ctx.close()"></app-product-form>
