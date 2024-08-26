@@ -394,10 +394,6 @@ Here is the preview of "Login" page i already created as a standalone component.
 
 ---
 
-Here's a polished version of your README:
-
----
-
 # 👩🏻‍🏫 Lecture 20 - Basic Angular
 
 > This repository is created as a part of assignment for Lecture 20 - Basic Angular
