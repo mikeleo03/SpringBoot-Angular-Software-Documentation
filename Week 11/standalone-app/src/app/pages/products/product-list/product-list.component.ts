@@ -12,6 +12,7 @@ import { ProductFormComponent } from '../product-form/product-form.component';
 import { StatusCellRendererComponent } from './status-cell-renderer.component';
 import { ActionCellRendererComponent } from './action-cell-renderer.component';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
+import { Product } from '../../../models/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -41,7 +42,7 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
   styleUrls: [],
 })
 export class ProductListComponent implements OnInit {
-  products: any[] = [];
+  products: Product[] = [];
   colDefs: ColDef[] = [
     { field: 'name', headerClass: 'text-center', cellClass: 'text-center' },
     { field: 'price', sortable: true, filter: "agNumberColumnFilter", headerClass: 'text-center', cellClass: 'text-center' },
@@ -78,11 +79,17 @@ export class ProductListComponent implements OnInit {
   }
 
   loadProducts() {
-    this.productService.getProducts().subscribe((data) => (this.products = data));
+    this.productService.getProducts().subscribe((products) => {
+      this.products = products;
+    });
   }
 
   onAddProduct(product: any) {
     this.loadProducts(); // Reload products after adding
+  }
+
+  onProductEdited(product: any) {
+    this.loadProducts(); // Reload products after edited
   }
 
   onProductToggle(event: any) {
@@ -96,10 +103,6 @@ export class ProductListComponent implements OnInit {
     this.productService.updateProductStatus(product.id, product.status).subscribe(() => {
       this.loadProducts();
     });
-  }
-
-  onEditProduct(product: any) {
-    this.router.navigate(['/products/edit', product.id]);
   }
 
   onDeleteProduct(product: any) {

@@ -3,7 +3,7 @@
         <div class="items-center grid grid-cols-4 gap-4">
             <label hlmLabel for="name" class="text-right">Name</label>
             <div class="col-span-3">
-                <input hlmInput id="name" formControlName="name" class="w-full" />
+                <input hlmInput id="name" formControlName="name" class="w-full" placeholder="Enter product name" />
                 <span *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-red-500 text-sm block mt-1">
                     Name is required.
                 </span>
@@ -12,7 +12,7 @@
         <div class="items-center grid grid-cols-4 gap-4">
             <label hlmLabel for="price" class="text-right">Price</label>
             <div class="col-span-3">
-                <input hlmInput id="price" type="number" formControlName="price" class="w-full" />
+                <input hlmInput id="price" type="number" formControlName="price" class="w-full" placeholder="Enter price" />
                 <span *ngIf="price?.invalid && (price?.dirty || price?.touched)" class="text-red-500 text-sm block mt-1">
                     Price must be greater than 0.
                 </span>
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="pt-5 w-full justify-end">
-            <button hlmBtn type="submit" [disabled]="productForm.invalid">Save Product</button>
+            <button hlmBtn type="submit" [disabled]="productForm.invalid">{{ isEditMode ? 'Update Product' : 'Save Product' }}</button>
         </div>
     </form>
 </div>

@@ -22,8 +22,9 @@ import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
   ],
 })
 export class ProductFormComponent implements OnInit {
-  @Input() product: any;
-  @Output() productAdded = new EventEmitter<any>();
+  @Input() product: any;  // Pass the product data for editing
+  @Input() isEditMode = false;  // Flag to differentiate between add and edit mode
+  @Output() productSaved = new EventEmitter<any>();
   @Output() formClosed = new EventEmitter<void>();
 
   productForm!: FormGroup;
@@ -41,29 +42,28 @@ export class ProductFormComponent implements OnInit {
       updatedAt: [new Date()],
     });
 
-    if (!this.product) {
+    if (!this.isEditMode) {
       // Fetch the last product ID if creating a new product
       this.productService.getLastProductId().subscribe((lastId: number) => {
         this.lastProductId = lastId;
         this.productForm.patchValue({ id: (this.lastProductId + 1).toString() });
       });
     } else {
-      this.productForm.patchValue(this.product);
+      this.productForm.patchValue(this.product); // Pre-fill the form with existing product data
     }
   }
 
   onSubmit() {
     const productData = this.productForm.value;
-    if (this.product) {
-      // Update existing product
+    if (this.isEditMode) {
       this.productService.updateProduct(productData).subscribe(() => {
-        this.productAdded.emit(productData);
+        this.productSaved.emit(productData);
         this.formClosed.emit(); // Close sheet
       });
     } else {
       // Add new product
       this.productService.addProduct(productData).subscribe(() => {
-        this.productAdded.emit(productData);
+        this.productSaved.emit(productData);
         this.formClosed.emit(); // Close sheet
       });
     }

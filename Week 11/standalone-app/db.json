@@ -2,19 +2,51 @@
   "products": [
     {
       "id": "1",
-      "name": "Product A",
-      "price": 100,
-      "status": false,
+      "name": "Product XXXXX",
+      "price": 200,
+      "status": true,
       "createdAt": "2024-08-01T10:00:00Z",
       "updatedAt": "2024-08-01T10:00:00Z"
     },
     {
       "id": "2",
       "name": "Product B",
-      "price": 150,
-      "status": true,
+      "price": 100,
+      "status": false,
       "createdAt": "2024-08-02T12:00:00Z",
       "updatedAt": "2024-08-02T12:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "aa",
+      "price": 200,
+      "status": true,
+      "createdAt": "2024-08-26T13:15:05.202Z",
+      "updatedAt": "2024-08-26T13:15:05.202Z"
+    },
+    {
+      "id": "4",
+      "name": "coba1234",
+      "price": 2000,
+      "status": true,
+      "createdAt": "2024-08-26T13:21:40.365Z",
+      "updatedAt": "2024-08-26T13:21:40.365Z"
+    },
+    {
+      "id": "5",
+      "name": "makabaru12",
+      "price": 12345,
+      "status": true,
+      "createdAt": "2024-08-26T13:34:39.650Z",
+      "updatedAt": "2024-08-26T13:34:39.650Z"
+    },
+    {
+      "id": "6",
+      "name": "makau123556",
+      "price": 2020,
+      "status": true,
+      "createdAt": "2024-08-26T13:51:37.351Z",
+      "updatedAt": "2024-08-26T13:51:37.351Z"
     }
   ],
   "users": [
@@ -22,6 +54,11 @@
       "id": "1",
       "username": "admin",
       "password": "password123"
+    },
+    {
+      "id": 0,
+      "username": "",
+      "password": ""
     }
   ]
 }
