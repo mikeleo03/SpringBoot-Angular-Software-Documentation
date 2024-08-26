@@ -10,8 +10,8 @@
                 <span>Add New Product</span>
             </button>
             <hlm-sheet-content *brnSheetContent="let ctx">
-                <hlm-sheet-header class="text-start">
-                    <h1 hlmSheetTitle class="text-2xl font-bold text-green-1">Add New Product</h1>
+                <hlm-sheet-header class="text-start md:mt-4 mt-6">
+                    <h1 hlmSheetTitle class="md:text-2xl text-xl font-bold text-green-1">Add New Product</h1>
                     <p hlmSheetDescription>Fill out the form below to add a new product.</p>
                 </hlm-sheet-header>
                 <app-product-form (productAdded)="onAddProduct($event)" (formClosed)="ctx.close()"></app-product-form>
@@ -33,5 +33,4 @@
             (firstDataRendered)="onFirstDataRendered($event)">
         </ag-grid-angular>
     </div>
-  </div>
-  
+</div>

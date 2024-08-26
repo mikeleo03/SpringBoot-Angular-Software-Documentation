@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent, GridOptions } from 'ag-grid-community';
+import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent, GridOptions, GridApi } from 'ag-grid-community';
 import { Router } from '@angular/router';
 import { DateFormatPipe } from '../../../core/pipes/date-format.pipe';
 import { PriceFormatPipe } from '../../../core/pipes/price-format.pipe';
@@ -19,8 +19,8 @@ import { Product } from '../../../models/product.model';
   selector: 'app-product-list',
   standalone: true,
   imports: [
-    AgGridAngular, 
-    DateFormatPipe, 
+    AgGridAngular,
+    DateFormatPipe,
     PriceFormatPipe,
     CommonModule,
     ReactiveFormsModule,
@@ -36,36 +36,38 @@ import { Product } from '../../../models/product.model';
     HlmSheetTitleDirective,
     HlmSheetDescriptionDirective,
     HlmLabelDirective,
-
     ActionCellRendererComponent,
     StatusCellRendererComponent
   ],
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css'], // Reference to CSS file
+  styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   colDefs: ColDef[] = [
-    { field: 'name', headerClass: 'text-center' },
+    { field: 'name', headerClass: 'text-center', minWidth: 200 },
     { 
       field: 'price', 
       sortable: true, 
       filter: "agNumberColumnFilter", 
       headerClass: 'text-center',
+      minWidth: 200,
       valueFormatter: (params: any) => new PriceFormatPipe().transform(params.value)
     },
     {
       field: 'status',
       headerClass: 'text-center',
       cellClass: 'text-center',
+      minWidth: 200,
       cellRenderer: StatusCellRendererComponent
     },
-    { field: 'createdAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
-    { field: 'updatedAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
+    { field: 'createdAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', minWidth: 200, valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
+    { field: 'updatedAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', minWidth: 200, valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
     {
       headerName: 'Actions',
       cellRenderer: ActionCellRendererComponent,
       headerClass: 'text-center',
+      minWidth: 225,
       cellClass: 'text-center',
     },
   ];
@@ -73,6 +75,7 @@ export class ProductListComponent implements OnInit {
   public defaultColDef: ColDef = {
     filter: "agTextColumnFilter",
     floatingFilter: true,
+    resizable: true,
   };
 
   public gridOptions: GridOptions = {
@@ -80,14 +83,22 @@ export class ProductListComponent implements OnInit {
       if (!params.data.status) {
         return { backgroundColor: '#f5f5f5', color: '#aaa' }; // Dark background for entire row when inactive
       }
-      return undefined; // Return undefined instead of null for no style
+      return undefined;
     }
-  };  
+  };
+
+  private gridApi!: GridApi;
 
   constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit() {
     this.loadProducts();
+    window.addEventListener('resize', this.adjustGridForScreenSize.bind(this)); // Listen for resize events
+  }
+
+  onGridReady(params: any) {
+    this.gridApi = params.api;
+    this.adjustGridForScreenSize(); // Initial check
   }
 
   loadProducts() {
@@ -126,30 +137,16 @@ export class ProductListComponent implements OnInit {
   }
 
   onGridSizeChanged(params: GridSizeChangedEvent) {
-    let gridWidth = document.querySelector(".ag-body-viewport")!.clientWidth;
-    let columnsToShow = [];
-    let columnsToHide = [];
-    let totalColsWidth = 0;
-    let allColumns = params.api.getColumns();
-    if (allColumns && allColumns.length > 0) {
-      for (const element of allColumns) {
-        let column = element;
-        totalColsWidth += column.getMinWidth();
-        if (totalColsWidth > gridWidth) {
-          columnsToHide.push(column.getColId());
-        } else {
-          columnsToShow.push(column.getColId());
-        }
-      }
-    }
-    params.api.setColumnsVisible(columnsToShow, true);
-    params.api.setColumnsVisible(columnsToHide, false);
-    window.setTimeout(() => {
-      params.api.sizeColumnsToFit();
-    }, 10);
+    params.api.sizeColumnsToFit(); // Ensure columns fit the grid width
   }
 
   onFirstDataRendered(params: FirstDataRenderedEvent) {
-    params.api.sizeColumnsToFit();
+    params.api.sizeColumnsToFit(); // Fit columns on initial render
+  }
+
+  adjustGridForScreenSize() {
+    if (this.gridApi) {
+      this.gridApi.sizeColumnsToFit(); // Adjust columns for screen size
+    }
   }
 }
