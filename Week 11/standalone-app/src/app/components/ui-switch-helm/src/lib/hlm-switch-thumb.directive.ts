@@ -13,7 +13,7 @@ export class HlmSwitchThumbDirective {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected _computedClass = computed(() =>
 		hlm(
-			'block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform group-data-[state=checked]:translate-x-5 group-data-[state=unchecked]:translate-x-0',
+			'block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform group-data-[state=checked]:translate-x-6 group-data-[state=unchecked]:translate-x-0',
 			this.userClass(),
 		),
 	);

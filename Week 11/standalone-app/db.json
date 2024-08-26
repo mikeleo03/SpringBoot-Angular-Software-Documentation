@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "1",
-      "name": "Product XXXXX",
+      "name": "Product X",
       "price": 200,
       "status": true,
       "createdAt": "2024-08-01T10:00:00Z",
@@ -12,7 +12,7 @@
       "id": "2",
       "name": "Product B",
       "price": 100,
-      "status": false,
+      "status": true,
       "createdAt": "2024-08-02T12:00:00Z",
       "updatedAt": "2024-08-02T12:00:00Z"
     },
@@ -28,7 +28,7 @@
       "id": "4",
       "name": "coba1234",
       "price": 2000,
-      "status": true,
+      "status": false,
       "createdAt": "2024-08-26T13:21:40.365Z",
       "updatedAt": "2024-08-26T13:21:40.365Z"
     },
@@ -36,17 +36,9 @@
       "id": "5",
       "name": "makabaru12",
       "price": 12345,
-      "status": true,
+      "status": false,
       "createdAt": "2024-08-26T13:34:39.650Z",
       "updatedAt": "2024-08-26T13:34:39.650Z"
-    },
-    {
-      "id": "6",
-      "name": "makau123556",
-      "price": 2020,
-      "status": true,
-      "createdAt": "2024-08-26T13:51:37.351Z",
-      "updatedAt": "2024-08-26T13:51:37.351Z"
     }
   ],
   "users": [

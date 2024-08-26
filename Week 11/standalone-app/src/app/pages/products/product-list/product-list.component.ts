@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
-import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent } from 'ag-grid-community';
+import { ColDef, GridSizeChangedEvent, FirstDataRenderedEvent, GridOptions } from 'ag-grid-community';
 import { Router } from '@angular/router';
 import { DateFormatPipe } from '../../../core/pipes/date-format.pipe';
+import { PriceFormatPipe } from '../../../core/pipes/price-format.pipe';
 import { HlmSheetComponent, HlmSheetContentComponent, HlmSheetHeaderComponent, HlmSheetFooterComponent, HlmSheetTitleDirective, HlmSheetDescriptionDirective } from '@spartan-ng/ui-sheet-helm';
 import { BrnSheetContentDirective, BrnSheetTriggerDirective } from '@spartan-ng/ui-sheet-brain';
 import { CommonModule } from '@angular/common';
@@ -20,6 +21,7 @@ import { Product } from '../../../models/product.model';
   imports: [
     AgGridAngular, 
     DateFormatPipe, 
+    PriceFormatPipe,
     CommonModule,
     ReactiveFormsModule,
     AgGridModule,
@@ -39,26 +41,27 @@ import { Product } from '../../../models/product.model';
     StatusCellRendererComponent
   ],
   templateUrl: './product-list.component.html',
-  styleUrls: [],
+  styleUrls: ['./product-list.component.css'], // Reference to CSS file
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   colDefs: ColDef[] = [
-    { field: 'name', headerClass: 'text-center', cellClass: 'text-center' },
-    { field: 'price', sortable: true, filter: "agNumberColumnFilter", headerClass: 'text-center', cellClass: 'text-center' },
+    { field: 'name', headerClass: 'text-center' },
+    { 
+      field: 'price', 
+      sortable: true, 
+      filter: "agNumberColumnFilter", 
+      headerClass: 'text-center',
+      valueFormatter: (params: any) => new PriceFormatPipe().transform(params.value)
+    },
     {
       field: 'status',
       headerClass: 'text-center',
       cellClass: 'text-center',
-      cellRenderer: StatusCellRendererComponent,
-      cellStyle: (params) => {
-        return params.value
-          ? null
-          : { backgroundColor: '#f5f5f5', color: '#aaa' };
-      }
+      cellRenderer: StatusCellRendererComponent
     },
-    { field: 'createdAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', cellClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
-    { field: 'updatedAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', cellClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
+    { field: 'createdAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
+    { field: 'updatedAt', sortable: true, filter: "agDateColumnFilter", headerClass: 'text-center', valueFormatter: (params: any) => new DateFormatPipe().transform(params.value) },
     {
       headerName: 'Actions',
       cellRenderer: ActionCellRendererComponent,
@@ -71,6 +74,15 @@ export class ProductListComponent implements OnInit {
     filter: "agTextColumnFilter",
     floatingFilter: true,
   };
+
+  public gridOptions: GridOptions = {
+    getRowStyle: (params) => {
+      if (!params.data.status) {
+        return { backgroundColor: '#f5f5f5', color: '#aaa' }; // Dark background for entire row when inactive
+      }
+      return undefined; // Return undefined instead of null for no style
+    }
+  };  
 
   constructor(private productService: ProductService, private router: Router) {}
 
