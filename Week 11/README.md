@@ -396,3 +396,90 @@ Here is the preview of "Login" page i already created as a standalone component.
         <b>Fig 6.</b> Mobile device-size Mockup.
     </div>
 </div>
+
+---
+
+Here's a polished version of your README:
+
+---
+
+# 👩🏻‍🏫 Lecture 20 - Basic Angular
+
+> This repository is created as a part of assignment for Lecture 20 - Basic Angular
+
+## 📋 Assignments
+
+The following assignments are part of this project:
+
+1. **Build the Base Project Structure**  
+   Establish the foundational structure of your Angular project.
+
+2. **Implement Parent-Child Event Communication**  
+   Demonstrate a component where a parent listens for events emitted by a child component.
+
+3. **Build Main Components**  
+   Create the essential components for your application, including:
+   - Header
+   - Footer
+   - Menu
+   - Router outlet
+
+4. **Develop UI Pages for Product Management**  
+   Based on the midterm project, build the following pages:
+   - **Product List Page:** Display products with columns for ID, name, price, and status. Include functionality to:
+     - Search by name
+     - Sort by name or price
+     - Implement pagination
+   - **Add New Product Page:** Use a reactive form to add new products.
+   - **Edit Product Page:** Enable editing of existing products.
+   - **Activate/Deactivate Product:** Add functionality to toggle the activation status for each product both in the list and detail pages.
+
+## 👨🏻‍💻 Implementation
+
+### 💻 Laptop Screen-Sized View
+
+The following UI pages have been implemented for laptop-sized screens:
+
+<table style="width:100%; text-align:center;">
+    <col width="49%">
+    <col width="49%">
+    <tr>
+        <td width="1%" align="center"><img src="/Week%2011/img/laptop-login.png" alt="Login Page"/></td>
+        <td width="1%" align="center"><img src="/Week%2011/img/laptop-product.png" alt="List of Products Page"/></td>
+    </tr>
+    <tr>
+        <td width="1%" align="center">Login Page</td>
+        <td width="1%" align="center">List of Products Page</td>
+    </tr>
+    <tr>
+        <td width="1%" align="center"><img src="/Week%2011/img/laptop-add.png" alt="Add New Product"/></td>
+        <td width="1%" align="center"><img src="/Week%2011/img/laptop-edit.png" alt="Edit Product"/></td>
+    </tr>
+    <tr>
+        <td width="1%" align="center">Add New Product</td>
+        <td width="1%" align="center">Edit Product</td>
+    </tr>
+</table>
+
+### 📱 Mobile Device Screen-Sized View
+
+The following UI pages have been implemented for mobile-sized screens:
+
+<table style="width:100%; text-align:center;">
+    <col width="24%">
+    <col width="24%">
+    <col width="24%">
+    <col width="24%">
+    <tr>
+        <td width="1%" align="center"><img height="400" src="/Week%2011/img/mobile-login.png" alt="Login Page"/></td>
+        <td width="1%" align="center"><img height="400" src="/Week%2011/img/mobile-product.png" alt="List of Products Page"/></td>
+        <td width="1%" align="center"><img height="400" src="/Week%2011/img/mobile-edit.png" alt="Edit Product"/></td>
+        <td width="1%" align="center"><img height="400" src="/Week%2011/img/mobile-menu.png" alt="Responsive Navbar"/></td>
+    </tr>
+    <tr>
+        <td width="1%" align="center">Login Page</td>
+        <td width="1%" align="center">List of Products Page</td>
+        <td width="1%" align="center">Edit Product</td>
+        <td width="1%" align="center">Responsive Navbar</td>
+    </tr>
+</table>
