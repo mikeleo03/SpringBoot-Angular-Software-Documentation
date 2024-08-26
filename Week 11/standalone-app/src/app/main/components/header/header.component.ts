@@ -13,16 +13,22 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
     HlmButtonDirective
   ], // Import necessary modules
   templateUrl: './header.component.html',
-  styleUrls: []
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   username = '';
+  isMenuOpen = false;
   showLogout = false;
+  isOpen = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.username = 'Mr. Lorem Ipsum';
+  }
+
+  toggleMenu() {
+    this.isOpen = !this.isOpen;
   }
 
   handleLogout() {
