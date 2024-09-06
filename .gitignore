@@ -1,1 +1,6 @@
 target
+HELP.md
+env.properties
+.vscode
+node_modules
+.angular
