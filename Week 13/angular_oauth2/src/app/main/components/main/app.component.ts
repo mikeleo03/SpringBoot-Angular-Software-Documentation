@@ -1,13 +1,33 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: []
 })
-export class AppComponent {
-  title = 'angular_oauth2';
+export class AppComponent implements OnInit {
+  showNavAndFooter = true;
+  title = 'angular-demo';
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Hide nav and footer for any URL starting with "/login"
+        this.showNavAndFooter = !event.url.startsWith('/login');
+      }
+    });
+  }
 }
