@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring_oauth2.service.TokenService;
@@ -41,6 +42,12 @@ public class AuthenticationController {
 
         // Return the token as a response
         return ResponseEntity.status(HttpStatus.OK).body(new JwtResponse(jwt));
+    }
+
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handlePreflight() {
+        // Just return a 200 OK for preflight requests
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")

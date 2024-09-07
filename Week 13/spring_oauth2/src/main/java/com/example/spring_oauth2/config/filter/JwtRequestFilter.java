@@ -52,6 +52,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
+        loggerFilter.info("[JWTFilter] None of init filter.");
+
         // Extract JWT and validate it
         final String authorizationHeader = request.getHeader("Authorization");
 

@@ -46,6 +46,8 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
+        loggerFilter.info("[Filter] None of init filter.");
         
         String requestApiKey = request.getHeader("api-key");
 
