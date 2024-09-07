@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { RouterConfig } from './config/app.constants';
 import { AuthGuard } from './main/guards/auth-guard.service';
-import { CallbackComponent } from './pages/login/callback.component';
 
 export const routes: Routes = [
     {
@@ -11,7 +10,6 @@ export const routes: Routes = [
         title: RouterConfig.LOGIN.title,
         data: RouterConfig.LOGIN.data,
     },
-    { path: 'callback', component: CallbackComponent },
     {
         path: '',
         canActivate: [AuthGuard],
