@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,19 +11,39 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/oauth2/callback'; // Endpoint to handle OAuth callback
   private jwtHelper = new JwtHelperService(); // Ensure JwtHelperService is correctly imported
+  private authUrl = `${environment.apiUrl}/authentication`;
+  private apiKey = environment.apiKey;
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.checkToken(); // Check token on initialization
+  constructor(private http: HttpClient, private router: Router) { }
+
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'api-key': this.apiKey
+    });
+  }
+
+  login(user: any): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.post<any>(this.authUrl, user, { headers });
   }
 
   // Redirect to Google OAuth login page
-  login(): void {
+  loginWithOAuth(): void {
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  }
+
+  setToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   // Store the token after successful login and validate it
   handleLogin(token: string): void {
-    localStorage.setItem('token', token);
+    this.setToken(token);
     if (this.isLoggedIn()) { // Check if token is valid right after login
       this.router.navigate(['/']); // Redirect to home page after login
     } else {
@@ -38,25 +59,11 @@ export class AuthService {
   // Remove token on logout and update login state
   logout(): void {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']); // Redirect to login page
   }
 
   // Check if user is logged in by verifying token existence and validity
   isLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     return token != null && !this.jwtHelper.isTokenExpired(token); // Return true if token exists and is valid
-  }
-
-  // Check the presence and validity of the token on startup
-  private checkToken(): void {
-    if (this.isLoggedIn()) {
-      // User is logged in
-      console.log('User is logged in');
-      this.router.navigate(['/']);
-    } else {
-      // Not logged in, redirect to login page if necessary
-      console.log('User is not logged in');
-      this.router.navigate(['/login']);
-    }
   }
 }
