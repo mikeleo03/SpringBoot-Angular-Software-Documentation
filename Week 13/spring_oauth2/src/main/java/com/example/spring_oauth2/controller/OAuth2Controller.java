@@ -1,6 +1,5 @@
 package com.example.spring_oauth2.controller;
 
-import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.spring_oauth2.dto.JwtResponse;
+import com.example.spring_oauth2.exception.AuthException;
 import com.example.spring_oauth2.service.TokenService;
 
 @RestController
@@ -48,7 +49,7 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<Map<String, String>> handleOAuth2Callback(@RequestParam("code") String code) {
+    public ResponseEntity<JwtResponse> handleOAuth2Callback(@RequestParam("code") String code) {
         try {
             // Exchange authorization code for access token
             String accessToken = getAccessToken(code);
@@ -64,17 +65,19 @@ public class OAuth2Controller {
             Map<String, Object> userInfo = userInfoResponse.getBody();
 
             if (userInfo == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Failed to retrieve user info"));
+                throw new AuthException("Failed to retrieve user info");
             }
 
             // Extract user information
-            String subject = (String) userInfo.get("sub"); // Google user ID
+            String subject = (String) userInfo.get("name"); // Google user name
 
             // Generate JWT token
-            String token = tokenService.generateToken(subject);
-            return ResponseEntity.ok(Collections.singletonMap("token", token));
+            final String jwt = tokenService.generateToken(subject);
+
+            // Return the token as a response
+            return ResponseEntity.status(HttpStatus.OK).body(new JwtResponse(jwt));
         } catch (RestClientException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error processing authentication"));
+            throw new AuthException("Error processing authentication");
         }
     }
 
