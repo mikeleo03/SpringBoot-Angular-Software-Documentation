@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,15 +48,24 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<?> handleOAuth2Callback(@RequestParam("code") String code) {
+    public ResponseEntity<Map<String, String>> handleOAuth2Callback(@RequestParam("code") String code) {
         try {
             // Exchange authorization code for access token
             String accessToken = getAccessToken(code);
 
             // Fetch user info from Google using the access token
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Map> userInfoResponse = restTemplate.getForEntity(userInfoUri + "?access_token=" + accessToken, Map.class);
+            ResponseEntity<Map<String, Object>> userInfoResponse = restTemplate.exchange(
+                userInfoUri + "?access_token=" + accessToken, 
+                org.springframework.http.HttpMethod.GET, 
+                null, 
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
             Map<String, Object> userInfo = userInfoResponse.getBody();
+
+            if (userInfo == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Failed to retrieve user info"));
+            }
 
             // Extract user information
             String subject = (String) userInfo.get("sub"); // Google user ID
@@ -64,27 +74,40 @@ public class OAuth2Controller {
             String token = tokenService.generateToken(subject);
             return ResponseEntity.ok(Collections.singletonMap("token", token));
         } catch (RestClientException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing authentication");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error processing authentication"));
         }
     }
 
     private String getAccessToken(String authorizationCode) {
         RestTemplate restTemplate = new RestTemplate();
         String requestUrl = "https://oauth2.googleapis.com/token";
-
+    
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
+    
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("code", authorizationCode);
         body.add("client_id", gClientID);
         body.add("client_secret", gClientSecret);
         body.add("redirect_uri", redirectURI);
         body.add("grant_type", "authorization_code");
-
+    
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> response = restTemplate.postForEntity(requestUrl, requestEntity, Map.class);
+    
+        // Using exchange() with ParameterizedTypeReference
+        ResponseEntity<Map<String, String>> response = restTemplate.exchange(
+            requestUrl,
+            org.springframework.http.HttpMethod.POST,
+            requestEntity,
+            new ParameterizedTypeReference<Map<String, String>>() {}
+        );
+    
         Map<String, String> responseBody = response.getBody();
-        return responseBody.get("access_token");
-    }
+    
+        if (responseBody != null) {
+            return responseBody.get("access_token");
+        } else {
+            throw new RestClientException("Failed to retrieve access token");
+        }
+    }    
 }
