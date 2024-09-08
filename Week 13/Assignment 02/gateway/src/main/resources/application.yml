@@ -1,0 +1,26 @@
+server:
+  port: 8080  # Gateway server port
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/products/**
+          filters:
+            - name: ApiKey
+
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/v1/customers/**
+          filters:
+            - name: ApiKey
+            
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
