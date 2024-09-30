@@ -1,0 +1,38 @@
+<div class="container mx-auto p-6">
+    <div class="flex md:flex-row flex-col justify-between">
+        <div class="flex flex-col justify-start text-start md:my-4 my-2">
+            <h1 class="md:text-3xl text-2xl font-bold text-green-1 text-start">Product Management</h1>
+            <h3 class="mt-1 text-slate-600">Master Your Inventory: Streamline and Optimize with Our Product Management Hub!</h3>
+        </div>
+        <div class="flex justify-end items-end">
+            <hlm-sheet side="right">
+                <button class="flex items-center space-x-2 bg-green-3 text-white p-2 px-4 text-sm mb-4 rounded-xl" brnSheetTrigger>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Add New Product</span>
+                </button>
+                <hlm-sheet-content *brnSheetContent="let ctx">
+                    <hlm-sheet-header class="text-start md:mt-4 mt-6">
+                        <h1 hlmSheetTitle class="md:text-2xl text-xl font-bold text-green-1">Add New Product</h1>
+                        <p hlmSheetDescription>Fill out the form below to add a new product.</p>
+                    </hlm-sheet-header>
+                    <app-product-form (productAdded)="onAddProduct($event)" (formClosed)="ctx.close()"></app-product-form>
+                </hlm-sheet-content>
+            </hlm-sheet>
+        </div>
+    </div>
+    <div class="flex items-center justify-center">
+        <ag-grid-angular
+            class="ag-theme-quartz w-full h-[100vh] mt-4 my-6"
+            [gridOptions]="gridOptions"
+            [rowData]="products"
+            [columnDefs]="colDefs"
+            [defaultColDef]="defaultColDef"
+            [pagination]="true"
+            [paginationPageSize]="10"
+            [context]="{ componentParent: this }"
+            (cellValueChanged)="onProductToggle($event)"
+            (gridSizeChanged)="onGridSizeChanged($event)"
+            (firstDataRendered)="onFirstDataRendered($event)">
+        </ag-grid-angular>
+    </div>
+</div>

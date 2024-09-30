@@ -1,0 +1,331 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Apple iPhone 14",
+      "price": 15999000,
+      "status": true,
+      "createdAt": "2024-08-01T10:00:00Z",
+      "updatedAt": "2024-08-01T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Samsung Galaxy S23",
+      "price": 12999000,
+      "status": false,
+      "createdAt": "2024-08-02T12:00:00Z",
+      "updatedAt": "2024-08-02T12:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Sony WH-1000XM5",
+      "price": 5999000,
+      "status": true,
+      "createdAt": "2024-08-03T14:00:00Z",
+      "updatedAt": "2024-08-03T14:00:00Z"
+    },
+    {
+      "id": "4",
+      "name": "Dell XPS 13",
+      "price": 22499000,
+      "status": true,
+      "createdAt": "2024-08-04T16:00:00Z",
+      "updatedAt": "2024-08-04T16:00:00Z"
+    },
+    {
+      "id": "5",
+      "name": "Apple MacBook Air M2",
+      "price": 18499000,
+      "status": true,
+      "createdAt": "2024-08-05T18:00:00Z",
+      "updatedAt": "2024-08-05T18:00:00Z"
+    },
+    {
+      "id": "6",
+      "name": "Google Pixel 8",
+      "price": 9499000,
+      "status": false,
+      "createdAt": "2024-08-06T20:00:00Z",
+      "updatedAt": "2024-08-06T20:00:00Z"
+    },
+    {
+      "id": "7",
+      "name": "Microsoft Surface Pro 9",
+      "price": 17499000,
+      "status": true,
+      "createdAt": "2024-08-07T22:00:00Z",
+      "updatedAt": "2024-08-07T22:00:00Z"
+    },
+    {
+      "id": "8",
+      "name": "Bose QuietComfort 45",
+      "price": 5299000,
+      "status": true,
+      "createdAt": "2024-08-08T08:00:00Z",
+      "updatedAt": "2024-08-08T08:00:00Z"
+    },
+    {
+      "id": "9",
+      "name": "Apple AirPods Pro 2",
+      "price": 3499000,
+      "status": true,
+      "createdAt": "2024-08-09T10:00:00Z",
+      "updatedAt": "2024-08-09T10:00:00Z"
+    },
+    {
+      "id": "10",
+      "name": "Samsung Galaxy Tab S9",
+      "price": 11499000,
+      "status": false,
+      "createdAt": "2024-08-10T12:00:00Z",
+      "updatedAt": "2024-08-10T12:00:00Z"
+    },
+    {
+      "id": "11",
+      "name": "Lenovo ThinkPad X1 Carbon",
+      "price": 24499000,
+      "status": true,
+      "createdAt": "2024-08-11T14:00:00Z",
+      "updatedAt": "2024-08-11T14:00:00Z"
+    },
+    {
+      "id": "12",
+      "name": "HP Spectre x360",
+      "price": 21499000,
+      "status": true,
+      "createdAt": "2024-08-12T16:00:00Z",
+      "updatedAt": "2024-08-12T16:00:00Z"
+    },
+    {
+      "id": "13",
+      "name": "Nikon D850",
+      "price": 38999000,
+      "status": false,
+      "createdAt": "2024-08-13T18:00:00Z",
+      "updatedAt": "2024-08-13T18:00:00Z"
+    },
+    {
+      "id": "14",
+      "name": "Sony A7 IV",
+      "price": 32999000,
+      "status": true,
+      "createdAt": "2024-08-14T20:00:00Z",
+      "updatedAt": "2024-08-14T20:00:00Z"
+    },
+    {
+      "id": "15",
+      "name": "Canon EOS R5",
+      "price": 59999000,
+      "status": true,
+      "createdAt": "2024-08-15T22:00:00Z",
+      "updatedAt": "2024-08-15T22:00:00Z"
+    },
+    {
+      "id": "16",
+      "name": "Apple Watch Series 8",
+      "price": 5499000,
+      "status": true,
+      "createdAt": "2024-08-16T08:00:00Z",
+      "updatedAt": "2024-08-16T08:00:00Z"
+    },
+    {
+      "id": "17",
+      "name": "Fitbit Charge 5",
+      "price": 2199000,
+      "status": false,
+      "createdAt": "2024-08-17T10:00:00Z",
+      "updatedAt": "2024-08-17T10:00:00Z"
+    },
+    {
+      "id": "18",
+      "name": "Garmin Venu 3",
+      "price": 5299000,
+      "status": true,
+      "createdAt": "2024-08-18T12:00:00Z",
+      "updatedAt": "2024-08-18T12:00:00Z"
+    },
+    {
+      "id": "19",
+      "name": "GoPro HERO10 Black",
+      "price": 5999000,
+      "status": true,
+      "createdAt": "2024-08-19T14:00:00Z",
+      "updatedAt": "2024-08-19T14:00:00Z"
+    },
+    {
+      "id": "20",
+      "name": "DJI Mavic Air 2",
+      "price": 11999000,
+      "status": false,
+      "createdAt": "2024-08-20T16:00:00Z",
+      "updatedAt": "2024-08-20T16:00:00Z"
+    },
+    {
+      "id": "21",
+      "name": "Apple iPad Pro",
+      "price": 16499000,
+      "status": true,
+      "createdAt": "2024-08-21T18:00:00Z",
+      "updatedAt": "2024-08-21T18:00:00Z"
+    },
+    {
+      "id": "22",
+      "name": "Samsung Galaxy Watch 6",
+      "price": 5499000,
+      "status": true,
+      "createdAt": "2024-08-22T20:00:00Z",
+      "updatedAt": "2024-08-22T20:00:00Z"
+    },
+    {
+      "id": "23",
+      "name": "Sony PlayStation 5",
+      "price": 8999000,
+      "status": false,
+      "createdAt": "2024-08-23T22:00:00Z",
+      "updatedAt": "2024-08-23T22:00:00Z"
+    },
+    {
+      "id": "24",
+      "name": "Microsoft Xbox Series X",
+      "price": 8999000,
+      "status": true,
+      "createdAt": "2024-08-24T08:00:00Z",
+      "updatedAt": "2024-08-24T08:00:00Z"
+    },
+    {
+      "id": "25",
+      "name": "Apple Mac Mini M2",
+      "price": 10499000,
+      "status": true,
+      "createdAt": "2024-08-25T10:00:00Z",
+      "updatedAt": "2024-08-25T10:00:00Z"
+    },
+    {
+      "id": "26",
+      "name": "ASUS ROG Zephyrus G14",
+      "price": 23999000,
+      "status": true,
+      "createdAt": "2024-08-26T12:00:00Z",
+      "updatedAt": "2024-08-26T12:00:00Z"
+    },
+    {
+      "id": "27",
+      "name": "HP Envy 15",
+      "price": 21499000,
+      "status": false,
+      "createdAt": "2024-08-27T14:00:00Z",
+      "updatedAt": "2024-08-27T14:00:00Z"
+    },
+    {
+      "id": "28",
+      "name": "Lenovo Yoga 7i",
+      "price": 18499000,
+      "status": true,
+      "createdAt": "2024-08-28T16:00:00Z",
+      "updatedAt": "2024-08-28T16:00:00Z"
+    },
+    {
+      "id": "29",
+      "name": "Acer Aspire 5",
+      "price": 9499000,
+      "status": true,
+      "createdAt": "2024-08-29T18:00:00Z",
+      "updatedAt": "2024-08-29T18:00:00Z"
+    },
+    {
+      "id": "30",
+      "name": "Huawei P50 Pro",
+      "price": 12999000,
+      "status": false,
+      "createdAt": "2024-08-30T20:00:00Z",
+      "updatedAt": "2024-08-30T20:00:00Z"
+    },
+    {
+      "id": "31",
+      "name": "Xiaomi Mi 11 Ultra",
+      "price": 8499000,
+      "status": true,
+      "createdAt": "2024-08-31T22:00:00Z",
+      "updatedAt": "2024-08-31T22:00:00Z"
+    },
+    {
+      "id": "32",
+      "name": "Oppo Find X5 Pro",
+      "price": 11499000,
+      "status": false,
+      "createdAt": "2024-09-01T08:00:00Z",
+      "updatedAt": "2024-09-01T08:00:00Z"
+    },
+    {
+      "id": "33",
+      "name": "OnePlus 10 Pro",
+      "price": 9999000,
+      "status": true,
+      "createdAt": "2024-09-02T10:00:00Z",
+      "updatedAt": "2024-09-02T10:00:00Z"
+    },
+    {
+      "id": "34",
+      "name": "Xiaomi Redmi Note 11",
+      "price": 3999000,
+      "status": true,
+      "createdAt": "2024-09-03T12:00:00Z",
+      "updatedAt": "2024-09-03T12:00:00Z"
+    },
+    {
+      "id": "35",
+      "name": "Realme GT 2",
+      "price": 5499000,
+      "status": false,
+      "createdAt": "2024-09-04T14:00:00Z",
+      "updatedAt": "2024-09-04T14:00:00Z"
+    },
+    {
+      "id": "36",
+      "name": "Infinix Zero Ultra",
+      "price": 7999000,
+      "status": true,
+      "createdAt": "2024-09-05T16:00:00Z",
+      "updatedAt": "2024-09-05T16:00:00Z"
+    },
+    {
+      "id": "37",
+      "name": "Samsung Galaxy A54",
+      "price": 6499000,
+      "status": true,
+      "createdAt": "2024-09-06T18:00:00Z",
+      "updatedAt": "2024-09-06T18:00:00Z"
+    },
+    {
+      "id": "38",
+      "name": "Nokia X30",
+      "price": 4799000,
+      "status": false,
+      "createdAt": "2024-09-07T20:00:00Z",
+      "updatedAt": "2024-09-07T20:00:00Z"
+    },
+    {
+      "id": "39",
+      "name": "Asus ZenFone 9",
+      "price": 7499000,
+      "status": true,
+      "createdAt": "2024-09-08T22:00:00Z",
+      "updatedAt": "2024-09-08T22:00:00Z"
+    },
+    {
+      "id": "40",
+      "name": "Vivo X80 Pro",
+      "price": 13999000,
+      "status": true,
+      "createdAt": "2024-09-09T08:00:00Z",
+      "updatedAt": "2024-09-09T08:00:00Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "password123"
+    }
+  ]
+}
