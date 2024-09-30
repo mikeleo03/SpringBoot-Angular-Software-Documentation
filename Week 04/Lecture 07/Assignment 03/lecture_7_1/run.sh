@@ -1,0 +1,3 @@
+#!/bin/bash
+echo Building the project with Maven...
+mvn clean install && java -jar target/lecture_7_1-0.0.1-SNAPSHOT.jar
