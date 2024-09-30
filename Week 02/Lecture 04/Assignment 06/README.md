@@ -119,11 +119,22 @@ Here’s a detailed process on how to remove duplicate lines from files based on
 4. **Write the Output**: Write the processed, duplicate-free data to a new file.
 
 #### 👨🏻‍💻 Implementation
-Detail implementation is written on [this code](/Week%2002%20-%20Jun%2017-21/Lecture%2004/Assignment%206/RemoveDuplicatesCSV.java). Here’s what the program actually done.
-1. **Read All Lines**: `Files.readAllLines(Paths.get(inputFilePath))` reads the CSV file into a list of strings.
-2. **Extract Header**: The first line is treated as the header to determine the key field's index.
-3. **Stream Processing**: The stream skips the header, then collects lines into a map using the key field (`id`). If a duplicate key is found, the first occurrence is retained.
-4. **Write Results**: The header is re-added, and the list is written to the new file.
+Detail implementation is written on [this code](/Week%2002/Lecture%2004/Assignment%2006/RemoveDuplicatesCSV.java). Here’s what the program actually done (updated based on comment).
+1. **Initialize Readers and Writers**
+    - `BufferedReader` is used to read the input CSV file line by line.
+    - `BufferedWriter` is used to write the unique lines to the output CSV file.
+2. **Extract and Write Header**
+    - The first line, which is the header, is read using `reader.readLine()`.
+    - This header is written immediately to the output file using `writer.write(header)`.
+3. **Determine Key Field Index**
+    - The header is split to determine the index of the key field (`id`).
+    - This is done by iterating through the headers to find the matching field.
+4. **Stream Processing and Duplicate Removal**
+    - A `Set<String>` is used to keep track of the keys that have already been processed.
+    - For each subsequent line, the key field's value is checked against the `Set`. If the key is unique, the line is written to the output file.
+5. **Read and Write Lines**
+    - The program continues to read each line from the input file, splits it to get the key field, and checks the key against the `Set`.
+    - If the key is not in the `Set`, the line is written to the output file and the key is added to the `Set`.
 
 **Best Practices Highlighted**
 1. **`BufferedReader` for Large Files**: Using `BufferedReader` with `lines()` streams data efficiently.
