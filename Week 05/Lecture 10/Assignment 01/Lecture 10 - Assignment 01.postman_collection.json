@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "859f23f0-952d-4e0d-b176-9816219a20e5",
+		"name": "Lecture 10 - Assignment 01",
+		"description": "This postman collection is created by Michael Leon as a part of Assignment 02 for Lecture 08 - Spring boot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34693283"
+	},
+	"item": [
+		{
+			"name": "Get All Employees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Employee By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/3ccd3c90-890e-41c4-9fa3-456f3d97f999"
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Michael Leon\",\r\n    \"dob\": \"2003-12-18\",\r\n    \"address\": \"Anytime anywhere\",\r\n    \"department\": \"MOBILE\",\r\n    \"email\": \"michael.leon@example.com\",\r\n    \"phone\": \"+6281234567890\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/v1/employee"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Employee",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Leon Michael\",\r\n    \"dob\": \"2003-12-18\",\r\n    \"address\": \"Anytime anywhere anyplace\",\r\n    \"department\": \"MOBILE\",\r\n    \"email\": \"leon.michael@example.com\",\r\n    \"phone\": \"+6281234567890\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/v1/employee/1caa1b8e-678c-41a2-9d91-234f1d75f777"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Employee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/f82cafb3-a5b2-481e-8f05-e8bec34bba78"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Employees by Department",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/employee?department=QA",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee"
+					],
+					"query": [
+						{
+							"key": "department",
+							"value": "QA"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

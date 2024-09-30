@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Custom CSS -->
+        <link th:href="@{/css/style.css}" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+        <!-- Include Toastify CSS and JS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+        <title>Save Employee</title>
+    </head>
+
+    <body class="bg-gray-100 text-gray-800 h-full mb-4">
+        <div class="container mx-auto p-4 h-full">
+            <h3 class="text-3xl font-bold mb-4">Employee Management</h3>
+            <hr class="mb-4">
+
+            <div class="flex flex-row space-x-2 mb-4 items-center h-full">
+                <div class="flex justify-center items-center">
+                    <a th:href="@{/employees}">
+                        <button class="p-2 px-3 btn bg-gray-500 hover:bg-gray-600 text-white font-bold">
+                            <
+                        </button>
+                    </a>
+                </div>
+                <div class="text-xl h-full font-semibold flex justify-center items-center">Save Employee</div>
+            </div>
+
+            <form th:action="@{/employees/save}" th:object="${employee}" method="POST">
+                <div class="form-group">
+                    <label for="userId" class="pb-2">ID</label>
+                    <input type="text" id="userId" th:field="*{id}" class="form-control" placeholder="ID" required/>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="pb-2">Name</label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="dob" class="pb-2">Date of Birth</label>
+                    <input type="date" id="dob" th:field="*{dob}" class="form-control" placeholder="Date of Birth" required>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="pb-2">Address</label>
+                    <input type="text" id="address" th:field="*{address}" class="form-control" placeholder="Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="department" class="pb-2">Department</label>
+                    <input type="text" id="department" th:field="*{department}" class="form-control" placeholder="Department" required>
+                </div>
+                <div class="form-group">
+                    <label for="salary" class="pb-2">Salary</label>
+                    <input type="number" id="salary" th:field="*{salary}" class="form-control" placeholder="Salary" required>
+                </div>
+
+                <button type="submit" class="btn bg-green-500 hover:bg-green-600 rounded shadow px-4">Save</button>
+            </form>
+        </div>
+
+        <!-- Custom JS -->
+        <script th:src="@{/js/script.js}"></script>
+    </body>
+</html>

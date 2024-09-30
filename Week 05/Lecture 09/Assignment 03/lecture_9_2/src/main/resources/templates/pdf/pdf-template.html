@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fsoft</title>
+    <style>
+      body {
+        font-family: "Roboto";
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      p {
+        font-size: 14px;
+        white-space: nowrap;
+        text-wrap: nowrap;
+        flex-wrap: nowrap;
+        word-wrap: nowrap;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        font-size: 12px;
+      }
+      th {
+        word-wrap: break-word;
+        white-space: normal;
+      }
+      .customer-info {
+        display: flex;
+        width: 100%;
+      }
+      h3,
+      h2 {
+        text-align: center;
+        color: #027ebc;
+      }
+      h4 {
+        margin: 0 0 10px 0;
+      }
+      .account-info {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid black;
+      }
+      .account-info th,
+      .account-info td {
+        padding: 8px;
+        text-align: left;
+      }
+      .account-info td::before {
+        content: ":";
+        padding-right: 10px;
+      }
+      .message-details th {
+        background-color: #027ebc;
+        color: #fff;
+      }
+      hr {
+        border: none;
+        height: 2px;
+        background-color: black;
+      }
+      @media print {
+        .page-break {
+          page-break-before: always;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>FPT BE COURSE</h2>
+    <h3>Genarate PDF</h3>
+    <div>
+      <div class="customer-info">
+        <p>User: <span th:text="${customer}"></span></p>
+        <p style="width: 100%"></p>
+        <p>Date: <span th:text="${currentDate}"></span></p>
+      </div>
+    </div>
+    <hr />
+    <h4>Message summary</h4>
+    <table class="account-info">
+      <tbody>
+        <tr>
+          <th>Employee highest salary</th>
+          <td><span th:text="${nameHighSal}"></span></td>
+          <th>Max salary</th>
+          <td><span th:text="${maxSalary}"></span></td>
+        </tr>
+        <tr>
+          <th>Employee lowest salary</th>
+          <td><span th:text="${nameLowSal}"></span></td>
+          <th>Min salary</th>
+          <td><span th:text="${minSalary}"></span></td>          
+        </tr>
+        <tr>
+          <th>Total record</th>
+          <td><span th:text="${record}"></span></td>
+          <th>Salary avg</th>
+          <td><span th:text="${aveSalary}"></span></td>          
+        </tr>
+      </tbody>
+    </table>
+    <hr style="background-color: #999" />
+    <h4>Message details</h4>
+    <table class="message-details">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Date of Birth</th>
+          <th>Address</th>
+          <th>Deparment</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="employee, iterationStatus: ${employees}">
+            <td th:text="${iterationStatus.count}">#</td>
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.dob}"></td>
+            <td th:text="${employee.address}"></td>
+            <td th:text="${employee.department}"></td>
+            <td th:text="${employee.salary}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
