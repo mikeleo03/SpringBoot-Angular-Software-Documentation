@@ -1,0 +1,3 @@
+#!/bin/bash
+echo Building the project with Maven...
+mvn clean install && java -jar target/fpt_midterm_pos-1.0-SNAPSHOT.jar

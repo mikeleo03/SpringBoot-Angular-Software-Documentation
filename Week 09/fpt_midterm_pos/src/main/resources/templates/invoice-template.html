@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #027ebc;
+        }
+        h1 {
+            text-align: center;
+        }
+        h3 {
+            margin-top: 40px;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9em; /* Smaller font size */
+            color: #027ebc; /* Blue color for labels */
+        }
+        .info span {
+            color: #000; /* Black color for IDs */
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #027ebc;
+            color: #fff;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 100px;
+        }
+        .signature {
+            font-style: italic;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Invoice</h1>
+        <div class="info">
+            <div>
+                <h4>Invoice ID: <span th:text="${invoice.id}"></span></h4>
+                <h4>Date: <span th:text="${invoice.date}"></span></h4>
+            </div>
+            <div>
+                <h4>Customer ID: <span th:text="${customer.id}"></span></h4>
+                <h4>Customer Name: <span th:text="${customer.name}"></span></h4>
+            </div>
+        </div>
+        <h3>Invoice Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="detail : ${invoice.invoiceDetails}">
+                    <td th:text="${detail.id.productId}"></td>
+                    <td th:text="${detail.productName}"></td>
+                    <td th:text="${detail.quantity}"></td>
+                    <td th:text="${detail.price}"></td>
+                    <td th:text="${detail.amount}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total">
+            Total Amount: <span th:text="${totalAmount}"></span>
+        </div>
+        <div class="footer">
+            <p class="signature">Group 03 - FPT Software Indonesia Intern</p>
+            <p class="greetings">Thank you for your business!</p>
+        </div>
+    </div>
+</body>
+</html>
