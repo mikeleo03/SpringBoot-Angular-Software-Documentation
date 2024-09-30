@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "b86c9309-f939-464c-96d1-ef8938f15793",
+		"name": "Lecture 08 - Assignment 03",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34693283"
+	},
+	"item": [
+		{
+			"name": "Get All Employees From DS1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/ds1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Employees From DS2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/ds2"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Employee By ID From DS1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/ds1/3ccd3c90-890e-41c4-9fa3-456f3d97f999"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Employee By ID From DS2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/ds2/3ccd3c90-890e-41c4-9fa3-456f3d97f999"
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Employee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"b002747b-4cc3-4a81-bd7e-e3184da0410a\",\r\n    \"name\": \"Michael Leon\",\r\n    \"dob\": \"2003-12-18\",\r\n    \"address\": \"Anytime anywhere\",\r\n    \"department\": \"MOBILE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/v1/employee"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Employee",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Leon Michael\",\r\n    \"dob\": \"2003-12-18\",\r\n    \"address\": \"Anytime anywhere anyplace\",\r\n    \"department\": \"MOBILE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Employee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:8080/api/v1/employee/b002747b-4cc3-4a81-bd7e-e3184da0410a"
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Employee Fail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"b002747b-4cc3-4a81-bd7e-e3184da0410a\",\r\n    \"name\": \"Michael Leon\",\r\n    \"dob\": \"2003-12-18\",\r\n    \"address\": \"Anytime anywhere\",\r\n    \"department\": \"MOBILE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/v1/employee/fail"
+			},
+			"response": []
+		}
+	]
+}

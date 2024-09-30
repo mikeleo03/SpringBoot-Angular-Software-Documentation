@@ -30,7 +30,7 @@ public class FileUtils {
             br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
                 String[] attributes = line.split(",");
-                Employee employee = Employee.fromCSV(attributes);
+                Employee employee = fromCSV(attributes);
                 employees.add(employee);
             }
         } catch (FileNotFoundException e) {
@@ -55,7 +55,7 @@ public class FileUtils {
             String[] line;
             reader.readNext(); // Skip header
             while ((line = reader.readNext()) != null) {
-                Employee employee = Employee.fromCSV(line);
+                Employee employee = fromCSV(line);
                 employees.add(employee);
             }
         } catch (FileNotFoundException e) {
@@ -82,5 +82,20 @@ public class FileUtils {
         } catch (IOException e) {
             throw new FileNotFoundException("Error writing employee" + e);
         }
+    }
+
+    /**
+     * Parses an array of attributes into an Employee object.
+     *
+     * @param attributes an array of strings representing the employee's id, name, date of birth, address, and department.
+     * @return an Employee object created from the provided attributes.
+     */
+    public static Employee fromCSV(String[] attributes) {
+        String id = attributes[0];
+        String name = attributes[1];
+        LocalDate dateOfBirth = DateUtils.parseDate(attributes[2]);
+        String address = attributes[3];
+        String department = attributes[4];
+        return new Employee(id, name, dateOfBirth, address, department);
     }
 }
