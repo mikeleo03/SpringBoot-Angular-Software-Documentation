@@ -1,0 +1,835 @@
+{
+	"info": {
+		"_postman_id": "3093d6b8-a742-4d7c-b565-95715055e5d3",
+		"name": "Lecture 12 - Assignment 01",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34693283"
+	},
+	"item": [
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "All Employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/v1/employees"
+					},
+					"response": []
+				},
+				{
+					"name": "All Employees Configurable Pages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees?page=1&size=5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee By EmpNo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/v1/employees/3"
+					},
+					"response": []
+				},
+				{
+					"name": "New Employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthDate\": \"2003-08-12\",\r\n    \"firstName\": \"Michael\",\r\n    \"lastName\": \"Leon\",\r\n    \"gender\": \"M\",\r\n    \"hireDate\": \"2024-07-17\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/employees"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Employee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthDate\": \"2003-08-12\",\r\n    \"firstName\": \"Leon\",\r\n    \"lastName\": \"Michael\",\r\n    \"gender\": \"M\",\r\n    \"hireDate\": \"2024-07-18\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/employees/12"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:8080/api/v1/employees/12"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Departments",
+			"item": [
+				{
+					"name": "All Departments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/v1/departments"
+					},
+					"response": []
+				},
+				{
+					"name": "All Departments Configurable Pages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/departments?page=0&size=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"departments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Department By DeptNo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/v1/departments/d004"
+					},
+					"response": []
+				},
+				{
+					"name": "New Department",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"deptNo\": \"d006\",\r\n    \"deptName\": \"Research\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/departments"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Employee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"deptNo\": \"d006\",\r\n    \"deptName\": \"New Research\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/departments/d006"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:8080/api/v1/departments/d006"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Salaries",
+			"item": [
+				{
+					"name": "Salary by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"empNo\": 1,\r\n    \"fromDate\": \"2000-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/salaries"
+					},
+					"response": []
+				},
+				{
+					"name": "New Salary",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {\r\n        \"empNo\": 1,\r\n        \"fromDate\": \"2024-07-17\"\r\n    },\r\n    \"salary\": 60000,\r\n    \"toDate\": \"2025-07-17\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/salaries"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Salary",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {\r\n        \"empNo\": 1,\r\n        \"fromDate\": \"2024-07-17\"\r\n    },\r\n    \"salary\": 65000,\r\n    \"toDate\": \"2025-07-17\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/salaries"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Salary",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"empNo\": 1,\r\n    \"fromDate\": \"2024-07-17\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/salaries"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Titles",
+			"item": [
+				{
+					"name": "Title by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"empNo\": 1,\r\n    \"title\": \"Manager\",\r\n    \"fromDate\": \"2000-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/titles"
+					},
+					"response": []
+				},
+				{
+					"name": "New Title",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {\r\n        \"empNo\": 8,\r\n        \"title\": \"Engineer\",\r\n        \"fromDate\": \"2000-01-01\"\r\n    },\r\n    \"toDate\": \"2002-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/titles"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Title",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {\r\n        \"empNo\": 8,\r\n        \"title\": \"Engineer\",\r\n        \"fromDate\": \"2000-01-01\"\r\n    },\r\n    \"toDate\": \"2020-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/titles"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Title",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"empNo\": 8,\r\n    \"title\": \"Engineer\",\r\n    \"fromDate\": \"2000-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/v1/titles"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Advance Employees Search",
+			"item": [
+				{
+					"name": "Employee Dynamic Search (1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?firstName=Paul&gender=M",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Paul"
+								},
+								{
+									"key": "gender",
+									"value": "M"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Dynamic Search (2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?birthDate=1991-03-22&birthDateOperation=eq&lastName=Garcia",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "birthDate",
+									"value": "1991-03-22"
+								},
+								{
+									"key": "birthDateOperation",
+									"value": "eq"
+								},
+								{
+									"key": "lastName",
+									"value": "Garcia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Dynamic Search (3)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?gender=F&page=1&size=3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "gender",
+									"value": "F"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Dynamic Search (4)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/v1/employees/search"
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (1)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?firstName=John&firstNameOperation=like&sortBy=lastName&sortOrder=asc",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "John"
+								},
+								{
+									"key": "firstNameOperation",
+									"value": "like"
+								},
+								{
+									"key": "sortBy",
+									"value": "lastName"
+								},
+								{
+									"key": "sortOrder",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (2)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?hireDate=2020-06-01&hireDateOperation=lt&size=40&page=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "hireDate",
+									"value": "2020-06-01"
+								},
+								{
+									"key": "hireDateOperation",
+									"value": "lt"
+								},
+								{
+									"key": "size",
+									"value": "40"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (3)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?birthDate=1990-01-01&birthDateOperation=gt&page=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "birthDate",
+									"value": "1990-01-01"
+								},
+								{
+									"key": "birthDateOperation",
+									"value": "gt"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (4)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?lastName=Smith&hireYear=2015",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "lastName",
+									"value": "Smith"
+								},
+								{
+									"key": "hireYear",
+									"value": "2015"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (5)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?birthMonth=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "birthMonth",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (6)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?firstName=Albert&lastName=B&lastNameOperation=like&gender=M",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Albert"
+								},
+								{
+									"key": "lastName",
+									"value": "B"
+								},
+								{
+									"key": "lastNameOperation",
+									"value": "like"
+								},
+								{
+									"key": "gender",
+									"value": "M"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (7)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?firstName=Bobby&birthDate=1985-01-01&birthDateOperation=geq",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Bobby"
+								},
+								{
+									"key": "birthDate",
+									"value": "1985-01-01"
+								},
+								{
+									"key": "birthDateOperation",
+									"value": "geq"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (8)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?hireDate=2010-12-31&hireDateOperation=leq&sortBy=hireDate&sortOrder=desc&page=4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "hireDate",
+									"value": "2010-12-31"
+								},
+								{
+									"key": "hireDateOperation",
+									"value": "leq"
+								},
+								{
+									"key": "sortBy",
+									"value": "hireDate"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc"
+								},
+								{
+									"key": "page",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (9)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?birthMonth=8&hireYear=2011",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "birthMonth",
+									"value": "8"
+								},
+								{
+									"key": "hireYear",
+									"value": "2011"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Employee Advance Search (10)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/employees/search?firstName=Michael&birthDate=1977-09-05&birthDateOperation=eq",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"search"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Michael"
+								},
+								{
+									"key": "birthDate",
+									"value": "1977-09-05"
+								},
+								{
+									"key": "birthDateOperation",
+									"value": "eq"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

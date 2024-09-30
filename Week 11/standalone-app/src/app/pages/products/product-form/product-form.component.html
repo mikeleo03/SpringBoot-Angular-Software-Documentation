@@ -1,0 +1,32 @@
+<div class="py-4 grid gap-4">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="items-center grid grid-cols-4 gap-4">
+            <label hlmLabel for="name" class="text-right">Name</label>
+            <div class="col-span-3">
+                <input hlmInput id="name" formControlName="name" class="w-full" placeholder="Enter product name" />
+                <span *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-red-500 text-sm block mt-1">
+                    Name is required.
+                </span>
+            </div>
+        </div>
+        <div class="items-center grid grid-cols-4 gap-4">
+            <label hlmLabel for="price" class="text-right">Price</label>
+            <div class="col-span-3">
+                <input hlmInput id="price" type="number" formControlName="price" class="w-full" placeholder="Enter price" />
+                <span *ngIf="price?.invalid && (price?.dirty || price?.touched)" class="text-red-500 text-sm block mt-1">
+                    Price must be greater than 0.
+                </span>
+            </div>
+        </div>
+        <div class="items-center grid grid-cols-4 gap-4">
+            <label hlmLabel for="status" class="text-right">Status</label>
+            <div class="col-span-3 flex items-center">
+                <input type="checkbox" formControlName="status" class="spartan-checkbox">
+                <span class="ml-2">{{ productForm.get('status')?.value ? 'Active' : 'Inactive' }}</span>
+            </div>
+        </div>
+        <div class="pt-5 w-full justify-end">
+            <button hlmBtn class="bg-green-2 hover:bg-green-2/80" type="submit" [disabled]="productForm.invalid">{{ isEditMode ? 'Update Product' : 'Save Product' }}</button>
+        </div>
+    </form>
+</div>

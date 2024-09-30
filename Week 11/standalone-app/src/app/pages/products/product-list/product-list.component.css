@@ -1,0 +1,10 @@
+/* Dark background with light text for inactive rows */
+.row-inactive {
+  background-color: #333; /* Dark background */
+  color: #fff; /* Light text */
+}
+
+.row-inactive .ag-cell {
+  background-color: inherit;
+  color: inherit;
+}
